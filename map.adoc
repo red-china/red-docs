@@ -1,0 +1,233 @@
+= Map! datatype
+:toc:
+:numbered:
+
+== 概要
+
+map是一个拥有key/value的关联数组。它提供了一种快速获取(内部使用哈希表结构)、方便和专用的语法。和`hash!`不同的是，map不是一个序列，所以它不存在偏移和位置的说法。从概念上讲，`map!`是一种处于`hash!`和`object!`之间的数据类型。
+
+== 字面量语法
+----
+#(<key> <value>...)
+
+<key>   : hashed key, accepted types are: any-word!, any-string!, number!, char!, pair!, tuple!
+<value> : any-type! value
+----
+== 构造语法
+----
+make map! <spec>
+
+<spec> : block of key/value pairs or an integer value
+----
+如果_spec_是个整数，一个包含预分配大小的空map将会被返回。
+
+注意：
+
+* map自身或spec block必须包含偶数个元素，否则会产生错误。
+* 值不是经过*reduce*产生的，所以某些值必须使用构造语法，比如`logic!`。
+
+例子：
+----
+#(a: 1 b: 2)
+== #(
+    a: 1
+    b: 2
+)
+
+make map! [a 1 'b 2 "c" 3]
+== #(
+    a: 1
+    b: 2
+    "c" 3
+)
+----
+如果key是*any-word!*类型，为了使map的内容看起来更像键值对，在map中key的类型会被转换为*set-word!*。要访问这些key，不需要再提供set-word，简单的word就够了。同样地，`keys-of`反射器会返回这些word，这大大简化了之后的处理过程(特别是匹配操作，匹配words比匹配set-words容易多了)。
+
+注意：
+
+* 和`hash!`以及`block!`一样, `map!`的查找操作默认是**大小写不敏感的**。
+* 如果指定了`none`作为value，那么相应的key不会被创建(参考“删除键”部分)。
+* 在创建map的时候所有的key都是深度拷贝的。
+* 在创建map的时候，如果value的值是序列，则value不会被深度拷贝。这个由用户自己决定是否优化(因为序列值可以在多处通用)。
+
+另一种创建map的方式是使用`copy`动作来复制一个已有的map。
+
+== 获取值
+
+使用路径：
+----
+<map>/<key>
+get '<map>/<key>
+
+<map> : word referring to a map! value
+<key> : word key
+----
+
+使用`select`动作：
+---- 
+select <map> <key>
+
+<map> : map value
+<key> : any valid key type
+----
+所有获取值的操作都是大小写不敏感的，如果想要区分大小写，需要用`/case`细化：
+----
+get/case '<map>/<key>
+select/case <map> <key>
+----
+如果访问一个map中不存在的key，结果将是`none`。
+
+例子：
+
+----
+m: #(Ab: 2 aB: 5 ab: 10)
+m/ab
+== 2
+select m 'aB
+== 2
+get/case 'm/aB
+== 5
+select/case m 'ab
+== 10
+----
+
+== 改变键和值
+
+使用路径：
+----
+<map>/<key>: <value>
+set '<map>/<key> <value>
+
+<map>   : word referring to a map! value
+<key>   : word key to select a value in the map
+<value> : any value
+----
+
+使用修改动作：
+---- 
+put <map> <key> <value>
+
+<map> : map value
+<key> : any valid key value to a select a value in the map
+----
+修改大量数据：
+----
+extend <map> <spec>
+
+<map>  : a map value
+<spec> : block of name/value pairs (one or more pairs)
+----
+所有获取值的操作都是大小写不敏感的，如果想要区分大小写，需要用`/case`细化：
+----
+set/case '<map>/<key> <value>
+put/case <map> <key> <value>
+extend/case <map> <spec>
+----
+
+`extend`可以一次性接收多个key，所以它很适合用来修改大量数据。
+
+注意：
+
+* 如果设置一个map中不存在的key，则会**自动创建它**.
+* 如果添加的key和map原有的key同名，则map中的key会被更新(默认情况下key是不区分大小写的)。
+
+例子：
+----
+m: #(Ab: 2 aB: 5 ab: 10)
+m/ab: 3
+m
+== #(
+    Ab: 3
+    aB: 5
+    ab: 10
+)
+
+put m 'aB "hello"
+m
+== #(
+    Ab: "hello"
+    aB: 5
+    ab: 10
+)
+
+set/case 'm/aB 0
+m
+== #(
+    Ab: "hello"
+    aB: 0
+    ab: 10
+)
+set/case 'm/ab 192.168.0.1
+== #(
+    Ab: "hello"
+    aB: 0
+    ab: 192.168.0.1
+)
+
+m: #(%cities.red 10)
+extend m [%cities.red 99 %countries.red 7 %states.red 27]
+m
+== #(
+    %cities.red 99
+    %countries.red 7
+    %states.red 27
+)
+----
+
+== 删除键
+
+要删除map中的key/value，只要设置key为`none`即可，具体可以采用以下几种方式：
+
+例子：
+----
+m: #(a: 1 b 2 "c" 3 d: 99)
+m
+== #(
+    a: 1
+    b: 2
+    "c" 3
+    d: 99
+)
+m/b: none
+put m "c" none
+extend m [d #[none]]
+m
+== #(
+    a: 1
+)
+----
+
+注意：上面例子中传递`none!`类型的值时必须使用构造语法。因为`none`是`none!`类型的值，`[d none]`表示`d`的值为`none`，而`[d #[none]]`表示`d`的值是`none!`类型，即`d`没有值，所以删除了`d`。
+
+你也可以用`clear`动作一次性清空map：
+----
+clear #(a 1 b 2 c 3)
+== #()
+----
+
+== 反射
+
+* `find` 检查map中是否存在指定的key。如果存在返回`true`，否则返回`none`。
+
+ find #(a 123 b 456) 'b
+ == true
+
+* `length?` 返回map中key/value的个数。
+
+ length? #(a 123 b 456)
+ == 2
+
+* `keys-of` 返回包含map中所有key的block(set-words被转换为words)。
+
+ keys-of #(a: 123 b: 456)
+ == [a b]
+
+* `values-of` 返回包含map中所有value的block。
+
+ values-of #(a: 123 b: 456)
+ == [123 456]
+
+* `body-of` 返回包含map中所有key/value的block。
+
+ body-of #(a: 123 b: 456)
+ == [a: 123 b: 456]
