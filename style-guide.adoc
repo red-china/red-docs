@@ -4,7 +4,7 @@
 
 == 介绍 
 
-Red是一种同像语言，代码可以被视为数据。 该功能的结果是语言几乎是完全自由的，以便应对所有可能的方式来格式化数据，以及足够灵活的 DSL 特定格式化需求。 以下内容只是格式化 Red 代码的 _许多方法之一_。
+Red是一种同像语言，代码可以被视为数据。 该功能的结果是语言几乎是完全自由的，以便应对所有可能的方式来格式化数据，以及足够的灵活性满足 DSL 特定格式化需求。 以下内容只是格式化 Red 代码的 _许多方法之一_。
 
 本文档描述了 _Red 源代码中使用的官方编码风格_，因此，尊重此编码风格是提交给 Red/Red Github 资源库的每个提取请求的先决条件。
 
@@ -137,7 +137,7 @@ _这种风格是错误的，因为它破坏了将代码复制/粘贴到 Red 控�
  unless tail? list-of-books [author-property: select list-of-books selected-index]
 ----
 
-*Function names* should strive to be single-word _verbs_, in order to express an action, though two or three words names are often necessary. More than three words should be avoided as much as possible. Variable naming conventions also apply to function names. A noun or an adjective followed by a question mark is also accepted. Often, it denotes that the return value is of `logic!` type, but this is not a strict rule, as it is handy to form single-word action names for retrieving a property (e.g. `length?`, `index?`). When forming function names with two or more words, always put the verb in the first position. If names are picked carefully for variables and function names, the code becomes almost self-documented, often reducing the need for comments.
+*函数名称* 应该努力成为单字 _变量_ ，以表达一个动作，虽然通常需要两个或三个字的名字。 应尽可能避免超过三个字。 变量命名约定也适用于函数名称。 一个名词或一个形容词，后跟一个问号也被接受。 通常，它表示返回值是 `logic!` 类型，但这不是严格的规则，因为它可以方便地形成用于检索属性的单字动作名称（例如 `length?`, `index?`）。 当用两个或多个单词形成函数名称时，始终将动词放在第一个位置。 如果为变量和函数仔细挑选了名称，则代码会变成近乎自带文档，通常这会减少对注释的需要。
 
 *正确*
 ----
@@ -152,10 +152,10 @@ _这种风格是错误的，因为它破坏了将代码复制/粘贴到 Red 控�
  length:    func [...
  future:    func [...
  position:  func [...
- blue-fill: func [...		;-- should be fill-blue
+ blue-fill: func [...		;-- 应填充蓝色
 ----
 
-There is an exception to those naming rules which applies to OS or non-Red third-party API names. In order to make API-specific function and structures field names easily recognizable, their original name should be used. It visually helps distinguish such imported names from regular Red or Red/System code. For example:
+这些适用于操作系统或非 Red 第三方 API 名称的命名规则有一个例外。 为了使 API 特定的功能和结构字段名称易于识别，应使用其原始名称。 它在视觉上有助于区分这些导入的名称与常规 Red 或 Red/System 代码。 例如：
 
 ----
  tagMSG: alias struct! [
@@ -189,22 +189,22 @@ There is an exception to those naming rules which applies to OS or non-Red third
 ]
 ----
 
-== Casing 
+== 大小写 
 
-All variable and function names should be lowercase by default, unless there is a good reason for using uppercasing such as:
+默认情况下，所有变量和函数名称都应为小写，除非有很好的理由使用大写字母，例如：
 
-* name is an acronym e.g. GMT (Greenwich Mean Time)
-* name is operating-system or (non-Red) third-party API-related
+* 名字是缩写，例如 GMT（格林威治标准时间）
+* 名称是操作系统或（非 Red）第三方 API 相关的
 
-== Macros (Red/System) anchor:macros-redsystem[]
+== 宏 (Red/System) anchor:macros-redsystem[]
 
-Apply the same naming conventions for picking up Red/System macros names. Macros generally use uppercase for names, as a way to visually distinguish them easily from the rest of the code (unless the intention is explicitely to make it look like regular code, like pseudo-custom datatype definitions). When multiple words are used, they are separated by an underscore `_` character to increase even more the difference with regular code.
+应用相同的命名约定来获取 Red/System 宏名称。 宏通常使用大写字母作为名称的一种方式，以便轻松地与其余代码区分开（除非意图明确地使其看起来像常规代码，如伪自定义数据类型定义）。 当使用多个单词时，它们由下划线 `_` 字符分隔，以增加与常规代码的差异。
 
-_(TBD: extract all single-word names used in the Red codebase as examples)_
+_（TBD：提取 Red 代码库中使用的所有单字名称作为示例）_
 
-== Function definitions 
+== 函数定义 
 
-The general rule is to keep the spec block on a single line. The body block can be on the same line or over several lines. In case of Red/System, as the spec blocks tend to be longer, most functions spec blocks are wrapped over several lines, so, for sake of visual consistency, often even small spec block are wrapped.
+一般规则是将定义块保留在一行之内。 代码块可以在同一行或多行上。 在 Red/System 的情况下，由于定义块往往更长，大多数函数定义块都被包裹在几行中，所以为了视觉一致性，通常会包含更小规模的块。
 
 *正确*
 ----
@@ -238,9 +238,9 @@ The general rule is to keep the spec block on a single line. The body block can 
  ][n + 1]
 ----
 
-When the spec block is too long, it should be wrapped over several lines. When wrapping the spec block, each type definition must be on the same line as its argument. The optional attributes block should be on its own line. Each refinement starts on a new line. If followed by a single argument, the argument can be on the same line or a new line with an indentation (just be consistent with other refinements in the same spec block). For /local refinement, if the local words are not followed by type annotation, they can be put on the same line.
+当定义块太长时，它应该被包裹进好几行中。 封装定义块时，每个类型定义必须与其参数在同一行上。 可选属性块应该在其自己的行上。 每个语句新起一行。 如果后跟一个参数，则参数可以在同一行或具有缩进的新行（仅与同一定义块中的其他改进一致）。 对于 /local 语句，如果本地关键字后面没有类型注释，则可以将它们放在同一行上。
 
-When wrapping the spec block over several lines, it is recommended to align the datatype definitions for consecutive arguments, on the same column for easier reading. Such alignment is preferably done using tabs (if you strictly follow these coding style rules) or else, using spaces.
+当将定义块封装在几行中时，建议将连续参数的数据类型定义对齐在同一列上，以便于阅读。 这种对齐最好使用制表符（如果你严格遵循这些编码风格规则），否则使用空格。
 
 *正确*
 ----
@@ -263,30 +263,30 @@ When wrapping the spec block over several lines, it is recommended to align the 
 不正确
 ----
  make-world: func [
-  	[throw] earth [word!]		;-- attributes block not on its own line
+  	[throw] earth [word!]		;-- 属性块不在自己的行上
     	wind	[bitset!]
-    	fire [binary!]			;-- unaligned type definition
+    	fire [binary!]			;-- 未对齐类型定义
     	water	[string!]
     	/with
             thunder [url!]
     	/only
-    	/into space [block! none!]	;-- inconsistent with /with formatting
+    	/into space [block! none!]	;-- 与格式化 /with 不一致
     	/local
-    	    plants animals		;-- breaking line too early
+    	    plants animals		;-- 断行太早了
     	    men women computers robots
 ][
 	...
 ]
 ----
 
-For docstrings, the main one (describing the function) should be on its own line if the spec block is wrapped. The argument and refinement docstrings should be on the same line as the item they are describing. Docstrings start with a capital letter and do not require a ending dot (it's added automatically when printed on screen by `help` function).
+对于文本串，如果定义块被包裹，主要（描述函数）应该在自己所在的行上。 参数和语句文本字符串应与其描述的项目在同一行。 文字块以大写字母开始，不需要结束点（当通过 `help` 功能打印在屏幕上时它会自动添加）。
 
 *正确*
 ----
  increment: func ["Add 1 to the argument value" n][n + 1]
 
  make-world: func [
-     "Build a new World"
+     "建立新世界"
      earth    [word!]      "1st element"
      wind     [bitset!]    "2nd element"
      fire     [binary!]    "3rd element"
@@ -304,17 +304,17 @@ For docstrings, the main one (describing the function) should be on its own line
 ----
 不正确
 ----
- make-world: func ["Build a new World"	;-- should be on a newline
+ make-world: func ["建立新世界"	;-- 应该新起一行
      earth	[word!]		"1st element"
-     wind	[bitset!]	  "2nd element"	;-- excessive indentation
+     wind	[bitset!]	  "2nd element"	;-- 过度缩进
      fire	[binary!]
-     "3rd element"			;-- should be on same line as `fire`
+     "3rd element"			;-- 应与 `fire` 在同一行
      water	[string!]
      /with 			"Additional element"
     		thunder [url!]
-     /only "Not implemented yet"	;-- should be aligned with other docstrings
+     /only "Not implemented yet"	;-- 应与其他文字块对齐
      /into
-           "Provides a container"      ;-- should follow the refinement
+           "Provides a container"      ;-- 应该遵循语句
     	    space [unset!]	"The container"
      /local
          plants animals men women computers robots
