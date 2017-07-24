@@ -210,6 +210,7 @@ make date! [99 12 31]
 <date>  : a word or path expression referring to a date! value
 <date2> : a date! value
 ----
+
 *描述*
 
 获取或设置日期的日期字段（不包括时间和区域）. 日期返回为 `date!` 值.
@@ -267,6 +268,7 @@ d
 <date>  : a word or path expression referring to a date! value
 <month> : an integer! value
 ----
+
 *描述*
 
 获取或设置日期的月份字段. 月数返回为整数. 超出范围的参数值会返回一个标准化日期.
@@ -299,6 +301,7 @@ d/month
 <date> : a word or path expression referring to a date! value
 <day>  : an integer! value
 ----
+
 *描述*
 
 获取或设置日期的日期字段. 天数返回为整数. 超出范围的参数值会返回一个标准化日期.
@@ -329,6 +332,7 @@ d
 <date> : a word or path expression referring to a date! value
 <time> : a time! or none! value
 ----
+
 *描述*
 
 获取或设置日期的时间字段. 返回 `time!` 值, 或返回 `none!` 值如果时间未设定, 或已重置（见下文）. 超出范围的参数值会返回一个标准化日期.
@@ -336,6 +340,7 @@ d
 如果时间设置为 `none!` 值, 时间和区域字段设置为零，字段值将不会被显示.
 
 *例子*
+
 ----
 d: now
 == 10-Jul-2017/23:18:54-06:00
@@ -358,6 +363,7 @@ d/time: none
 <date> : a word or path expression referring to a date! value
 <hour> : an integer! value
 ----
+
 *描述*
 
 获取或设置日期的小时数字段. 小时数返回0到23之间的整数值. 超出范围的参数值会返回一个标准化日期.
@@ -388,11 +394,13 @@ d
 <date>   : a word or path expression referring to a date! value
 <minute> : an integer! value
 ----
+
 *描述*
 
 获取或设置日期的分钟字段. 分钟返回0到59之间的整数值. 超出范围的参数值会返回一个标准化日期.
 
 *例子*
+
 ----
 
 == 10-Jul-2017/23:20:25-06:00
@@ -422,6 +430,7 @@ d
 获取或设置日期的秒数字段. 秒数返回为0到59之间的`integer!` 或 `float!` 值. 超出范围的参数值会返回一个标准化日期.
 
 *例子*
+
 ----
 d: now
 == 10-Jul-2017/23:21:15-06:00
@@ -450,6 +459,7 @@ d
 <date> : a word or path expression referring to a date! value
 <zone> : a time! or integer! value
 ----
+
 *描述*
 
 获取或设置日期的时区字段. 时区在-16：00和+15：00之间返回为`time!`值. 使用 `/zone` 设置时区将只改变时区字段,时间字段会保持不变. 超出范围的参数值会返回一个标准化日期.
@@ -488,6 +498,7 @@ d/zone: -4:00
 时区的分钟数为15, 不合格的值将四舍五入到最近15分钟的倍数.
 
 *例子*
+
 ----
 d: 1/3/2017/5:30:0
 d/timezone: 8
