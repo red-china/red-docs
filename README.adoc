@@ -7,30 +7,25 @@ _目前项目还处于开发阶段，所有只有少数信息能够作为文档�
 在线交流讨论，请点击 https://gitter.im/red/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge[image:https://badges.gitter.im/red/docs.svg[https://gitter.im/red/docs]]
 
 //define custom symbol for display自定义打钩符号
-:checkedbox: pass:normal[{startsb}&#10004;{endsb}]
-:mybox: pass:normal[{startsb}&#10084;{endsb}]
+:finished: pass:normal[{startsb}&#10004;{endsb}]
+:working: pass:normal[{startsb}&#10084;{endsb}]
 // 注释 ,用|分隔每一个单元格
 
 .翻译进度表
 |===
-| 文档名 | 已完成 | 翻译者 | 进行中  
-
-| SUMMARY.adoc | | |
-
-| README.adoc | {checkedbox} | pixcai |
-
-| date.adoc | | aa1214808834 |  {mybox} 
-
-| draw.adoc | {checkedbox} | aa1214808834 | 
-| gui.adoc | | pixcai |  {mybox}
-| libred.adoc | | | 
-| map.adoc |  {checkedbox} | pixcai  | 
-| ownership.adoc | | | 
-| preprocessor.adoc | | | 
-| reactivity.adoc | | | 
-| redbin.adoc | | | 
-|style-guide.adoc | | | 
-|vid.adoc | | | 
-|view.adoc | | | 
-
+| 文档名 | 状态 | 翻译者
+| link:SUMMARY.adoc[]      |            |
+| link:README.adoc[]       | {finished} | link:https://github.com/pixcai[Xuehua Cai]
+| link:date.adoc[]         | {working}  | link:https://github.com/aa1214808834[Silu Tang]
+| link:draw.adoc[]         | {finished} | link:https://github.com/aa1214808834[Silu Tang]
+| link:gui.adoc[]          | {working}  | link:https://github.com/pixcai[Xuehua Cai]
+| link:libred.adoc[]       |            |
+| link:map.adoc[]          | {finished} | link:https://github.com/pixcai[Xuehua Cai]
+| link:ownership.adoc[]    |            |
+| link:preprocessor.adoc[] |            |
+| link:reactivity.adoc[]   |            |
+| link:redbin.adoc[]       |            |
+| link:style-guide.adoc[]  |            |
+| link:vid.adoc[]          |            |
+| link:view.adoc[]         |            |
 |===
