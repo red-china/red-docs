@@ -323,9 +323,9 @@ _（TBD：提取 Red 代码库中使用的所有单字名称作为示例）_
  ]
 ----
 
-== Function calls 
+== 函数调用 
 
-Arguments are following the function call on the same line. If the line becomes too long, arguments can be wrapped over several lines (one argument per line) with an indentation.
+参数在同一行上跟随函数调用。 如果行变得太长，则可以使用缩进将参数包裹在几行（每行一个参数）中。
 
 *正确*
 ----
@@ -355,7 +355,7 @@ Arguments are following the function call on the same line. If the line becomes 
                      argument5
 ----
 
-For long expressions with many nested parts, spotting the bounds of each expression can be sometimes difficult. Using parenthesis for grouping a nested call with its arguments is acceptable (but not mandatory).
+对于具有许多嵌套部分的长表达式，发现每个表达式的边界有时会很困难。 使用括号将嵌套调用与其参数进行分组是可以接受的（但不是强制性的）。
 ----
  head insert (copy/part [1 2 3 4] 2) (length? mold (2 + index? find "Hello" #"o"))
 
@@ -364,25 +364,25 @@ For long expressions with many nested parts, spotting the bounds of each express
      length? mold (2 + index? find "Hello" #"o")
 ----
 
-== Comments 
+== 注释 
 
-In Red codebase:
+在 Red 代码库中：
 
-* comments are written using the `;--` prefix (stronger visual clue)
-* single-line comments start at column 57 (works best on average, else column 53)
-* multi-line comments are done using several single-line prefixes rather than `comment {...}` constructions.
+* 注释使用 `;--` 前缀（更强的视觉提示）
+* 单行注释从第 57 列开始（做到平均值最好，否则 53 列也可以）
+* 多行注释是使用多个单行前缀而不是 `comment {...}` 结构完成的。
 
-The general rule is to put comments on the same line as the beginning of the corresponding code instead of on a new line in order to save significant vertical space. Though, if the comment is used for separating chunks of code, then putting it on a new line is fine.
+一般规则是将注释放在相应代码开头相同的行上，而不是在新行上，以显著节省垂直空间。 然而，如果这个注释用于分割代码块，那么把它放在一个新的行上就行了。
 
-== String syntax 
+== 字符串语法 
 
-Use `""` for single-line strings. The `{}` form is reserved for multi-line strings. Respecting this rule ensures:
+对于单行字符串使用 `""` 。 `{}` 格式用于保存多行字符串。 尊重此规则可确保：
 
-* a more consistent source representation before and after LOADing code
-* better convey of meaning
+* 加载之前和之后的源代码更加一致
+* 更好地传达意义
 
-One exception to the rule is when a single-line string includes the " character itself. In this case, it is preferred to use the `{}` form rather than escaping the quote `^"` as it is more readable.
+规则的一个例外是当单行字符串包含 " 字符本身时。 在这种情况下，最好使用 `{}` 形式，而不是转义引号 `^"` ，因为它更可读。
 
-== New line usage 
+== 新行用法 
 
 TBD
