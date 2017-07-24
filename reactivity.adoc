@@ -1,13 +1,13 @@
-= Reactive Programming
+= 响应式编程
 :imagesdir: ../images
 :toc:
 :numbered:
 
-== Concept 
+== 概念 
 
-In version 0.6.0, Red introduced support for "reactive programming" to help reduce the size and complexity of Red programs. Red's reactive model relies on dataflow and object events to construct a directed graph and propagate changes in objects. It uses a "push" model. More specifically, Red implements the https://en.wikipedia.org/wiki/Reactive_programming#Object-oriented[object-oriented reactive programming] model, where only object fields can be the source of change.
+自版本0.6.0开始，Red引入响应式编程，以精炼Red程序。 响应模式依赖于数据流和对象事件，以构造有向图及在对象间传递变化。它使用推送模式，更准确讲，是https://en.wikipedia.org/wiki/Reactive_programming#Object-oriented[对象响应式编程]模式，仅对象字段是变化之源。
 
-The reactive API and its use are simple and practical, even if the description is abstract. Here are some diagrams to help visualize reactive relationships.
+虽然描述的抽象，但'reactive API'及其使用，简单而实用，。下面是一些图表，帮助可视化响应关系。
 
 image::react-simple.png[react-simple,align="center"]
 
