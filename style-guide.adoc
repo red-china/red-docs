@@ -1,32 +1,32 @@
-= Coding Style Guide
+= 编码样式指南
 :toc:
 :numbered:
 
-== Introduction 
+== 介绍 
 
-Red is an homoiconic language where code is represented as data. A consequence of that feature is that the language is almost totally free-form, in order to cope with all possible ways to format data, as well as being flexible enough for DSL-specific formatting needs. The following content is _just one of many, many ways_ to format Red code.
+Red是一种同像语言，代码可以被视为数据。 该功能的结果是语言几乎是完全自由的，以便应对所有可能的方式来格式化数据，以及足够灵活的 DSL 特定格式化需求。 以下内容只是格式化 Red 代码的 _许多方法之一_。
 
-This document describes the _official coding style used in the Red source code_, so respecting this coding style is a prerequisite of every pull request submitted to red/red Github repository.
+本文档描述了 _Red 源代码中使用的官方编码风格_，因此，尊重此编码风格是提交给 Red/Red Github 资源库的每个提取请求的先决条件。
 
-As Red/System is a dialect of Red, it shares the same syntax and coding style rules. Specific Red/System rules are marked as such.
+由于 Red/System 是 Red 的一种方言，它们共享相同的语法和编码风格规则。 特定的 Red/System 规则被标记为这样。
 
-The objectives of the following rules are to maximise readability including keeping an optimum number of lines of code visible on-screen while minimizing the need for comments.
+以下规则的目标是最大限度地提高可读性，包括在屏幕上保持最佳数量的代码行可见，同时最大限度地减少对注释的需求。
 
-== Line of code length 
+== 代码行长度 
 
-There is no strictly-defined maximum number of columns for a single line of code, as it can vary according to the type of the font used (size, proportional vs fixed-width) or highlighting effects. It should be possible to read a full line of code (excluding comments) in an editor occupying at maximum, half of a 1080p monitor width. On the displays we use for Red codebase coding, it is about 100 columns. In the description below, _excessive size_ or _too long_ expressions will refer to line of code sizes which do not fit the aforementioned criteria.
+对于单行代码，没有严格定义的最大列数，因为它可以根据使用的字体类型（大小，比例或固定宽度）或突出显示效果而有所不同。 应该可以在最多 1080p 监视器宽度的编辑器中读取全部代码（不包括注释）。 在我们用于 Red 代码库编码的显示器上，它大约是 100 列。 在下面的描述中，_表达式尺寸_ 或 _太长的_ 表达式将会不符合上述标准的代码行大小。
 
-== Indentation 
+== 缩进 
 
-Red codebase uses tabulations with size of *4* columns to indent the source code. This gives a good trade-off between too small values (like 2 columns) and too big ones (like 8 columns). Using tabs also means that you can adjust it to your personal preference in your editor, while respecting the rule (just pay attention to right alignments using tabs then).
+Red 代码库使用大小为 *4* 列的列表符缩进源代码。 这给出了太小的值（如 2 列）和太大值（如 8 列）之间的良好折衷。 使用制表符也意味着您可以在编辑器中将其调整为您的个人偏好，同时遵守规则（只需使用制表符注意正确的对齐方式）。
 
-All the contributed Red files to red/red repo should contain the following field in their header:
+所有贡献的 Red 文件到 Red/Red 代码仓库应该在其标题中包含以下字段：
 
- Tabs: 4
+ 制表符: 4
 
-Each time you go to a new line after opening a block or a parenthesis, you should indent by one tab.
+每次打开一个块或圆括号后，你都要去新行，你应该在一个选项卡上缩进。
 
-*Correct*
+*正确*
 ----
  func [
      arg1
@@ -37,54 +37,54 @@ Each time you go to a new line after opening a block or a parenthesis, you shoul
      ...
  ]
 ----
-Incorrect
+不正确
 ---- 
  func [
- arg1				;-- missing indentation!
+ arg1				;-- 缺少缩进！
  arg2
  ...
  ][
-		print arg1		;-- excessive indentation!
+		print arg1		;-- 过度缩进！
 		...
  ]
 ----
 
-== Block layouts 
+== 块布局 
 
-All the following rules apply to blocks `[]` as well as parenthesis `()`.
+所有以下规则适用于块 `[]` 以及括号 `（）` 。
 
-Empty blocks do not contain any whitespace:
+空块不包含任何空格：
  
  a: []
  
-Contiguous blocks do not require a whitespace between the end of one and start of another:
+相邻的块在一个的结尾和另一个的开始之间不需要空格：
  
  [][]
  []()
 
  [
-    hello
- ][						;-- no spacing required
-	   world
+    你好
+ ][						;-- 不需要间距
+	   世界
  ]
  
-However, it is acceptable to use whitespaces in-between nested blocks:
+然而，可以在嵌套块之间使用空格：
 ----
  array: [[] [] [] []]
  list:  [ [] [] [] [] ]
 
- either a = 1 [["hello"]][["world"]]
- either a = 1 [ ["hello"] ][ ["world"] ]
+ either a = 1 [["你好"]][["世界"]]
+ either a = 1 [ ["你好"] ][ ["世界"] ]
 ----
 
-For expressions containing small blocks, they are usually opened and closed on the same line
+对于包含小块的表达式，它们通常在同一行上打开和关闭
  
  b: either a = 1 [a + 1][3]
  
 
-If the line is too long, the block should be wrapped over several lines with one level of indentation:
+如果行太长，则该块应该用一个级别的缩进包裹在几行上：
 
-*Correct*
+*正确*
 ----
  b: either a = 1 [
      a + 1
@@ -93,17 +93,17 @@ If the line is too long, the block should be wrapped over several lines with one
  ]
 ----
 
-Incorrect
+不正确
 ----
  b: either a = 1 
      [a + 1][123 + length? mold a]
 ----
-_That style is wrong because it breaks the ability to copy/paste code to the Red console (`either ` will be evaluated before the block arguments are detected)._
+_这种风格是错误的，因为它破坏了将代码复制/粘贴到 Red 控制台的能力（`同样` 将在检测到块参数之前进行评估）._
 
-If the first block is small enough and can fit on the same line, then only the subsequent blocks are wrapped over several lines:
+如果第一个块足够小并且可以适合同一行，则只有后续的块被包裹在几行中：
 ----
  print either a = 1 ["hello"][
-     append mold a "this is a very long expression"
+     append mold a "这是一个很长的表达式"
  ]
 
  while [not tail? series][
@@ -112,13 +112,13 @@ If the first block is small enough and can fit on the same line, then only the s
  ]
 ----
 
-== Naming conventions 
+== 命名约定 
 
-*Variable names* should be single-word *nouns*. Choose words which are short and capturing the meaning as best as possible. Common words should be used first (_especially if they are already used in existing Red source code in the same context_). If needed, use a http://www.thesaurus.com/browse/synonym[synonyms dictionary]v, to find the best word for the usage. Single-letter or abbreviated words (unless the abbreviated word is in common usage) should be avoided as much as possible.
+*变量名* 应为单字 *名词* 。 选择简短的词语，尽可能地符合用意。 应该首先使用常用的单词（_特别是如果它们已经在现有 Red 源代码的同一上下文语境中使用过_）。 如果需要，请使用 http://www.thesaurus.com/browse/synonym[synonyms dictionary]v，找到能使用的最好的单词。 应尽可能避免单字母或缩写词（除非缩写词常用）。
 
-Names made of multiple words are separated with a dash `-` character. Use a two-words name only when a fitting single-word cannot be found or would be too confusing with already used ones. Variable names made of more than two words should only be used in rare cases. Using single-words as much as possible makes the code horizontally much more compact, improving readability greatly. Avoid useless verbosity.
+由多个单词组成的名称用短划线 `-` 字符分隔。 只有在找不到合适的单词时或者与已经使用的单词混淆才会使用双字的名称。 由两个以上的单词组成的变量名称只能在极少数情况下使用。 尽可能多地使用单个词让代码水平方向更加紧凑，大大提高可读性。 避免无用的冗长。
 
-*Correct*
+*正确*
 ----
  code: 123456
  name: "John"
@@ -128,7 +128,7 @@ Names made of multiple words are separated with a dash `-` character. Use a two-
  unless tail? list [author: select list index]
 ----
 
-Incorrect
+不正确
 ----
  code_for_article: 123456
  Mytable: [2 6 8 4 3]
@@ -139,7 +139,7 @@ Incorrect
 
 *Function names* should strive to be single-word _verbs_, in order to express an action, though two or three words names are often necessary. More than three words should be avoided as much as possible. Variable naming conventions also apply to function names. A noun or an adjective followed by a question mark is also accepted. Often, it denotes that the return value is of `logic!` type, but this is not a strict rule, as it is handy to form single-word action names for retrieving a property (e.g. `length?`, `index?`). When forming function names with two or more words, always put the verb in the first position. If names are picked carefully for variables and function names, the code becomes almost self-documented, often reducing the need for comments.
 
-*Correct*
+*正确*
 ----
  make:   func [...
  reduce: func [...
@@ -147,7 +147,7 @@ Incorrect
  crunch: func [...
 ----
 
-Incorrect
+不正确
 ----
  length:    func [...
  future:    func [...
@@ -206,7 +206,7 @@ _(TBD: extract all single-word names used in the Red codebase as examples)_
 
 The general rule is to keep the spec block on a single line. The body block can be on the same line or over several lines. In case of Red/System, as the spec blocks tend to be longer, most functions spec blocks are wrapped over several lines, so, for sake of visual consistency, often even small spec block are wrapped.
 
-*Correct*
+*正确*
 ----
  do-nothing: func [][]
  increment: func [n [integer!]][n + 1]
@@ -221,7 +221,7 @@ The general rule is to keep the spec block on a single line. The body block can 
      n + 1
  ]
 ----
-Incorrect
+不正确
 ----
  do-nothing: func [
  ][
@@ -242,7 +242,7 @@ When the spec block is too long, it should be wrapped over several lines. When w
 
 When wrapping the spec block over several lines, it is recommended to align the datatype definitions for consecutive arguments, on the same column for easier reading. Such alignment is preferably done using tabs (if you strictly follow these coding style rules) or else, using spaces.
 
-*Correct*
+*正确*
 ----
  make-world: func [
      earth	 [word!]
@@ -260,7 +260,7 @@ When wrapping the spec block over several lines, it is recommended to align the 
      ...
  ]
 ----
-Incorrect
+不正确
 ----
  make-world: func [
   	[throw] earth [word!]		;-- attributes block not on its own line
@@ -281,7 +281,7 @@ Incorrect
 
 For docstrings, the main one (describing the function) should be on its own line if the spec block is wrapped. The argument and refinement docstrings should be on the same line as the item they are describing. Docstrings start with a capital letter and do not require a ending dot (it's added automatically when printed on screen by `help` function).
 
-*Correct*
+*正确*
 ----
  increment: func ["Add 1 to the argument value" n][n + 1]
 
@@ -302,7 +302,7 @@ For docstrings, the main one (describing the function) should be on its own line
 	...
  ]
 ----
-Incorrect
+不正确
 ----
  make-world: func ["Build a new World"	;-- should be on a newline
      earth	[word!]		"1st element"
@@ -327,7 +327,7 @@ Incorrect
 
 Arguments are following the function call on the same line. If the line becomes too long, arguments can be wrapped over several lines (one argument per line) with an indentation.
 
-*Correct*
+*正确*
 ----
  foo arg1 arg2 arg3 arg4 arg5
 
@@ -338,7 +338,7 @@ Arguments are following the function call on the same line. If the line becomes 
      argument4
      argument5
 ----
-Incorrect
+不正确
 ----
  foo arg1 arg2 arg3
      arg4 arg5
