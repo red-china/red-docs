@@ -1,36 +1,36 @@
-== Red GUI Architecture ==
+== Red GUI架构 ==
 
 image::../images/view-overview.png[Overview,align="center"]
 
-=== VID 
+=== VID
 
-VID stands for Visual Interface Dialect. It is a dialect of Red, providing the simplest possible way to specify graphic components with their properties, layouts and even event handlers. VID code is compiled at runtime to a tree of faces suitable for displaying.
+VID代表可视化接口方言(Visual Interface Dialect)。它是Red的方言之一，旨在以最简单有效的方式来规定一个图形组件所拥有的属性、布局以及事件处理函数。VID代码会在运行时被编译到一种faces树结构以便用于显示。
 
-=== View 
+=== View
  
-The GUI code engine contains several parts:
+GUI引擎包含以下几个部分：
 
-* Platform-independent faces management engine
-* Reactive actions events
-* Draw dialect interpreter
-* Platform-specific backends
+* 平台独立的faces管理引擎
+* 响应式行为事件
+* Draw方言解释器
+* 平台特定的后端
 
 === React
 
-Reactive actions can be defined directly from VID dialect or can be specified directly using the REACT function.
+响应式行为可以直接用VID方言定义或者也可以直接用REACT函数指定。
 
 === Draw
 
-Draw is a Red dialect for 2D vector drawing. It can be specified in different ways:
+Draw是Red的一种2D矢量绘图方言。它有以下几种使用方式：
 
-* in VID layouts
-* directly in the `draw` property of any face object
-* using the DRAW function to draw directly onto an image
+* 在VID布局中使用
+* 直接在任何face对象的`draw`属性中使用
+* 使用DRAW函数直接绘制到图像上
 
-=== Platform-specific backends
+=== 平台特定的后端
 
-An internal API allows multiple backends (OS/graphic system combinations) so that the View engine can be implemented in different environments. Each backend must be capable of extensive 2D drawing for complete support of Draw dialect.
+因为内部API允许多个后端(OS/图形系统绑定)，所以View引擎可以在多个不同的环境中实现。为了完整的支持Draw方言，每个后端必须支持2D绘图操作。
 
-.Disclaimer
+声明：
 
-The initial design of VID, Draw and most of View (except for the reactive parts) were created by Carl Sassenrath and implemented in Rebol. Red View is a completely new, independent implementation providing similar features with some desirable improvements. Reactive actions being a prime example.
+VID、Draw以及大部分的View(除了响应式部分)都是Carl Sassenrath在Rebol中实现的。Red View是全新的，它对某些功能有所增强并且是独立实现的，响应式行为就是一个最好的例子。

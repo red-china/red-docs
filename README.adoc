@@ -1,36 +1,39 @@
 = Red编程语言中文文档
 
-_目前项目还处于开发阶段，所有只有少数信息能够作为文档参考_。
+_目前项目还处于开发阶段，所有只有少数信息能够作为文档参考_
 
-关于Red语言的更多信息，请访问 http://red-lang.org 。
+关于Red语言的更多信息，请访问 http://red-lang.org
 
 在线交流讨论，请点击 https://gitter.im/red/docs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge[image:https://badges.gitter.im/red/docs.svg[https://gitter.im/red/docs]]
 
-//define custom symbol for display自定义打钩符号
-:checkedbox: pass:normal[{startsb}&#10004;{endsb}]
-:mybox: pass:normal[{startsb}&#10084;{endsb}]
-// 注释 ,用|分隔每一个单元格
+=== 翻译进度表
 
-.翻译进度表
-|===
-| 文档名 | 已完成 | 翻译者 | 进行中  
+|        文档名        |        状 态       |        翻译者        |
 
-| SUMMARY.adoc | | |
+|     SUMMARY.adoc    |      无需翻译      |                     |
 
-| README.adoc | {checkedbox} | pixcai |
+|     README.adoc     |       已完成       |       pixcai        |
 
-| date.adoc | | aa1214808834 |  {mybox} 
+|      date.adoc      |       进行中       |     aa1214808834    |
 
-| draw.adoc | {checkedbox} | aa1214808834 | 
-| gui.adoc | | pixcai |  {mybox}
-| libred.adoc | | | 
-| map.adoc |  {checkedbox} | pixcai  | 
-| ownership.adoc | | | 
-| preprocessor.adoc | | | 
-| reactivity.adoc | | | 
-| redbin.adoc | | | 
-|style-guide.adoc | | | 
-|vid.adoc | | | 
-|view.adoc | | | 
+|      draw.adoc      |       已完成       |     aa1214808834    |
 
-|===
+|      gui.adoc       |       已完成       |       pixcai        |
+
+|     libred.adoc     |                   |                     | 
+
+|      map.adoc       |       已完成       |       pixcai        | 
+
+|    ownership.adoc   |                   |                     | 
+
+|  preprocessor.adoc  |                   |                     | 
+
+|   reactivity.adoc   |                   |                     | 
+
+|     redbin.adoc     |                   |                     | 
+
+|   style-guide.adoc  |                   |                     | 
+
+|       vid.adoc      |                   |                     | 
+
+|      view.adoc      |                   |                     | 
