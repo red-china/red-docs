@@ -5,28 +5,28 @@
 
 == 概念 
 
-自版本0.6.0开始，Red引入响应式编程，以精炼Red程序。 响应模式依赖于数据流和对象事件，以构造有向图及在对象间传递变化。它使用推送模式，更准确讲，是https://en.wikipedia.org/wiki/Reactive_programming#Object-oriented[对象响应式编程]模式，仅对象字段是变化之源。
+自版本0.6.0开始，Red引入响应式编程，以精简Red程序。 响应模式依赖于数据流和对象事件，以构造有向图及在对象间传递变化。它使用推送（push）模式，更准确讲，是 https://en.wikipedia.org/wiki/Reactive_programming#Object-oriented[对象响应式编程] 模式，仅对象字段是变化之源。
 
-虽然描述的抽象，但'reactive API'及其使用，简单而实用，。下面是一些图表，帮助可视化响应关系。
+虽然描述的抽象，但 `reactive API` 及其使用，简单而实用。下面是一些图表，帮助可视化响应关系。
 
 image::react-simple.png[react-simple,align="center"]
 
-_Graph A & B show simple relations between one or several reactors (objects that act as a reactive source)._
+_图 A & B 展示了一或多个响应器（Reactor:作为响应源的对象）之间的简单关系。_
 
 image::react-graphs.png[react-graph,align="center"]
 
 
-_Graphs C, D & E show chained reactions, where some targets are, themselves, reactors, setting up a chain of relations that can have any shape._
+_图 C, D & E 展示响应关系链, 其中某些目标自身就是响应器（Reactor）, 使得关系链可为任何形状。_
 
-Reactions are run asynchronously, when a source field's value is changed. The reaction relationship is maintained until the reaction is explicitly destroyed using `react/unlink` or `clear-reactions`.
+当源字段的值变化时，响应是异步的。响应关系会维持到使用  `react/unlink` 或 `clear-reactions` 明确销毁响应之时。
 
-Only the source objects in a reactive expression need to be a reactor. The target can be a simple object. If the target is also a reactor, reactions are chained and a graph of relations is constructed implicitly.
+响应表达式中，仅源对象需要是响应器，目标可以是简单对象。若目标对象也是响应器，则响应关系是链式的，并且会隐式的构造关系图。
 
-Notes:
+备注：
 
-* Red's reactive support could be extended in the future to support a "pull" model.
-* This is not a https://en.wikipedia.org/wiki/Functional_reactive_programming[FRP] framework, though event streams could be supported in the future.
-* The Red/View GUI engine relies on _face!_ objects in order to operate on graphic objects. Faces are reactors, and they can be used for setting reactive relations between faces or with non-reactor objects.
+* Red 的响应式编程将来会支持"拉取"（pull）模式。
+* 虽然将来会支持事件流，但这并不是 https://en.wikipedia.org/wiki/Functional_reactive_programming[函数响应式编程（FRP）] 框架。
+* 为了操作图形对象，Red/View GUI 引擎依靠 _face!_ 对象. Faces 都是响应器, 它们可在 face 之间，或与非响应器对象，建立响应关系。
 
 === Glossary 
 
