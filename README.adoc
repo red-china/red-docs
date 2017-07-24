@@ -19,7 +19,7 @@ _目前项目还处于开发阶段，所有只有少数信息能够作为文档�
 | link:map.adoc[]          |    已完成   | link:https://github.com/pixcai[pixcai]
 | link:ownership.adoc[]    |    不用译   |
 | link:preprocessor.adoc[] |    进行中   | link:https://github.com/pixcai[pixcai]
-| link:reactivity.adoc[]   |            |
+| link:reactivity.adoc[]   |    进行中   | link:https://github.com/morler[morler]
 | link:redbin.adoc[]       |    进行中   | link:https://github.com/pixcai[pixcai]
 | link:style-guide.adoc[]  |    初译完  |  link:https://github.com/morler[morler]
 | link:vid.adoc[]          |            |
