@@ -12,7 +12,7 @@ _目前项目还处于开发阶段，所有只有少数信息能够作为文档�
 | 文档名 | 状  态 | 翻译者
 | link:SUMMARY.adoc[]      |    不用译   |
 | link:README.adoc[]       |    已完成   | link:https://github.com/pixcai[pixcai]
-| link:date.adoc[]         |    进行中   | link:https://github.com/aa1214808834[Silu Tang]
+| link:date.adoc[]         |    已完成   | link:https://github.com/aa1214808834[Silu Tang]
 | link:draw.adoc[]         |    已完成   | link:https://github.com/aa1214808834[Silu Tang]
 | link:gui.adoc[]          |    已完成   | link:https://github.com/pixcai[pixcai]
 | link:libred.adoc[]       |    进行中   | link:https://github.com/pixcai[pixcai]
