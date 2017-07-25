@@ -28,19 +28,19 @@ _图 C, D & E 展示响应关系链, 其中某些目标自身就是响应器（R
 * 虽然将来会支持事件流，但这并不是 https://en.wikipedia.org/wiki/Functional_reactive_programming[函数响应式编程（FRP）] 框架。
 * 为了操作图形对象，Red/View GUI 引擎依靠 _face!_ 对象. Faces 都是响应器, 它们可在 face 之间，或与非响应器对象，建立响应关系。
 
-=== Glossary 
+=== 术语 
 
 [cols="1,2", options="header"]
 |===
-|Expression|  Definition
-|reactive programming|  A programming paradigm, a subset of dataflow programming, based on events "pushing" changes.
-|reaction|  A block of code which contains one or more reactive expressions.
-|reactive expression|  An expression which references at least one reactive source.
-|reactive relation|  A relation between two or more objects implemented using reactive expressions.
-|reactive source| A path! value referring to a field in a reactive object.
-|reactive formula|  A reaction which returns the last expression result on evaluation.
-|reactive object|  An object whose fields can be used as reactive sources.
-|reactor|	 Alias for "reactive object".
+|名称 |  定义
+|响应式编程|  一种编程范式，数据流编程的子集，基于事件 `推送` 变化。
+|响应|  包含一或多个响应表达式的代码区块。
+|响应表达式|  至少涉及一个响应源的表达式。
+|响应关系|  在两个或多个对象之间，用响应表达式实现的一种关系。
+|响应源| 一个引用响应对象内字段的路径（path!）值。
+|响应方案|  一种返回运算中最末表达式结果的响应。
+|响应对象|  其字段被用作响应源的对象。
+|响应器|	 `响应对象` 的别称。
 |===
 
 === Static Relations 
