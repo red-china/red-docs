@@ -5,9 +5,9 @@
 
 == 概念 
 
-自版本0.6.0开始，Red引入响应式编程，以精简Red程序。 响应模式依赖于数据流和对象事件，以构造有向图及在对象间传递变化。它使用推送（push）模式，更准确讲，是 https://en.wikipedia.org/wiki/Reactive_programming#Object-oriented[对象响应式编程] 模式，仅对象字段是变化之源。
+自版本0.6.0开始，Red引入响应式编程，以精简程序。 响应模式依赖于数据流和对象事件，以构造有向图及在对象间传递变化。它使用推送（push）模式，更准确讲，是 https://en.wikipedia.org/wiki/Reactive_programming#Object-oriented[对象响应式编程] 模式，仅对象字段是变化之源。
 
-虽然描述的抽象，但 `reactive API` 及其使用，简单而实用。下面是一些图表，帮助可视化响应关系。
+虽然描述的抽象，但响应式 API 及其使用，简单而实用。下面是一些图表，帮助可视化响应关系。
 
 image::react-simple.png[react-simple,align="center"]
 
@@ -20,13 +20,13 @@ _图 C, D & E 展示响应关系链, 其中某些目标自身就是响应器（R
 
 当源字段的值变化时，响应是异步的。响应关系会维持到使用  `react/unlink` 或 `clear-reactions` 明确销毁响应之时。
 
-响应表达式中，仅源对象需要是响应器，目标可以是简单对象。若目标对象也是响应器，则响应关系是链式的，并且会隐式的构造关系图。
+响应表达式中，仅源对象需要是响应器，目标可以是简单对象。若目标对象也是响应器，则响应关系是链式的，并且会隐式构造关系图。
 
 备注：
 
 * Red 的响应式编程将来会支持"拉取"（pull）模式。
 * 虽然将来会支持事件流，但这并不是 https://en.wikipedia.org/wiki/Functional_reactive_programming[函数响应式编程（FRP）] 框架。
-* 为了操作图形对象，Red/View GUI 引擎依靠 _face!_ 对象. Faces 都是响应器, 它们可在 face 之间，或与非响应器对象，建立响应关系。
+* Red/View GUI 引擎依靠 _face!_ 对象操作图形界面. face 都是响应器, 它们彼此之间，或与非响应器对象之间，可建立响应关系。
 
 === 术语 
 
@@ -38,47 +38,48 @@ _图 C, D & E 展示响应关系链, 其中某些目标自身就是响应器（R
 |响应表达式|  至少涉及一个响应源的表达式。
 |响应关系|  在两个或多个对象之间，用响应表达式实现的一种关系。
 |响应源| 一个引用响应对象内字段的路径（path!）值。
-|响应方案|  一种返回运算中最末表达式结果的响应。
+|响应公式|  一种返回运算中最末表达式结果的响应。
 |响应对象|  其字段被用作响应源的对象。
 |响应器|	 `响应对象` 的别称。
 |===
 
 === 静态关系 
 
-响应的最简单方式，是创建于 _命名_对象 间的 `静态关系` 。因其静态地链接对象，故称静态关系。它仅适用于源响应器，而不能再用于其它对象。
+响应的最简单形式，是创建于 _命名_ 对象之间的 `静态关系` 。因其静态地链接对象，故称静态关系。它仅适用于源响应器，而不能再用于其它对象。
 
 *例 1*
+
 ----
 view [
     s: slider return
     b: base react [b/color/1: to integer! 255 * s/data]
 ]
 ----
-此例，在命名为 `s` 的 slider 与命名为 `b` 的 base 之间建立响应关系。使得 base 的背景色依据 slider 的移动而变化。此响应表达式不得再使用于其它 faces 。这是 Red/View 中，图形对象间响应行为的最简单方式。
+此例，在命名为 `s` 的 slider 与命名为 `b` 的 base 之间建立响应关系。使得 base 的背景色依据 slider 的移动而变化。此响应表达式不得再使用于其它 face 。这是 Red/View 中，图形对象间响应行为的最简单方式。
 
 *例 2*
 
     vec: make reactor! [x: 0 y: 10]
     box: object [length: is [square-root (vec/x ** 2) + (vec/y ** 2)]]
 
-Another form of static relation can be defined using the `is` operator, where the value of the reaction evaluation is set to a word (in any context).
+静态关系的另一种形式可用 `is` 操作符定义。它把响应运算的值赋给任一语境中的字。
 
-This example is not related to the GUI system. It calculates the length of a vector defined by `vec/x` and `vec/y` using a reactive expression. Once again the source object is statically specified by its name (`vec`) in the reactive expression.
+此例无关于GUI系统。它用响应表达式计算由 `vec/x` 与 `vec/y` 定义的向量的长度。再次地，表达式中，源对象是由名称（`vec`）静态地指定的。
 
-*Example 3*
+*例 3*
 
 	a: make reactor! [x: 1 y: 2 total: is [x + y]]
 	
-The word `total` above has its value set to the `x + y` expression. Each time the `x` or `y` values change, `total` is immediately updated. Notice that paths are not needed in this case, to specify the reactive sources, because `is` is used directly inside the reactor's body and so knows its context.
+上面，字 `total` 的值由表达式 `x+y` 赋与。每当 `x` 或 `y` 的值有变化，`total`的值会立即更新。注意，此时无需路径指定响应源，因为 `is` 直接用在响应器内，而自知语境。
 
-*Example 4*
+*例 4*
 
 	a: make reactor! [x: 1 y: 2]
 	total: is [a/x + a/y]
 
-This variation of Example 3 shows that a global word can also be the target of a reactive relation (though it can't be the source). This form is the closest to that of a spreadsheet's (e.g. Excel) formula model.
+此例3的变体展示了，一个根语境的字，也可为响应关系的目标（虽不能为源）。这种形式最接近于电子表格（如Excel)的公式模型。
 
-NOTE: due to the size of global context, making it reactive (as above with `total`) could have significant performance overhead, though that could be overcome in the future.
+备注：尽管将来会克服，但根语境由于尺寸原因，其响应化（如上面的 `total` ）将有显著的性能开销。
 
 === Dynamic Relations 
 
