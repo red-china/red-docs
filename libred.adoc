@@ -5,39 +5,39 @@
 :numbered:
 
 
-== Abstract 
+== 概要
 
-LibRed is a special version of the Red interpreter and runtime library, suitable for integrating into software built in languages other than Red. In order to allow the non-Red software interact with Red, libRed exposes a dedicated low level API (following either C cdecl or Microsoft stdcall standards) which is described in this document. Among the supported features are:
+LibRed是Red解释器和运行时库的一个特殊版本，适合于集成到非Red语言开发的软件中。为了允许非Red软件与Red通信，libRed暴露一个极度底层的API(遵循C语言的cdecl或微软的stdcall标准)。它支持的特性有：
 
-* Ability to set/get a word's value from global or a local context.
-* Shortcut constructors for the most common Red datatypes.
-* Conversion functions for Red datatypes compatible with the host language (mostly C).
-* Series manipulation from the host language.
-* Callbacks allowing Red to call host language functions.
-* Console-oriented debugging functions.
+* 有能力从全局或局部上下文中设置/获取一个word的值。
+* 大部分通用的Red数据类型的快捷构造器。
+* 与宿主语言(通常是C语言)兼容的Red数据类型转换函数。
+* 对宿主语言的一系列操作。
+* 回调允许Red调用宿主函数。
+* 面向控制台的调试函数。
 
-Terminology: the term _host_ is used to designated the host language or application embedding libRed.
+术语：名词_host_表明宿主语言或者嵌入libRed的应用程序。
 
-Samples of libRed usage can be found https://github.com/red/red/tree/master/tests/libRed[here].
+libRed使用例子可以在 https://github.com/red/red/tree/master/tests/libRed[这里]查看。
 
-== Building libRed
+== 构建libRed
 
-Building your local version of libRed is simple:
+构建本地版本的libRed非常简单：
 ----
 red build libRed
 ----
-or from Rebol's console and Red sources:
+或者从Rebol的控制台和Red的源码中构建：
 ----
 rc "build libRed"
 ----
-Those command-lines will build the libRed version for C language (using the `cdecl` ABI). If you need the `stdcall` ABI (for Microsoft apps compatibility), you need to use:
+这些命令行将会构建出适合于C语言的libRed版本(采用`cdecl`ABI)。如果你需要`stdcall`ABI(为了兼容微软的应用)，你需要运行：
 ----
 red build libRed stdcall
 ----
 
-== Value references
+== 值引用
 
-Red values can be returned by libRed function calls. They are represented as _opaque_ 32-bit references. Those references are short-lived, so they are suitable only for restricted local use, like passing that reference to another libRed function call. Setting such references to host variables is possible, but it should be used *immediately after*. Those references are using a specific memory manager that will only keep references alive for about the next 50 API calls. For example:
+Red值可以通过libRed函数调用被返回。它们被表示为32-bit的不透明引用。这些引用的生命周期都非常短，所以它们只适合于在局部范围内使用，比如传递一个引用到另一个函数调用。设置这些引用到宿主变量也是可以的，但是它应该在设置之后立即使用。这些引用都使用一个特定的内存管理器，这个管理器将仅仅保持引用在接下来的大约50次API调用内有效。例如：
 ----
 long a, blk;
 
@@ -56,13 +56,13 @@ for(i = 0; i < 100, i++) {
 
 == C API
 
-The C API can be used with C/C++ applications, but also for integrating Red within any other programming language having a C-compatible https://en.wikipedia.org/wiki/Foreign_function_interface[FFI].
+C API可以用在C/C++应用程序中，但是也可以集成Red到任何一种与C兼容的编程语言之中 https://en.wikipedia.org/wiki/Foreign_function_interface[FFI]。
 
-=== Managing the library
+=== 管理库
 
-A libRed _instance_ needs to be create in order to use any function from the API. 
+为了使用API中的函数，libRed_实例_需要被创建。
 
-NOTE: Currently, only a single libRed session per process is allowed. It is intended that this will be extended in the future to allow multi-instances support.
+注意：当前，每个进程只允许单个libRed会话，预计将来允许对多实例的支持。
 
 ==== redOpen()
 ----

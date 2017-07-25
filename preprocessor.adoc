@@ -1,31 +1,31 @@
-= Preprocessor
+= 预处理器
 :toc:
 :numbered:
 
 
-== Concept
+== 概念
 
-The Red preprocessor is a dialect of Red, enabling transformation of Red source code using a specific layer on top of regular Red language. Transformations are achieved by inlining preprocessor keywords (called `directives`) inside Red source code. These directives will be processed:
+Red预处理器是Red的一种方言，可以转换Red源码在常规的Red语言特定层之上。 转换是通过Red源码中的内联预处理器关键字(称为`directives`)实现的。这些指令将会处理：
 
-* when the Red source code is compiled
-* when the Red source code is run by `do` function with a file argument
-* when `expand-directives` function is called on a block value
+* 当Red源码被编译的时候
+* 当Red源码通过`do`函数调用文件参数执行的时候
+* 当`expand-directives`函数在block值上被调用的时候
 
-The preprocessor is invoked after the LOADing phase, so it processes Red values, and not the source code in text form.
+预处理器在加载阶段(LOADing phase)之后被调用，所以它处理Red值，而不是文本形式的源码。
 
-Directive categories:
+指令分类：
 
-* conditional directives: include code depending on the result of an expression.
-* control directives: control the behavior of the preprocessor.
-* macros: transform code using functions, enables more complex transformations.
+* 条件指令：根据表达式执行的结果包含代码。
+* 控制指令：控制预处理器的行为。
+* 宏：使用函数转换代码，启用更复杂的转换。
 
-Directives are denoted by specific issue! values (starting with a `#` symbol).
+指令被表示为一个特定的`issue!`值(以`#`开头)。
 
-When a directive is processed, it is replaced by the resulting value it returns (some directives do not return anything, so they are just removed). That is how transformations of source code is achieved.
+当指令被处理的时候，它会被替换为它返回的结果值(有些指令没有返回值，所以它们仅仅只是被移除)。这就是源码转换是如何实现的。
 
-Notes: Red/System has its own http://static.red-lang.org/red-system-specs-light.html#section-16[preprocessor], which is similar, but low-level and applied to the source code in text form.
+注意：Red/System有它自己的 http://static.red-lang.org/red-system-specs-light.html#section-16[预处理器]，它和Red的预处理相似，但是更底层并且应用到文本形式的源码。
 
-=== Config object
+=== 配置对象
 
 In conditional expressions and in macros, an implicit `config` object is provided, to give access to the settings used to compile the source code. Those settings are often used for conditional inclusion of code. The exhaustive list of settings can be found https://github.com/red/red/blob/master/system/compiler.r#L31[here].
 
@@ -121,7 +121,7 @@ The `<rule>` part can be:
 
 `<attribute>` can be `[manual]`, which triggers the low-level manual mode for the macro.
 
-*Examples:*
+*例子：*
 ----
 Red []
 
@@ -133,7 +133,7 @@ will result in:
 Red []
 print 2 + 3 
 ----
-Using *manual* mode, the same macro would be written as:
+使用*manual*模式，相同的宏可以被写作：
 ----
 Red []
 
