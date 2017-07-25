@@ -114,7 +114,7 @@ ellipse <top-left> <size>
 
 注: 与“circle”命令相比，“ellipse”提供了一种更紧凑和面向盒子的方式来指定一个圆/椭圆.
 
-=== 弧线(Arc)
+=== 圆弧(Arc)
 
 *语法*
 
@@ -161,13 +161,13 @@ curve <end-A> <control-A> <control-B> <end-B>
 spline <point> <point> ...
 spline <point> <point> ... closed
 
-<point> : 一个控制点 (pair!).
+<point> : 一个控制点(pair!)。
 ----
 *描述*
 
-使用一系列点绘制一个B样条曲线. 需要至少3个点才能生成花键. 可选的“closed”关键字将从终点到起点绘制一个额外的段，以便关闭样条.
+使用一系列点绘制一个B样条曲线，需要至少3个点来生成样条曲线。可选的`closed`关键字将绘制一个额外的从终点到起点的线段，以便闭合样条曲线。
 
-NOTE: 2个点也可以被接受，但只能生成一条直线.
+NOTE: 允许只用2个点，但只能生成一条直线(line)。
 
 === 图片(Image) 
 
