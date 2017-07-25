@@ -81,13 +81,14 @@ view [
 
 备注：尽管将来会克服，但根语境由于尺寸原因，其响应化（如上面的 `total` ）将有显著的性能开销。
 
-=== Dynamic Relations 
+=== 动态关系 
 
-Static relations are easy to specify, but they don't scale well if you need to provide the same reaction to a number of reactors, or if the reactors are anonymous (reminder: all objects are anonymous by default). In such cases, the reaction should be specified with a *function* and `react/link`.
+静态关系虽容易设定，但若需要提供同一个响应给多个响应器，或响应器是匿名的（记住：所有对象默认都是匿名的），则适用性欠佳。此类情况，应当用 *函数* 与 `react/link` 来设定响应。
 
-*Example*
+*示例*
+
 ----
-;-- Drag the red ball up and down with the mouse. Watch how the other balls react.
+;-- 用鼠标上下拖动红球，看别的球如何响应。
 
 win: layout [
     size 400x500
@@ -106,7 +107,7 @@ while [not tail? next faces][
 ]
 view win
 ----
-In this example, the reaction is a function (`follow`) which is applied to the ball faces by pairs.  This creates a chain of relations that link all the balls together. The terms in the reaction are parameters, so they can be used for different objects (unlike static relations).
+例中的响应是个应用于成对小球的函数（ `follow` ）。由此构造出关系链连接所有小球。而响应条件是参数式的，故可应用于不同对象（有别于静态关系）。
 
 
 == API 
