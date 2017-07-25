@@ -43,20 +43,20 @@ _图 C, D & E 展示响应关系链, 其中某些目标自身就是响应器（R
 |响应器|	 `响应对象` 的别称。
 |===
 
-=== Static Relations 
+=== 静态关系 
 
-The simplest form of reactions is a "static relation" created between _named_ objects. It is _static_ because it statically links objects. It uniquely applies to its source reactors, and cannot be re-used for other objects.
+响应的最简单方式，是创建于 _命名_对象 间的 `静态关系` 。因其静态地链接对象，故称静态关系。它仅适用于源响应器，而不能再用于其它对象。
 
-*Example 1*
+*例 1*
 ----
 view [
     s: slider return
     b: base react [b/color/1: to integer! 255 * s/data]
 ]
 ----
-This example sets a reactive relation between a slider named `s` and a base face named `b`. When the slider is moved, the red component of the base face's background color is changed accordingly. The reactive expression cannot be re-used for a different set of faces. This is the simplest form of reactive behavior for graphic objects in Red/View.
+此例，在命名为 `s` 的 slider 与命名为 `b` 的 base 之间建立响应关系。使得 base 的背景色依据 slider 的移动而变化。此响应表达式不得再使用于其它 faces 。这是 Red/View 中，图形对象间响应行为的最简单方式。
 
-*Example 2*
+*例 2*
 
     vec: make reactor! [x: 0 y: 10]
     box: object [length: is [square-root (vec/x ** 2) + (vec/y ** 2)]]
