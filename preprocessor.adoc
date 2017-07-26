@@ -27,26 +27,26 @@ Red预处理器是Red的一种方言，可以转换Red源码在常规的Red语�
 
 === 配置对象
 
-In conditional expressions and in macros, an implicit `config` object is provided, to give access to the settings used to compile the source code. Those settings are often used for conditional inclusion of code. The exhaustive list of settings can be found https://github.com/red/red/blob/master/system/compiler.r#L31[here].
+在条件表达式或宏中，为了访问编译源码时提供的设置，有一个隐式的`config`对象被提供。这些设置经常用于在条件表达式中包含代码。详细的设置列表可以在 https://github.com/red/red/blob/master/system/compiler.r#L31[这里] 查看。
 
-*Example:*
+*例子：*
     
     #if config/OS = 'Windows [#include %windows.red]
 
-NOTE:
- when using the preprocessor at runtime (from Red's interpreter), the `config` object is also available, and will reflect the options used for compiling the Red executable currently used to run the code.
+注意：
+当在运行时(从Red的解释器中)使用预处理器时，`config`对象也有效，并且可以反射在编译Red可执行文件到可运行代码时的选项。
 
-=== Execution context
+=== 执行上下文
 
-All the expressions used in directives are bound to a dedicated context to avoid leaking words in global context, causing unwanted side-effects. That context is extended with every set-word used in conditional expressions, macros and `#do` directive.
+为了避免暴露words到全局上下文，以造成不必要的副作用，在指令中的所有表达式都限定在特定的上下文中。上下文延伸到在条件表达式、宏和`#do`指令的每个set-word。
 
-Tips:
+提示：
 
-* It is possible to print out the content of that hidden context using the following expression:
+* 可以用以下表达式打印输出隐藏上下文：
         
         #do [probe self]
         
-* When used at runtime, the hidden context can also be accessed directly using:
+* 当在运行时使用的时候，隐藏上下文也可以用以下形式直接访问：
         
         probe preprocessor/exec
 
