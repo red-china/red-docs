@@ -114,7 +114,7 @@ view win
 
 === react 
 
-*Syntax*
+*语法*
 ----
 react <code>
 react/unlink <code> <source>
@@ -124,9 +124,9 @@ react/unlink <func> <source>
 
 react/later <code>
 
-<code>    : block of code that contain at least one reactive source (block!).
-<func>    : function that contain at least one reactive source (function!).
-<objects> : list of objects used as arguments to a reactive function (block! of object! values).
+<code>    : 包含至少一个响应源的代码块(block!)
+<func>    : 包含至少一个响应源的函数(function!)
+<objects> : 用作响应函数参数的对象列表 (block! of object! values).
 <source>  : 'all word, or an object or a list of objects (word! object! block!).
 
 Returns   : <code> or <func> for further references to the reaction.
