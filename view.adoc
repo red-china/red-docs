@@ -1,22 +1,22 @@
-= Red/View Graphic Engine
+= Red/View 图形引擎
 :imagesdir: ../images
 :toc:
 :toclevels: 3
 :numbered:
 
-== Design goals 
-
-The Red/View (or just View) component is a graphic system for the Red programming language. The design goals are:
-
-* Data-oriented, minimal API
-* Virtual tree of objects as programming interface
-* Realtime or deferred synchronization between the virtual tree and the display system
-* Make two-way binding trivial to support
-* Ability to have different backends, across different platforms
-* Support OS, third-party and custom widget sets
-* Low performance overhead
-
-The virtual tree is built using face objects. Each face object maps to a graphic component on the display in a two-way binding.
+== 设计目标
+ 
+此 Red/View (或 View) 组件，是Red编程语言的图形系统。其设计目标：
+ 
+* 数据导向，API少
+* 以虚拟对象树为编程接口
+* 显示系统与虚拟树之间实时或延迟的同步
+* 细致的双向绑定支持（Make two-way binding trivial to support）
+* 多后端，跨平台
+* 支持系统的，第三方的，以及自制的窗口部件
+* 低性能开销
+ 
+虚拟树用 face 对象构造。每个 face 对象以双向绑定映射一个图形组件。
 
 == Face object
 
