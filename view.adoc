@@ -17,17 +17,18 @@
 * 低性能开销
 
 虚拟树用 face 对象构造。每个 face 对象以双向绑定映射一个图形组件。
+//根据中学生编程.pdf里提到的facet称为属性.  感觉这个facet= face +type的t的合体词
 
-== Face object
+== Face对象(Face object)
 
-Face objects are clones of `face!` template object. A field in face object is called a _facet_.
+face对象是 `face!` 模板对象的克隆. 在face对象中的一个字段被称作属性( _facet_ )。
 
-List of available facets:
+可用属性(facets)的列表:
 
 [cols="1,1,1,1,2", options="header"]
 |===
 
-|Facet | Datatype | Mandatory? | Applicability | Description
+|属性 Facet | 数据类型 Datatype | 强制性 Mandatory? | 适用性 Applicability | 描述 Description
 |type| word!| yes| all| Type of graphic component (see link:view.html#_face_types[below]).
 |offset| pair!| yes| all| Offset position from parent top-left origin.
 |size| pair!| yes| all| Size of the face.
