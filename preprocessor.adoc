@@ -50,19 +50,19 @@ Red预处理器是Red的一种方言，可以转换Red源码在常规的Red语�
         
         probe preprocessor/exec
 
-=== Implementation note
+=== 实现笔记
 
-Currently, expressions in directives used at compile-time are evaluated using Rebol2 interpreter, as it is running the toolchain code. This is temporary and should be switched to a Red evaluator as soon as possible. In the meantime, ensure that  your expressions and macros code can be run with Red too, for compatibility with Red interpreter at run-time (and at compile-time in the future).
+当前，那些用在编译时的指令中的表达式都是用Rebol2解释器执行的，由它来运行工具链代码。这是临时的，以后会尽可能地切换为Red执行器。与此同时，为了在运行时(将来还包含编译时)和Red解释器兼容，确保你的表达式和宏代码也可以用Red运行。
 
-== Macros
+== 宏
 
-The Red preprocessor supports definining macro functions (called just *macros*) for achieving more complex transformations. Macros allow for an efficient form of metaprogramming, where the execution cost is paid at compile-time, rather than run-time. Red already has strong metaprogramming abilities at run-time, but, for the sake of enabling Red source code to be run equally well by the compiler and interpreter, macros can also be resolved at run-time.
+Red预处理器支持定义宏函数(简称为*macros*)来实现更复杂的转换。宏允许高效的元编程，即执行花费在编译时而不是运行时。Red在运行时已经有很强的元编程能力，但是，为了使得Red源码在编译器和解释器运行等效，宏也可以在运行时被解析。
 
-NOTE: There are no read-time (reader) macros. Given how simple it is to already preprocess sources in text form using Parse dialect, such support would be, for now, redundant.
+注意：没有读取时间宏。考虑到用解析方言对文本形式的源进行预处理是多么简单，这种支持现在是多余的。
 
-The preprocessor supports two types of macros:
+预处理器支持两种类型的宏：
 
-=== Named macros
+=== 命名宏
 
 This type of macro is higher-level, as the preprocessor takes care of arguments fetching and returned value replacing for the user. The typical form is:
 
@@ -101,7 +101,7 @@ will result in:
 Red []
 print 1048576
 ----
-=== Pattern-matching macros
+=== 模式匹配宏
 
 Instead of matching a word and fetching argument, this type of macros matches a pattern provided as a Parse dialect rule or keyword. Like for the named macros, the returned value is used as replacement for the matched pattern.
 
