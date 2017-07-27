@@ -11,7 +11,7 @@
 * 数据导向，API少
 * 以虚拟对象树为编程接口
 * 显示系统与虚拟树之间实时或延迟的同步
-* 细致的双向绑定支持（Make two-way binding trivial to support）
+* 支持细致的双向绑定（Make two-way binding trivial to support）
 * 多后端，跨平台
 * 支持系统的，第三方的，以及自制的窗口部件
 * 低性能开销
@@ -54,42 +54,42 @@ face对象是 `face!` 模板对象的克隆. 在face对象中的一个字段被�
 |draw| block!| no| all| List of Draw commands to be drawn on the face.
 |===
 
-List of globally-usable flags for `flags` facet:
+下表列出属性(facet)的全局可用标记 `flags` 。 原文: List of globally-usable flags for `flags` facet:
 
 [cols="1,4", options="header"]
 |===
-|Flag | Description
+| 标记 Flag | 满速 Description
 |*all-over*| Send all `over` events to the face.
 |===
 
 
-Other face types specific flags are documented in their respective sections.
+其他face类型的具体标志在其各自的部分被记录。 原文:Other face types specific flags are documented in their respective sections.
 
 Notes:
 
-* Non-mandatory facets can be set to `none`.
-* `offset` and `size` are specified in screen pixels.
-* `offset` and `size` can sometime be set to `none` before displaying them. The View engine will take care of setting the values (like for panels in tab-panel type).
-* Display order (from back to front): color, image, text, draw.
+* 非强制性属性 (facets) 可以设置 `none`.
+* `offset` 和 `size` 用屏幕像素指定.
+* `offset` 和 `size` 在它们被显示之前有时可以设置 `none`. View引擎将负责设置值 比如 tab-panel 类型里的面板).
+* 显示顺序(从后到前): color, image, text, draw.
 
-Creating a new face is achieved by cloning the face! object and providing *at least* a valid `type` name.
+创建一个 face 可以通过克隆 face! 对象来实现，并需要提过 *至少* 一个有效的 `type` 名称.
 
     button: make face! [type: 'button]
 
-Once a face created, the `type` field is not allowed to be changed.
+一旦 face 完成创建 `type` 字段就不允许再更改.
 
-=== Options facet 
+=== 属性选项 (Options facet )
 
-Options facet holds optional facets which are used for specific behaviors:
+属性选项包含可选属性(facet),用于指定一些行为:
 
 [cols="1,4" options="header"]
 |===
-|Option| Description
+|选项 Option| 描述 Description
 |*drag&#8209;on*| Can be one of: `'down`, `'mid-down`, `'alt-down`, `'aux-down`. Used for enabling a drag'n drop operation.
 |===
 
 	
-== Font object
+== 文字对象 (Font object)
 
 Font objects are clones of `font!` template object. One font object can be referenced by one or more faces, allowing to control font properties of a group of faces from a single place.
 
