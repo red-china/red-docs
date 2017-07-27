@@ -58,7 +58,7 @@ face对象是 `face!` 模板对象的克隆. 在face对象中的一个字段被�
 
 [cols="1,4", options="header"]
 |===
-| 标记 Flag | 满速 Description
+| 标记 Flag | 描述 Description
 |*all-over*| Send all `over` events to the face.
 |===
 
