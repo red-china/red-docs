@@ -1,33 +1,33 @@
-= Redbin format
+= Redbin格式
 :toc:
 :numbered:
 
-_Specification version 1_
+_规范版本 1_
 
-Redbin is a binary format that accurately represents Red values stored in memory, while enabling fast loading (avoiding the parsing and validation stage of the text representation format). Redbin format is largely inspired by http://www.rebol.com/article/0044.html[REBin]. Redbin can encode binding information for words and can handle cycles in any-block! values.
+Redbin是一种二进制格式，可以准确表示存储在内存中的Red值，同时启用快速加载（避免文本表示格式的解析和验证阶段）。 Redbin格式很大程度上受到http://www.rebol.com/article/0044.html [REBin]的启发。 Redbin可以编码单词的绑定信息，并可以处理任何块中的any-block!值。
 
-The user interface for Redbin format access will be provided by `load/binary` and `mold/binary`. Underlying implementation _could_  use the codec sub-system, once available.
+Redbin格式访问的用户界面将由“load / binary”和“mold / binary”提供。一个可用的底层实现_could_使用编解码器子系统。
 
-Implementation constraints:
+实施约束：
 
-* Base address in memory of Redbin data about to be loaded, needs to be 64-bit aligned.
+* 存储Redbin数据的基地址将被加载，需要64位对齐。
 
-== Encoding format
+== 编码格式
 
-The _default_ encoding format is optimized for decoding speed, while the _compact_ format requires a smaller storage space (at the expense of much slower decoding).
+_默认_编码格式针对解码速度进行了优化，而_紧凑_格式需要较小的存储空间（以牺牲较慢的解码为代价）。
 
-Values are stored in little-endian format.
+值以小端格式存储。
 
-Lexical conventions:
+词汇约定：
 
-. _Numbers in parentheses indicate the byte size of the field._
+. _括号中的数字表示字段的字节大小。_
 
-. _Field names followed by a datatype name in a block are place-holders for a value of that datatype._
+. _块中的字段名称后跟随的数据类型名称是该数据类型的值的占位符。_
 
-. _Field names followed by equal sign have a fixed value._
+. _字段名称后跟等号具有固定值。_
 
 
-== Header
+== 头部
 ----
 magic="REDBIN" (6), version=1 (1), flags (1), length (4), size (4)
 
@@ -40,30 +40,31 @@ flags (option is enabled if bit is set):
 length : number of root records to load.
 size   : size of records payload in bytes.
 ----
-If compression is applied, the data following the header is the payload to be compressed. Compression algorithm choice is implementation-dependent.
+如果应用压缩，则头后面的数据是要压缩的有效载荷。 压缩算法选择依赖于实现。
 
-== Symbol Table
-The symbol table is following immediately the header data. It is optional and should only be used if words are present in the rest of the Redbin payload. The symbol table has two sections:
+== 符号表
 
-* a table of offsets to string representation of each symbol
-* strings buffers, NUL-terminated and concatenated to each other
+符号表立即跟随标题数据。 这是可选的，只有在Redbin有效载荷的其余部分中存在单词时才应使用它。 符号表有两个部分：
 
-The position of a symbol in the table is its _index_ (zero-based), and it is used as reference for a symbol in contexts and words. The strings buffers section contains UTF-8 encoded strings with an optional padding at end to ensure 64-bit alignment. The offsets in the table are offsets in bytes from beginning of the strings buffers section to the referred string buffer.
+* 每个符号的字符串表示的偏移表
+* 字符串缓冲区，NULL终止并且彼此并置
 
-Table encoding:
+表中的符号的位置是其_索引_（从零开始），并且用作上下文和单词中的符号的引用。 字符串缓冲区部分包含UTF-8编码的字符串，其末尾可选填充，以确保64位对齐。 表中的偏移量是从字符串缓冲区开始到引用的字符串缓冲区的字节偏移量。
 
- Default: length (4), size (4), offset1 (4), offset2 (4),...
- Compact: TBD
+表编码：
 
-`length` field contains the number of entries in the table. `size` field indicates the size of the string buffer in bytes (including optional tail padding bytes).
+ 默认： length (4), size (4), offset1 (4), offset2 (4),...
+ 紧凑： TBD
 
-During the decoding process, these symbols are merged within Red's own symbol table and the offsets are replaced by the symbol ID value from Red table. That is, the symbol references in the Redbin records are an indirect reference to Red's internal symbol table entries used only during the loading process.
+`length`字段包含表中的条目数。`size`字段表示字符串缓冲区的大小（以字节为单位）（包括可选的尾部填充字节）。
 
-After the Symbol Table, Red values are stored as records in sequence with no special delimiter or end marker. The loaded values from root level are usually stored in a block! series.
+在解码过程中，这些符号被合并在Red自己的符号表中，并且偏移量由Red表中的符号ID值替代。 也就是说，Redbin记录中的符号引用是对仅在加载过程中使用的Red的内部符号表条目的间接引用。
 
-== Records definitions
+符号表后，Red值按顺序存储为记录，无特殊分隔符或结束标记。 来自根级别的加载值通常存储在block!序列。
 
-Each records starts with a 32-bit `header` field defined as:
+== 记录定义
+
+每个记录以一个32位`header`字段开头，定义为：
 ****
  * bit31    : new-line flag
  * bit30    : no-values flag (for contexts)
@@ -74,16 +75,16 @@ Each records starts with a 32-bit `header` field defined as:
  * bit15-8  : unit (used for encoding elements size in a series buffer)
  * bit7-0   : type
 ****
-Here follows the description of each individual record:
+以下是每个单独记录的说明：
 
-=== Padding anchor:padding[] 
+=== 对齐 anchor:padding[] 
 ----
-Default: header (4)
-Compact: n/a
+默认：header (4)
+紧凑：n/a
 
 header/type=0
 ----
-This empty type slot is used to properly align 64-bit values.
+这个空类型槽用于正确对齐64位值。
 
 === Datatype! anchor:datatype[] 
 ----
@@ -124,7 +125,7 @@ Compact: TBD
 
 header/type=5
 ----
-The `head` field indicates the offset of the block reference, using a zero-based integer. The `length` field contains the number of values to be stored in the block. The block values simply follow the block definition, no separator or end delimiter is required.
+`head`字段指示块引用的偏移，使用基于零的整数。 `length`字段包含要存储在块中的值的数量。 块值只是遵循块定义，不需要分隔符或结束分隔符。
 
 === Paren! anchor:paren[] 
 ----
@@ -133,7 +134,7 @@ Compact: TBD
 
 header/type=6
 ----
-Same encoding rules as block!.
+与block!相同的编码规则。
 
 === String! anchor:string[] 
 ----
@@ -143,7 +144,7 @@ Compact: TBD
 header/type=7
 header/unit=1|2|4
 ----
-`head` field has same meaning as for blocks. The `unit` sub-field indicates the encoding format of the string, only values of 1, 2 and 4 are valid. The `length` field contains the number of codepoints to be stored in the string, up to 16777215 codepoints (2^24 - 1) are supported. The string is encoded in UCS-1, UCS-2 or UCS-4 format. No NUL character is present, nor accounted for in the `length` field. An optional tail padding of 1 to 3 NUL bytes can be present to align the end of the string! record with a 32-bit boundary.
+`head`字段与块相同。 `unit`子字段指示字符串的编码格式，只有1,2和4的值有效。 `length`字段包含要存储在字符串中的代码点数，最多支持16777215个代码点（2 ^ 24 - 1）。 字符串以UCS-1，UCS-2或UCS-4格式编码。 不存在NUL字符，也不存在于`length`字段中。 可以使用1到3个NUL字节的可选尾填充，以将string!记录的末尾与32位边界对齐。
 
 === File! anchor:file[] 
 ----
@@ -153,7 +154,7 @@ Compact: TBD
 header/type=8
 header/unit=1|2|4
 ----
-Same encoding rules as string!.
+与string!相同的编码规则！
 
 === Url! anchor:url[] 
 ----
@@ -162,7 +163,7 @@ Compact: TBD
 
 header/type=9
 ----
-Same encoding rules as string!.
+与string!相同的编码规则！
 
 === Char! anchor:char[] 
 ----
@@ -187,7 +188,7 @@ Compact: TBD
 
 header/type=12
 ----
-The optional padding field is added to properly align the `value` field offset to a 64-bit value.
+添加可选的填充字段将“value”字段偏移正确对齐到64位值。
 
 === Context! anchor:context[] 
 ----
@@ -199,7 +200,7 @@ header/no-values=0|1
 header/stack?=0|1
 header/self?=0|1
 ----
-Contexts are Red values used internally by some datatypes like function!, object! and derivative types. A context contains two consecutive tables, the first one is the list of word entries in the context represented as symbol references, the second is the associated values for each of the symbols in the first table. `length` field indicates the number of entries in the context. Context records can only exist at root level, they cannot be nested. If `no-values` flag is set, it means that there are no values following the symbols (empty context). If `stack?` flag is set, then the values are allocated on the stack instead of the heap memory. The `self?` flag is used to indicate that the context is able to handle a self-referencing word (`self` in objects).
+上下文是一些数据类型在内部使用的Red值，如function !, object！ 和衍生类型。 上下文包含两个连续的表，第一个是上下文中表示为符号引用的单词条目列表，第二个表是第一个表中每个符号的关联值。 `length`字段表示上下文中的条目数。 上下文记录只能存在于根级别，不能嵌套。 如果设置了“no-values”标志，则表示符号之后没有值（空的上下文）。 如果设置了“stack？”标志，那么这些值将分配给堆栈而不是堆内存。 “self？”标志用于表示上下文能够处理自引用字（对象中的“self”）。
 
 === Word! anchor:word[] 
 ----
@@ -209,9 +210,9 @@ Compact: TBD
 header/type=15
 header/set?=0|1
 ----
-The `context` field is an offset from the beginning of the records section in the Redbin file referring to a context! value. The context needs to be located before the word record in the Redbin records list. If `context` equals -1, it refers to global context.
+`context`字段是与引用`context`值的Redbin文件中的记录部分的开头的偏移量。 上下文需要位于Redbin记录列表中的单词记录之前。 如果`context`等于-1，则指全局上下文。
 
-If the `set?` field is defined, this record is followed by an [any-value!] record, and the word will need to be set to that value (in the right context) by the decoder. This forms a name/value couple allowing to encode words' values in an adhoc way, when providing a sequence of values for a given context is too expensive (mostly for name/value couples in global context).
+如果定义了`set?`字段，则该记录后面是[any-value!]记录，并且该解码器将需要将该字设置为该值（在正确的上下文中）。 当形成给定上下文的值序列太贵（主要用于全球范围内的名称/值对）时，这形成了一个key/value对，可以以adhoc方式对单词的值进行编码。
 
 === Set-word! anchor:set-word[] 
 ----
@@ -220,7 +221,7 @@ Compact: TBD
 
 header/type=16
 ----
-Same as word!.
+和word!相同。
 
 === Lit-word! anchor:lit-word[] 
 ----
@@ -229,7 +230,7 @@ Compact: TBD
 
 header/type=17
 ----
-Same as word!.
+和word!相同。
 
 === Get-word! anchor:get-word[] 
 ----
@@ -238,7 +239,7 @@ Compact: TBD
 
 header/type=18
 ----
-Same as word!.
+和word!相同。
 
 === Refinement! anchor:refinement[] 
 ----
@@ -247,7 +248,7 @@ Compact: TBD
 
 header/type=19
 ----
-Same as word!.
+和word!相同。
 
 === Issue! anchor:issue[] 
 ----
@@ -264,7 +265,7 @@ Compact: TBD
 
 header/type=21
 ----
-`ID` is an offset into the internal `natives/table` jump table.
+`ID`是内部的`natives/table`跳转表的偏移量。
 
 
 === Action! anchor:action[] 
@@ -274,7 +275,7 @@ Compact: TBD
 
 header/type=22
 ----
-`ID` is an offset into the internal `actions/table` jump table.
+`ID`是内部的`actions/table`跳转表的偏移量。
 
 === Op! anchor:op[] 
 ----
@@ -283,7 +284,7 @@ Compact: TBD
 
 header/type=23
 ----
-`symbol` representes the action, native or function name (only from global context) used as the source for that op! value. 
+`symbol`表示作为_ op！_值的源的action，native或函数名（仅来自全局上下文）。
 
 
 === Function! anchor:function[] 
@@ -301,7 +302,7 @@ Compact: TBD
 
 header/type=25
 ----
-Same encoding rules as block!.
+和block!同样的编码。
 
 === Lit-path! anchor:lit-path[] 
 ----
@@ -310,7 +311,7 @@ Compact: TBD
 
 header/type=26
 ----
-Same encoding rules as block!.
+和block!同样的编码。
 
 === Set-path! anchor:set-path[] 
 ----
@@ -319,7 +320,7 @@ Compact: TBD
 
 header/type=27
 ----
-Same encoding rules as block!.
+和block!同样的编码。
 
 === Get-path! anchor:get-path[] 
 ----
@@ -328,7 +329,7 @@ Compact: TBD
 
 header/type=28
 ----
-Same encoding rules as block!.
+和block!同样的编码。
 
 === Bitset! anchor:bitset[] 
 ----
@@ -337,7 +338,7 @@ Compact: TBD
 
 header/type=30
 ----
-The `length` fields indicates the number of bits stored, rounded to the upper multiple of 8. The bits are memory dumps of the bitset! series buffer. Byte order is preserved. `bits` field needs to be padded with enough NUL bytes to keep the next record 32-bit aligned.
+`length`字段指示存储的位数，舍入到8的高位。这些位是bitset!序列缓冲区的内存转储。 字节顺序被保留。 `bits`字段需要用足够的NUL字节进行填充，以保持下一个记录32位对齐。
 
 === Point! anchor:point[] 
 ----
@@ -354,7 +355,7 @@ Compact: TBD
 
 header/type=32
 ----
-The `on-set-idx` field indicates the offset of the `on-change*` in the context values table. The `on-set-arity` stores the arity of that function.
+`on-set-idx`字段表示上下文值表中`on-change*`的偏移量。`on-set-arity`存储该功能的真实性。
 
 === Typeset! anchor:typeset[] 
 ----
@@ -379,7 +380,7 @@ Compact: TBD
 
 header/type=35
 ----
-`unit` indicates the size of the vector element type size: 1, 2, 4 or 8 bytes. The `values` field holds the list of values. `values` needs to be padded with NUL bytes to align the next record to a 32-bit boundary (if `unit` is equal to 1 or 2).
+`unit`表示向量元素类型大小的大小：1,2,4或8个字节。 `values`字段保存值列表。 `values`需要用NUL字节填充，以将下一个记录对齐到32位边界（如果`unit`等于1或2）。
 
 === Pair! anchor:pair[] 
 ----
@@ -396,7 +397,7 @@ Compact: TBD
 
 header/type=38
 ----
-Percent value is stored as a 64-bit float. The optional padding field is added to properly align the `value` field offset to a 64-bit value.
+百分比值存储为64位浮点数。 添加可选的填充字段将`value`字段偏移正确对齐到64位值。
 
 === Tuple! anchor:tuple[] 
 ----
@@ -413,7 +414,7 @@ Compact: TBD
 
 header/type=40
 ----
-The `length` field contains the number of elements (keys + values) to be stored in the map. The map elements simply follow the length definition, no separator or end delimiter is required.
+`length`字段包含要存储在地图中的元素数（键+值）。 map元素简单地遵循长度定义，不需要分隔符或结尾分隔符。
 
 === Binary! anchor:binary[] 
 ----
@@ -422,7 +423,7 @@ Compact: TBD
 
 header/type=41
 ----
-Same encoding rules as block!.
+和block!同样的编码。
 
 === Time! anchor:time[] 
 ----
@@ -431,7 +432,7 @@ Compact: TBD
 
 header/type=43
 ----
-Time value is stored as a 64-bit float. The optional padding field is added to properly align the `value` field offset to a 64-bit value.
+时间值存储为64位浮点数。 添加可选的填充字段将`value`字段偏移正确对齐到64位值。
 
 === Tag! anchor:tag[] 
 ----
@@ -441,7 +442,7 @@ Compact: TBD
 header/type=44
 header/unit=1|2|4
 ----
-Same encoding rules as string!.
+和string!同样的编码。
 
 === Email! anchor:email[] 
 ----
@@ -451,7 +452,7 @@ Compact: TBD
 header/type=45
 header/unit=1|2|4
 ----
-Same encoding rules as string!.
+和string!同样的编码。
 
 === Date! anchor:date[] 
 ----
@@ -460,7 +461,7 @@ Compact: TBD
 
 header/type=47
 ----
-Date is packed into a 32-bit integer (same as in `red-date!`). Time value is stored as a 64-bit float.
+日期被打包成32位整数（与`red-date!`相同）。 时间值存储为64位浮点数。
 
 === Reference! anchor:reference[] 
 ----
@@ -469,4 +470,4 @@ Date is packed into a 32-bit integer (same as in `red-date!`). Time value is sto
 
  header/type=255
 ----
-This special record type stores a reference to an already loaded value of type any-block! or object!. This makes it possible to store cycles in Redbin. The reference is created from a path into the loaded values (assuming that the root values are stored in a block). Each `index` field points to the series or object value to go into, until the last one is reached, pointing to the value to refer to. The `count` field indicates the number of indexes to go through. If one of the indexes has to be applied to an object, it refers to the corresponding object's field (0 => 1st field, 1 => 2nd field,...). All indexes are zero-based.
+这个特殊的记录类型存储对已经加载的类型any-block!或object!的值的引用。 这样可以在Redbin中存储周期。 引用是从路径创建到加载值（假定根值存储在块中）。 每个`index`字段指向要进入的系列或对象值，直到到达最后一个值，指向要引用的值。 `count`字段表示要通过的索引数。 如果其中一个索引必须应用于一个对象，它将引用相应的对象的字段（0 => 1个字段，1 => 2个字段，...）。 所有索引都是基于零的。
