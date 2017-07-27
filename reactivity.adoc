@@ -115,6 +115,7 @@ view win
 === react 
 
 *语法*
+
 ----
 react <code>
 react/unlink <code> <source>
@@ -129,16 +130,17 @@ react/later <code>
 <objects> : 用作响应函数参数的对象列表 (block! of object! values).
 <source>  : 'all word, or an object or a list of objects (word! object! block!).
 
-Returns   : <code> or <func> for further references to the reaction.
+Returns   : <code> 或 <func>  对响应的进一步引用？（for further references to the reaction.
 ----
-*Description*
-
-`react` sets a new reactive relation, which contains at least one reactive source, from a block of code (sets a "static relation") or a function (sets a "dynamic relation" and requires the `/link` refinement). In both cases, the code is statically analyzed to determine the reactive sources (in the form of path! values) that refer to reactor fields.
-
-By default, the newly formed reaction *is called once on creation* before the `react` function returns. This can be undesirable in some cases, so can be avoided with the `/later` option.
-
-A reaction contains arbitrary Red code, one or more reactive sources, and one or more reactive expressions. It is up to the user to determine the set of relations which best fit their needs.
-
+*说明*
+ 
+`react` 从代码块（设置“静态关系”）或函数（设置“动态关系”，且需要 `/link` 饰字）设置至少含一个响应源的新的响应关系，
+两种情况下，代码都是静态分析以确定引用响应器字段的响应源（以路径值(path!)的形式）。
+默认，新形成的响应会在 `react` 函数返回之前的*创建时调用一次*。这在某些情况下不可取，得使用 `/later`选项。
+ 
+响应包含任意Red代码，一或多个响应源，及一或多个响应表达式。由用户根据需要设置合适的关系。
+ 
+`/link` 选项携带一个函数作为响应，且一个对象参数列表用来运算该响应。
 The `/link` option takes a function as the reaction and a list of arguments objects to be used in evaluation of the reaction. This alternative form allows dynamic reactions, where the reaction code can be reused with different sets of objects (the basic `react` can only work with statically _named_ objects).
 
 A reaction is removed using the `/unlink` refinement and with one of the following as a `<source>` argument:
