@@ -64,31 +64,31 @@ Red预处理器支持定义宏函数(简称为*macros*)来实现更复杂的转�
 
 === 命名宏
 
-This type of macro is higher-level, as the preprocessor takes care of arguments fetching and returned value replacing for the user. The typical form is:
+这种类型的宏是高级的，因为预处理器负责为用户获取参数和替换返回值。典型的形式是：
 
     #macro name: func [arg1 arg2... /local word1 word2...][...code...]
     
-After defining such macro, each time the `name` word is encountered in the source code, it will trigger this macro following those steps:
+这样定义一个宏之后，源码中每个出现`name`的地方，都会触发以下步骤：
 
-. Fetch the argument values.
-. Invoke the macro function with the arguments.
-. Replace the macro call and its arguments with the last value of the function.
-. Resume preprocessing from the replaced value (allowing recursive macro evaluation).
+. 获取参数值。
+. 用参数调用宏函数。
+. 用函数的最后一个值替换宏调用及其参数。
+. 从替换值(允许递归执行宏)的地方恢复预处理器。
 
-NOTE: specifying types for the arguments is not currently supported.
+注意：目前不支持指定参数类型。
 
-*Examples:*
+*例子：*
 ----
 Red []
 #macro make-KB: func [n][n * 1024]
 print make-KB 64
 ----  
-will result in:    
+将会输出：
 ----
 Red []
 print 65536
 ----
-Calling other macros, from within a macro:
+在一个宏中调用另一个宏：
 ----
 Red []
 #macro make-KB: func [n][n * 1024]
@@ -96,30 +96,30 @@ Red []
 
 print make-MB 1
 ----  
-will result in:    
+将会输出：
 ----  
 Red []
 print 1048576
 ----
 === 模式匹配宏
 
-Instead of matching a word and fetching argument, this type of macros matches a pattern provided as a Parse dialect rule or keyword. Like for the named macros, the returned value is used as replacement for the matched pattern.
+与匹配单词和获取参数相反，这种类型的宏按照Parse方言的规则或关键字来匹配宏。和命名宏相同，返回值被用作匹配模式的替换值。
 
-Thought, there is also a lower-level version of this type of macros, which is triggered by the usage of the `[manual]` attribute. In such case, there are no implicit actions, but full control is given to the user.  No automatic replacement takes place, it is up to the macro function to apply the desired transformations and set the resuming point of the processing.
+虽然，也有这种类型的宏的低级版本，采用`[manual]属性触发`。在这种情况下，没有隐式的行为，而是由用户完全控制。它不会自动替换匹配的值，而是取决于宏函数应用所需的转换并设置处理的恢复点。
 
-The typical form of pattern-matching macros is:
+模式匹配宏的典型形式为：
 ----
  #macro <rule> func [<attribute> start end /local word1 word2...][...code...]
 ----
-The `<rule>` part can be:
+`<rule>`部分可以是：
 
-* a lit-word! value: for matching a specfic word.
-* a word! value: a Parse keyword, like a datatype name or `skip` for matching *all* values.
-* a block! value: a Parse dialect rule.
+* lit-word!值：用来匹配指定的word。
+* word!值：Parse关键字，和数据类型名字相同或者用`skip`匹配*所有*的值。
+* block!值：Parse方言规则。
 
-`start` and `end` argument are references delimiting the matched pattern in the source code. The return value needs to be a reference to the resuming position.
+`start`和`end`参数是引用划定匹配模式的源代码。返回值需要是对恢复位置的引用。
 
-`<attribute>` can be `[manual]`, which triggers the low-level manual mode for the macro.
+`<attribute>`可以是`[manual]`，使得触发宏的低级手动模式。
 
 *例子：*
 ----
@@ -128,7 +128,7 @@ Red []
 #macro integer! func [s e][s/1 + 1]
 print 1 + 2
 ----
-will result in:
+将会输出：
 ----
 Red []
 print 2 + 3 
@@ -141,7 +141,7 @@ Red []
 print 1 + 2
 ----
   
-Using a block rule to create a variable-arity function:
+使用block规则创建一个变元函数：
 ----
 Red []
 #macro ['max some [integer!]] func [s e][
@@ -149,43 +149,43 @@ Red []
 ]
 print max 4 2 3 8 1
 ----
-will result in:
+将会输出：
 ----
 Red []
 print 8 
 ----
-== Directives 
+== 指令
 
 === #if 
 
-*Syntax*
+*语法*
 ----
 #if <expr> [<body>]
 
 <expr> : expression whose last value will be used as a condition.
 <body> : code to be included if <expr> is true.
 ----
-*Description*
+*描述*
 
-Include a block of code if the conditional expression is true. If the `<body>` block is included, it will be also passed to the preprocessor.
+如果条件表达式为真，则包含一段代码。如果包含`<body>`块，它也将被传递给预处理器。
 
-*Examples*
+*例子*
 ----
 Red []
 
 #if config/OS = 'Windows [print "OS is Windows"]
 ----
-will result in the following code if run on Windows:
+如果在Windows运行的话将会输出以下结果：
 ----
 Red []
 
 print "OS is Windows"
 ----
-and otherwise, will result in just:
+否则的话，仅仅输出：
 ----
 Red []
 ----
-It is also possible to define your own words using `#do` directive, which can be used in conditional expressions later:
+也可以利用`#do`指令定义你自己的word，使得可以用在条件表达式后：
 ----
 Red []
 
@@ -193,7 +193,7 @@ Red []
 
 #if debug? [print "running in debug mode"]
 ----
-will result in:
+将会输出：
 ----
 Red []
 
@@ -201,7 +201,7 @@ print "running in debug mode"
 ----
 === #either 
 
-*Syntax*
+*语法*
 ----
 #either <expr> [<true>][<false>]
 
@@ -209,23 +209,23 @@ print "running in debug mode"
 <true>  : code to be included if <expr> is true.
 <false> : code to be included if <expr> is false.
 ----
-*Description*
+*描述*
 
-Choose a block of code to include depending on a conditional expression. The included block will be also passed to the preprocessor.
+根据条件表达式选择要包含的代码块。包括块也将传递给预处理器。
 
-*Example*
+*例子*
 ----
 Red []
 
 print #either config/OS = 'Windows ["Windows"]["Unix"]
 ----
-will result in the following code if run on Windows:
+如果在Windows运行的话将会输出以下结果：
 ----
 Red []
 
 print "Windows"
 ----
-and otherwise, will result in:
+否则的话，将会输出：
 ----
 Red []
 
@@ -233,7 +233,7 @@ print "Unix"
 ----
 === #switch 
 
-*Syntax*
+*语法*
 ----
 #switch <expr> [<value1> [<case1>] <value2> [<case2>] ...]
 #switch <expr> [<value1> [<case1>] <value2> [<case2>] ... #default [<default>]]
@@ -242,11 +242,11 @@ print "Unix"
 <caseN>   : code to be included if last tested value matched.
 <default> : code to be included if no other value matched.
 ----
-*Description*
+*描述*
 
-Choose a block of code to include among several choices, depending on a value. The included block will be also passed to the preprocessor.
+选择一个代码块，根据它的值选择是否包含多个代码块中的一个。所包含的块也将传递给预处理器。
 
-*Example*
+*例子*
 ----
 Red []
 
@@ -256,7 +256,7 @@ print #switch config/OS [
     MacOSX  ["macOS"]
 ]
 ----   
-will result in the following code if run on Windows:
+如果在Windows运行的话将会输出以下结果：
 ----
 Red []
 
@@ -264,18 +264,18 @@ print "Windows"
 ----
 === #case 
 
-*Syntax*
+*语法*
 ----
 #case [<expr1> [<case1>] <expr2> [<case2>] ...]
 
 <exprN> : conditional expression.
 <caseN> : code to be included if last conditional expression was true.
 ---- 
-*Description*
+*描述*
 
-Choose a block of code to include among several choices, depending on a value. The included block will be also passed to the preprocessor.
+选择一个代码块，根据它的值选择是否包含多个代码块中的一个。所包含的块也将传递给预处理器。
 
-*Example*
+*例子*
 ----
 Red []
 
@@ -287,7 +287,7 @@ print #case [
     level >= 4 ["Hard"]
 ]
 ----  
-will result in:
+将会输出：
 ----
 Red []
 
@@ -295,30 +295,30 @@ print "Medium"
 ----
 === #include 
 
-*Syntax*
+*语法*
 ----
 #include <file>
 
 <file> : Red file to be included (file!).
 ----  
-*Description*
+*描述*
 
-When evaluated at compile-time, read and include the argument file contents at the current position. The file can contain a path, absolute or relative to the current script. When run by the Red interpreter, this directive is just replaced by a `do`, and no file inclusion occurs.
+在编译时进行评估时，读取并将参数文件内容包含在当前位置。 该文件可以包含与当前脚本绝对或相对的路径。 当红色解释器运行时，该指令只是被替换为`do`，并且不会包含文件。
 
 === #do 
 
-*Syntax*
+*语法*
 ----
 #do [<body>]
 #do keep [<body>]
 
 <body> : any Red code.
 ----    
-*Description*
+*描述*
 
-Evaluate the body block in the hidden execution context. If `keep` is used, replace the directive and argument with the result of evaluating `body`.
+执行隐藏上下文中的body块。 如果使用`keep`，则将指令和参数替换为“body”的结果。
 
-*Example*
+*例子*
 ----
 Red []
 
@@ -328,7 +328,7 @@ print ["2 + 3 =" #do keep [2 + 3]]
     
 #if a < 0 [print "negative"]
 ----    
-will result in:
+将会输出：
 ----
 Red []
 
@@ -337,7 +337,7 @@ print ["2 + 3 =" 5]
 
 === #macro
 
-*Syntax*
+*语法*
 ----
 #macro <name> func <spec> <body>
 #macro <pattern> func <spec> <body>
@@ -348,36 +348,36 @@ print ["2 + 3 =" 5]
 <body>    : body block of the macro function.
 ----
 
-*Description*
+*描述*
 
-Create a macro function.
+创建一个宏函数。
 
-For a named macro, the specification block can declare as many arguments as needed. The body needs to return a value that will be used to replace the macro call and its arguments. Returning an empty block will just remove the macro call and its arguments.
+对于命名宏，指定的block可以根据需要声明任意数量的参数。body需要返回一个用于替换宏调用及其参数的值。 返回空块将仅删除宏调用及其参数。
 
-For a pattern-matching macro, the specification block must declare only **two** arguments, the starting reference and ending reference of the matched pattern. By convention, the arguments names are: `func [start end]` or `func [s e]` as short form. By default, the body needs to return a value that will be used to replace the matched pattern. Returning an empty block will just remove the matched pattern. 
+对于模式匹配宏，spec块必须只声明**两个**参数，匹配模式的起始引用和结束引用。按照惯例，参数名称为：`func [start end]`或`func [s e]`作为短格式。 默认情况下，主体需要返回一个用于替换匹配模式的值。 返回一个空块将只是删除匹配的模式。
 
-A *manual* mode is also available for pattern-matching macros. It can be set by putting a `[manual]` attribute in the function *spec* block: `func [[manual] start end]`. Such manual mode requires the macro to return the resuming position (instead of a replacement value). If it needs to *reprocess* a replaced pattern, then `start` is the value to return. If it needs to *skip* the matched pattern, then `end` is the value to return. Other positions can also be returned, depending on the transformation achieved by the macro, and the desire to partially or fully reprocess the replaced value(s).
+*手动*模式也可用于模式匹配宏。 可以通过在函数* spec *块中放置一个`[manual]`属性来设置：`func [[manual] start end]`。这种手动模式需要宏返回恢复位置(而不是替换值)。如果需要*重新处理*一个替换的模式，那么`start`是要返回的值。 如果需要*跳过匹配的模式，那么`end`是要返回的值。还可以返回其他位置，这取决于宏实现的转换，以及部分或全部重新处理替换值的愿望。
 
-A pattern-matching macro accepts:
+模式匹配宏接受：
 
-* a block: specifies a pattern to match using the Parse dialect.
-* a word: specifies a valid Parse dialect word (like a datatype name, or `skip` to match all values).
-* a lit-word: specifies a specific literal word to match.
+* block: 使用Parse方言指定要匹配的模式。
+* word: 指定一个有效的Parse方言word(如数据类型名称，或“skip”匹配所有值)。
+* lit-word: 指定一个特定的文字来匹配。
 
-*Examples*
+*例子*
 ----
 Red []
 #macro pow2: func [n][to integer! n ** 2]
 print pow2 10
 print pow2 3 + pow2 4 = pow2 5
 ----
-will result in:
+将会输出：
 ----
 Red []
 print 100
 print 9 + 16 = 25
 ----   
-Pattern-matching macro example:
+模式匹配宏例子：
 ----
 Red []
 #macro [number! '+ number! '= number!] func [s e][
@@ -386,12 +386,12 @@ Red []
 
 print 9 + 16 = 25
 ----
-will result in:
+将会输出：
 ----
 Red []
 print true
 ----
-A pattern-matching macro in manual mode:
+手动模式的模式匹配宏：
 ----
 Red []
 #macro ['sqrt number!] func [[manual] s e][
@@ -408,7 +408,7 @@ Red []
 print sqrt 9
 print sqrt -4
 ----
-will result in:
+将会输出：
 ----
 *** SQRT Error: no negative number allowed 
 *** At: sqrt -4
@@ -417,17 +417,17 @@ will result in:
 
 === #local 
 
-*Syntax*
+*语法*
 ----
 #local [<body>]
 
 <body> : arbitrary Red code containing local macros definitions.
 ----    
-*Description*
+*描述*
 
-Create a local context for macros. All macros defined in that context will be discarded on exit. Therefore, the local macros also need to be locally applied. This directive can be used recursively (`#local` is a valid directive in `<body>`).
+为宏创建本地上下文。 在该上下文中定义的所有宏将在退出时被丢弃。 因此，本地宏也需要在本地应用。 这个指令可以递归使用（`＃local`是`<body>`中的一个有效的指令）。
 
-*Example*
+*例子*
 ----
 Red []
 print 1.0
@@ -437,7 +437,7 @@ print 1.0
 ]
 print 2.0
 ----
-will result in:
+将会输出：
 ----
 Red []
 print 1.0
@@ -446,27 +446,27 @@ print 2.0
 ----
 === #reset 
 
-*Syntax*
+*语法*
 ----
 #reset
 ---- 
-*Description*
+*描述*
 
-Reset the hidden context, emptying it from all previously defined words and removing all previously defined macros.
+重置隐藏的上下文，将其从所有以前定义的单词中清空，并删除所有以前定义的宏。
 
 === #process
 
-*Syntax*
+*语法*
 ----
 #process [on | off]
 ---- 
-*Description*
+*描述*
 
-Enable or disable the preprocessor (it is enabled by default). This is an escape mechanism to avoid processing parts of Red files where directives are used literally and not meant for the preprocessor (for example, if used in a dialect with a different meaning).
+启用或禁用预处理器（默认情况下启用）。 这是一个避免处理Red文件的部分的转义机制，其中使用了指令，而不是用于预处理器（例如，如果在具有不同含义的方言中使用）。
 
-Implementation constraint: when enabling the preprocessor again after disabling it earlier, the `#process off` directive needs to be at same (or higher) level of nesting in the code.
+实现约束：在禁用它之前再次启用预处理器时，`#process off`指令需要在代码中嵌套相同（或更高）的级别。
 
-*Example*
+*例子*
 ----
 Red []
 
@@ -475,7 +475,7 @@ print "Conditional directives:"
 foreach d [#if #either #switch #case][probe d]
 #process on
 ----    
-will result in:
+将会输出：
 ----
 Red []
 
@@ -484,37 +484,37 @@ foreach d [#if #either #switch #case][probe d]
 ----
 === #trace 
 
-*Syntax*
+*语法*
 ----
 #trace [on | off]
 ----  
-*Description*
+*描述*
 
-Enable or disable the debugging output of evaluated expressions and macros on screen. There are no specific constraints on where this directive can be used in the Red sources.
+启用或禁用屏幕上评估的表达式和宏的调试输出。 在Red源中可以使用该指令的方式没有特别的限制。
 
 
-== Runtime API anchor:runtime-api[]
+== 运行时API anchor:runtime-api[]
 
-The Red preprocessor can also work at run-time, in order to be able to evaluate source code using preprocessor directives also from the interpreter. It will be invoked automatically when using `do` on a `file!` value. Note that the following form can be used to `do` a file without invoking the preprocessor: `do load %file`.
+Red预处理器也可以在运行时工作，以便能够使用解释器中的预处理器指令来评估源代码。 在`file``值上使用`do`时会自动调用它。 请注意，以下形式可用于在不调用预处理程序的情况下执行文件：`do load％file`。
 
 === expand-directives 
 
-*Syntax*
+*语法*
 ----
 expand-directives [<body>]
 expand-directives/clean [<body>]
 
 <body> : arbitrary Red code containing preprocessor directives.
 ----
-*Description*
+*描述*
 
-Invoke the preprocessor on a block value. The argument block will be modified and used as returned value. If `/clean` refinement is used, the preprocessor state is reset, so all the macros previously defined are erased.
+对块值调用预处理器。 参数块将被修改并用作返回值。 如果使用`/ clean`细化，则预处理器状态被重置，所以先前定义的所有宏被擦除。
 
-*Example*
+*例子*
 ----
 expand-directives [print #either config/OS = 'Windows ["Windows"]["Unix"]]
 ----
-will return on Windows platform:
+Windows平台上会输出：
 ----
 [print "Windows"]
 ----
