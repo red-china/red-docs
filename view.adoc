@@ -89,9 +89,9 @@ Notes:
 |===
 
 	
-== 文字对象 (Font object)
+== 字体对象 (Font object)
 
-Font objects are clones of `font!` template object. One font object can be referenced by one or more faces, allowing to control font properties of a group of faces from a single place.
+字体对象是从 `font!` 模板对象克隆而来. 字体对象可以被一个或多个face引用, 允许控制多个face的字体属性。
 
 [cols="1,1,1,3", options="header"]
 |===
