@@ -5,233 +5,225 @@
 :numbered:
 
   
-== Overview 
+== 概述
 
-VID stands for Visual Interface Dialect. Its purpose is to provide a simple dialect (DSL) for describing graphic user interfaces on top of the Red link:view.html[View] engine.
+VID代表可视界面方言。 其目的是提供一种简单的方言（DSL），用于在Red link:view.html [View]引擎之上描述图形用户界面。
 
-VID allows you to specify each graphic component to display, giving the choice of different layout methods:
+VID允许您指定要显示的每个图形组件，从而选择不同的布局方法：
 
-* horizontal or vertical flowing
-* grid positioning
-* absolute positioning
+* 水平或垂直流动
+* 网格定位
+* 绝对定位
 
-VID will create a container face for you automatically, to hold the faces description you provide. By default, the container face is of type `window`.
+VID将自动为您创建一个容器face，以保持您提供的face描述。 默认情况下，容器face的类型为“window”。
 
-VID code is processed by the `layout` function (which is internally called by `view` function). The VID code is then compiled to a tree of faces, suitable for direct display.
+VID代码由`layout`函数处理（由`view`函数内部调用）。 然后将VID代码编译成一张适合直接显示的faces。
 
-NOTE: Use `help view` and `help layout` from Red's console to see how to process a VID block.
+注意：从Red的控制台使用`help view`和`help layout`看看如何处理一个VID块。
 
-== Code structure 
+== 代码结构
 
-Typical VID block of code has the following structure:
+典型的VID代码块具有以下结构：
 
 	[
 	    <container settings>
 	    <layout description>
 	]
 
-* *container settings*: settings which affect the container object (could be a panel or a window).
+* *容器设置*: 影响容器对象的设置（可以是面板或窗口）。
 
-* *layout description*: layout positioning commands, style definitions and face descriptions.
+* *布局描述*: 布局定位命令，样式定义和面部描述。
 
-NOTE: All sections are optional, there is no mandatory content that must be provided in a VID block.
+注意：所有部分都是可选的，没有必须在VID块中提供必需的内容。
 
-== Container settings 
+== 容器设置
 
-NOTE: `react` keyword can also be used at the container settings level in addition to face options level, see its description <<anchor:_react, there>>
-
+注意：“react”关键字也可以在容器设置级别使用，除了face选项级别，请参阅其描述 << anchor:_react，there >>
 
 === title
 
-*Syntax*
+*语法*
 ----
 title <text>
 
 <text> : title text (string!).
 ----
-*Description*
+*描述*
 
-Sets the title text of the container face.
+设置容器face的标题文本。
 
 
 === size 
 
-*Syntax*
+*语法*
 ----
 size <value>
 
 <value> : width and height in pixels (pair!).
 ----
-*Description*
+*描述*
 
-Sets the size of the container face. If the size is not explicitly provided, the container's size is automatically calculated to fit its content.
+设置容器face的大小。 如果未明确提供大小，则会自动计算容器的大小以适应其内容。
 
 
 === backdrop 
 
-*Syntax*
+*语法*
 ----
 backdrop <color>
 
 <color> : name or value of a color (word! tuple! issue!).
 ----
-*Description*
+*描述*
 
-Sets the background color of the container face.
+设置容器face的背景颜色。
 
 == Layout 
 
-By default, VID places the faces in the container face according to simple rules:
+默认情况下，VID根据简单的规则将faces放置在容器face中：
 
-* direction can be horizontal or vertical
-* faces are positioned after each other in the current direction using the current spacing
+* 方向可以是水平还是垂直
+* 在当前方向使用当前间距对faces定位
 
-Defaults:
+默认：
 
-* origin: `10x10`
-* space: `10x10`
-* direction: `across`
-* alignment: `top`
+* 原点: `10x10`
+* 间距: `10x10`
+* 方向: `across`
+* 对齐: `top`
 
-This is how faces are laid out in `across` mode:
+这是在`across`中如何布置face：
 
 image::across.png[across,align="center"]
 
-This is how faces are laid out in `below` mode (using default `left` alignment):
+这是在`below`模式中布局faces（使用默认的`left`对齐方式）：
 
 image::below.png[below,align="center"]
 
 
 === across 
 
-*Syntax*
+*语法*
 ----
 across <alignment>
 
 <alignment> : (optional) possible values: top | middle | bottom.
 ----
-*Description*
+*描述*
 
-Sets the layout direction to horizontal, from left to right. An alignment modifier can be optionally provided to change the default (`top`) alignment of faces in the row.
-
+将布局方向设置为水平，从左到右。 可以选择提供对齐修饰符来更改行中的face的默认（`top`）对齐方式。
 
 === below 
 
-*Syntax*
+*语法*
 ----
 below <alignment>
 
 <alignment> : (optional) possible values: left | center | right.
 ----
-*Description*
+*描述*
 
-Sets the layout direction to vertical, from top to bottom. An alignment modifier can be optionally provided to change the default (`left`) alignment of faces in the column.
-
+将布局方向设置为垂直，从上到下。 可以选择提供对齐修饰符来更改列中默认（`left`）face对齐方式。
 
 === return 
 
-*Syntax*
+*语法*
 ----
 return <alignment>
 
 <alignment> : (optional) possible values: left | center | right | top | middle | bottom.
 ---- 
-*Description*
+*描述*
 
-Moves the position to the next row or column of faces, depending of the current layout direction. An alignment modifier can be optionally provided to change the current alignment of faces in the row or column.
-
+根据当前布局方向，将位置移动到下一行或多列face。 可以选择提供对齐修改器来更改行或列中face的当前对齐方式。
 
 === space 
 
-*Syntax*
+*语法*
 ----
 space <offset>
 
 <offset> : new spacing value (pair!).
 ----
-*Description*
+*描述*
 
-Sets the new spacing offset which will be used for placement of following faces.
-
+设置将用于放置它后面face的新间距偏移。
 
 === origin 
 
-*Syntax*
+*语法*
 ----
 origin <offset>
 
 <offset> : new origin value (pair!).
 ----
-*Description*
+*描述*
 
-Sets the new origin position, relative to container face.
-
+设置相对于容器face的新原点位置。
 
 === at
 
-*Syntax*
+*语法*
 ----
 at <offset>
 
 <offset> : position of next face (pair!).
 ----
-*Description*
+*描述*
 
-Places the next face at an absolute position. This positioning mode only affects the next following face, and does not change the layout flow position. So, the following faces, after the next one, will be placed again in the continuity of the previous ones in the layout flow.
-
+将下一个face放在绝对位置。 此定位模式仅影响下一个face，不会更改布局流程位置。 所以，在下一个之后，下面的face将再次被放置在布局流中之前的连续性中。
 
 === pad 
 
-*Syntax*
+*语法*
 ----
 pad <offset>
 
 <offset> : relative offset (pair!).
 ----
-*Description*
+*描述*
 
-Modifies the layout current position by a relative offset. All the following faces on the same row (or column) are affected.
-
+通过相对偏移修改布局当前位置。 同一行（或列）上的以下所有face都受到影响。
 
 === do 
 
-*Syntax*
+*语法*
 ----
 do <body>
 
 <body> : code to evaluate (block!).
 ----
-*Description*
+*描述*
 
-Evaluates a block of regular Red code, for last-minute initialization needs. `self` keyword can be used to refer to the container face (window or panel).
+评估常规Red代码块最后一分钟的初始化需求。 `self`关键字可用于引用容器face（窗口或面板）。
 
-== Additional styles
+== 额外样式
 
-View engine provides many buit-in widgets, VID dialect extends them by defining additional commonly used styles, with associated keywords. They can be used with the same options as their underlying face type. They can also be re-styled freely using `style` command.
+视图引擎提供了许多免费的小部件，VID方言通过定义附加常用的样式和关联的关键字来扩展它们。 它们可以使用与其底层面部类型相同的选项。 他们也可以使用`style`命令自由重新设计。
 	
 === h1
 
-The `H1` style is a `text` type with a font size set to 32.
+`H1`样式是一个文本类型，字体大小设置为32。
 
 === h2
 
-The `H2` style is a `text` type with a font size set to 26.
+`H2`样式是一个文本类型，字体大小设置为26。
 
 === h3
 
-The `H3` style is a `text` type with a font size set to 22.
+`H3`样式是一个文本类型，字体大小设置为22。
 
 === h4
 
-The `H4` style is a `text` type with a font size set to 17.
+`H4`样式是一个文本类型，字体大小设置为17。
 
 === h5
 
-The `H5` style is a `text` type with a font size set to 13.
+`H5`样式是一个文本类型，字体大小设置为13。
 
 === box
 
-The `box` style is a `base` type with a default transparent color.
+`box`样式是一个带有默认透明颜色的`base`类型。
 
 === image
 
