@@ -227,13 +227,13 @@ do <body>
 
 === image
 
-The `image` style is a `base` type of default size 100x100. It expects an `image!` option, if none is provided, an empty image with white background color, and of same size as the face, is provided.
+`image`风格是一个默认大小为100x100的`base`类型。它提供了一个`image!`选项，如果没有提供的话，就会提供一个空白的白色背景颜色和与face大小相同的图像。
 
-== Faces definition 
+== Faces定义
 
-A face can be inserted in the layout, at the current position, by just using the name of an existing face type or one of the available styles.
+可以通过使用现有face类型或可用样式之一的名称，将布局中的face插入当前位置。
 
-*Syntax*
+*语法*
 ----
 <name>: <type> <options>
 
@@ -241,383 +241,380 @@ A face can be inserted in the layout, at the current position, by just using the
 <type>    : a valid face type or style name (word!).
 <options> : optional list of options.
 ----
-If a name is provided, the word will reference the `face!` object created by VID from the face description.
+如果提供了一个名称，该word将从face描述中引用VID创建的`face!`对象。
 
-Default values are provided for each face type or style, so a new face can be used without having to specify any option. When options are required, the following sections are describing the different types of accepted options:
+为每个face类型或样式提供默认值，因此可以使用新face，而无需指定任何选项。 当需要选项时，以下部分将描述不同类型的接受选项：
 
 * Keywords
 * Datatypes
 * Actors
 
-All options can be specified in arbitrary order, following the face or style name. A new face name or a layout keyword marks the end of the options list for a given face.
+所有选项都可以以任意顺序指定，遵循face或样式名称。 新的face名称或布局关键字标记给定face的选项列表的结尾。
 
-NOTE: `window` cannot be used as a face type.
+注意：“window”不能用作face类型。
 
 === Keywords 
 
 ==== left
 
-*Syntax*
+*语法*
 ----
 left
 ---- 
-*Description*
+*描述*
 
-Aligns the face's text to left side.
+将face的文字对准左侧。
 
 
 ==== center
 
-*Syntax*
+*语法*
 ----
 center
 ----
-*Description*
+*描述*
 
-Centers the face's text.
+居中对齐face的文字。
 
 
 ==== right
 
-*Syntax*
+*语法*
 ----
 right
 ----
-*Description*
+*描述*
 
-Aligns the face's text to right side.
+将face的文字对准右侧。
 
 
 ==== top
 
-*Syntax*
+*语法*
 ----
 top
 ----
-*Description*
+*描述*
 
-Vertically align the face's text to `top`.
+将face的文字垂直对齐为`top`。
 
 
 ==== middle
 
-*Syntax*
+*语法*
 ----
 middle
 ----
-*Description*
+*描述*
 
-Vertically align the face's text to `middle`.
+将face的文字垂直对齐为`middle`。
 
 
 ==== bottom
 
-*Syntax*
+*语法*
 ----
 bottom
 ----
-*Description*
+*描述*
 
-Vertically align the face's text to `bottom`.
+将face的文字垂直对齐为`bottom`。
 
 
 ==== bold
 
-*Syntax*
+*语法*
 ----
 bold
 ----
-*Description*
+*描述*
 
-Sets the face's text style to `bold`.
+将face的文字样式设置为`bold`。
 
 
 ==== italic
 
-*Syntax*
+*语法*
 ----
 italic
 ----
-*Description*
+*描述*
 
-Sets the face's text style to `italic`.
+将face的文字样式设置为`italic`。
 
 
 ==== underline
 
-*Syntax*
+*语法*
 ----
 underline
 ----
-*Description*
+*描述*
 
-Sets the face's text style to `underline`.
+将face的文字样式设置为`underline`。
 
 
 ==== extra
 
-*Syntax*
+*语法*
 ----
 extra <value>
 
 <value> : any value (any-type!).
 ----
-*Description*
+*描述*
 
-Sets the face's `extra` facet to a new value.
+将face的`extra` facet设置为新值。
 
 
 ==== data
 
-*Syntax*
+*语法*
 ----
 data <list>
 
 <list> : list of items (block!).
 ----
-*Description*
+*描述*
 
-Sets the face's `data` facet to a list of values. Format of the list depends on the face type requirements.
+将face的`data` facet设置为值列表。 列表的格式取决于face类型要求。
 
 
 ==== draw
 
-*Syntax*
+*语法*
 ----
 draw <commands>
 
 <commands> : list commands (block!).
 ---- 
-*Description*
+*描述*
 
-Sets the face's `draw` facet to a list of Draw dialect commands. See [Draw dialect](draw.html) documentation for valid commands.
+将face的`draw` facet设置为Draw方言命令列表。 有关有效命令，请参阅[Draw方言](draw.html)文档。
 
 
 ==== font
 
-*Syntax*
+*语法*
 ----
 font <spec>
 
 <spec> : a valid font specification (block! object! word!).
 ----
-*Description*
+*描述*
 
-Sets the face's `font` facet to a new `font!` object. Font! object is described link:view.html#_font_object[here].
+将face的`font` facet设置为新的`font!`对象。font!对象被描述为 link:view.html＃_font_object [这里]。
 
-NOTE: It possible to use `font` along with other font-related settings, VID will merge them together, giving priority to the last one specified.
+注意：可以使用`font`与其他字体相关的设置，VID将它们合并在一起，优先于指定的最后一个。
 
 
 ==== para
 
-*Syntax*
+*语法*
 ----
 para <spec>
 
 <spec> : a valid para specification (block! object! word!).
 ----
-*Description*
+*描述*
 
-Sets the face's `para` facet to a new `para!` object. Para! object is described link:view.html#_para_object[here].
+将face的`para` facet设置为新的`para!`对象。para!对象被描述 link:view.html＃_para_object [对象]。
 
-NOTE: It possible to use `para` along with other para-related settings, VID will merge them together, giving priority to the last one specified.
-
+注意：可以使用`para`以及其他与`para`相关的设置，VID将它们合并在一起，优先于指定的最后一个。
 
 ==== wrap
 
-*Syntax*
+*语法*
 ----
 wrap
 ----
 
-*Description*
+*描述*
 
-Wrap the face's text when displaying.
+在显示时包裹face的文字。
 
 
 ==== no-wrap
 
-*Syntax*
+*语法*
 ----
 no-wrap
 ----
-*Description*
+*描述*
 
-Avoid wrapping the face's text when displaying.
+避免在显示时包裹face的文字。
 
 
 ==== font-size
 
-*Syntax*
+*语法*
 ----
 font-size <pt>
 
 <pt> : font size in points (integer! word!).
 ----
-*Description*
+*描述*
 
-Sets the current font size for the face's text.
+设置face文字的当前字体大小。
 
 
 ==== font-color
 
-*Syntax*
+*语法*
 ----
 font-color <value>
 
 <value> : color of the font (tuple! word! issue!).
 ----
-*Description*
+*描述*
 
-Sets the current font color for the face's text.
+设置face文字的当前字体颜色。
 
 
 ==== font-name
 
-*Syntax*
+*语法*
 ----
 font-name <name>
 
 <name> : valid name of an available font (string! word!).
 ----
-*Description*
+*描述*
 
-Sets the current font name for the face's text.
+设置face文字的当前字体名。
 
 
 ==== react
 
-This keyword can be used both as a face option or as a global keyword. Arbitrary number of `react` instances can be used.
+此关键字既可用作face选项，也可用作全局关键字。可以使用任意数量的`react`实例。
 
-*Syntax*
+*语法*
 ----
 react [<body>]
 react later [<body>]
 
 <body> : regular Red code (block!).
 ----
-*Description*
+*描述*
 
-Creates a new reactor from the body block. When `react` is used as a face option, the body can refer to the current face using `face` word. When `react` is used globally, target faces need to be accessed using a name. The optional `later` keyword skips the first reaction happening immediately after the `body` block is processed.
+从body块创建一个新的reactor。 当`react`用作face选项时，body可以使用`face`字来引用当前face。 当全局使用`react`时，需要使用名称访问目标face。可选的`later`关键字跳过在`body`块被处理之后立即发生的第一个反应。
 
-NOTE:
+注意：
 
-Reactors are part of the reactive programming support in View, which documentation is pending. In a nutshell, the body block can describe one or more relations between faces properties using paths. Set-path setting a face property are processed as *target* of the reactor (the face to update), while path accessing a face property are processed as *source* of the reactor (a change on a source triggers a refresh of the reactor's code).
-
+reactor是View中的响应式编程支持的一部分，文档正在编写。 简而言之，body块可以使用路径来描述face属性之间的一个或多个关系。 设置路径设置face属性被处理为reactor的* target*（要更新的face），而访问face属性的路径被处理为reactor的*source*（源的更改触发了reactor的更新码）。
 
 ==== loose
 
-*Syntax*
+*语法*
 ----
 loose
 ----
-*Description*
+*描述*
 
-Enables dragging of the face using the left mouse button.
+启用使用鼠标左键拖动face。
 
 
 ==== all-over
 
-*Syntax*
+*语法*
 ----
 all-over
 ----
-*Description*
+*描述*
 
-Sets the face `all-over` flag, allowing all mouse `over` events to be received.
+设置face `all-over`标志，允许接收所有鼠标`over`事件。
 
 
 ==== hidden
 
-*Syntax*
+*语法*
 ----
 hidden
 ----
-*Description*
+*描述*
 
-Makes the face invisible by default.
+默认情况下使face看不见。
 
 
 ==== disabled
 
-*Syntax*
+*语法*
 ----
 disabled
 ----
-*Description*
+*描述*
 
-Disables the face by default (the face will not process any event until it is enabled).
+默认情况下禁用face（face不会处理任何事件，直到启用）。
 
 
 ==== select
 
-*Syntax*
+*语法*
 ----
 select <index>
 
 <index> : index of selected item (integer!).
 ----
-*Description*
+*描述*
 
-Sets the `selected` facet of the current face. Used mostly for lists to indicate which item is pre-selected.
+设置当前face的`selected` facet。 主要用于列表以指示预先选择的项目。
 
 
 ==== focus
 
-*Syntax*
+*语法*
 ----
 focus
 ---- 
-*Description*
+*描述*
 
-Gives the focus to the current face when the window is displayed for the first time. Only one face can have the focus. If several `focus` options are used on different faces, only the last one will get the focus.
+当窗口首次显示时，将焦点放在当前的face。 只有一个face可以有焦点。 如果在不同的face上使用了几个`focus`选项，只有最后一个可以获得焦点。
 
 ==== hint
 
-*Syntax*
+*语法*
 ----
 hint <message>
 
 <message> : hint text (string!).
 ---- 
-*Description*
+*描述*
 
-Provides a hint message inside `field` faces, when the field's content is empty. That text disappears when any new content is provided (user action or setting the `face/text` facet).
+当字段的内容为空时，在`field` face中提供一个提示消息。 当提供任何新内容时，该文本消失（用户操作或设置`face/text` facet）。
 
 
 ==== rate
 
-*Syntax*
+*语法*
 ----
 rate <value>
 rate <value> now
 
 <value>: duration or frequency (integer! time!).
 ----
-*Description*
+*描述*
 
-Sets a timer for the face from a duration (time!) or a frequency (integer!). At each timer's tick, a `time` event will be generated for that face. If `now` option is used, a first time event is generated immediatly.
+从持续时间（time!）或频率（integer!）设置face的定时器。 在每个定时器的刻度上，将为该face产生一个`time`事件。 如果使用`now`选项，则会立即生成第一次事件。
 
 
 ==== default
 
-*Syntax*
+*语法*
 ----
 default <value>
 
 <value>: a default value for `data` facet (any-type!).
 ----
-*Description*
+*描述*
 
-Defines a default value for `data` facet when the conversion of `text` facet returns `none`. That default value is stored in `options` facet, as a key/value pair.
+当`text` facet的转换返回`none`时，定义`data` facet的默认值。 该默认值存储在`options` facet中，作为key/value对。
 
-NOTE: currently used only by `text` and `field` face types.
-
+注意：目前仅使用`text`和`field` face类型。
 
 
 === Datatypes 
 
-In addition to keywords, it is allowed to pass settings to faces using literal values of following types:
+除了关键字，允许使用以下类型的文字值将设置传递给face：
 
 [cols="1,3", options="header"]
 |===
@@ -638,9 +635,9 @@ In addition to keywords, it is allowed to pass settings to faces using literal v
 
 === Actors 
 
-An actor can be hooked to a face by specifying a literal block value or an actor name followed by a block value.
+actor可以通过指定一个文字块值或一个actor名称后跟一个块值来挂接到face。
 
-*Syntax*
+*语法*
 ----
 <actor>
 on-<event> <actor>
@@ -648,46 +645,45 @@ on-<event> <actor>
 <actor> : actor's body block or actor reference (block! get-word!).
 <event> : valid event name (word!). 
 ----
-*Description*
+*描述*
 
-It is possible to specify actors in a simplified way by providing just the body block of the actor, the spec block being implicit. The actor function gets constructed then and added to the face's `actor` facet. Several actors can be specified that way.
+可以通过仅仅提供actor的body块来指定actor，这个spec块是隐式的。 actor功能被构造，然后添加到face的`actor` facet。 几个actor可以这样指定。
 
-The created actor function full specification is:
+创建的actor功能完整规范是：
 ----
 func [face [object!] event [event! none!]][...body...]
 ----
-The valid list of event names can be found link:view.html#_actors[here].
+可以在 link:view.html＃_actors[这里] 找到有效的事件名称列表。
 
-When a block or a get-word is passed without any actor name prefix, the default actor for the face type is created according to the definitions https://github.com/red/red/blob/master/modules/view/styles.red[here]
+当一个块或一个get-word没有任何actor名称前缀被传递时，face类型的默认actor是根据 https://github.com/red/red/blob/master/modules/view/styles.red[这里] 定义创建的。
 
 
 == Panels 
 
-It is possible to define child panels for grouping faces together, and eventually applying specific styles. The size of the new panel, if not specified explicitly, is automatically calculated to fit its content.
+可以定义子面板以将face部分组在一起，并最终应用特定样式。 新面板的大小（如果未明确指定）将自动计算，以适应其内容。
 
-The panel-class face types from View are supported in VID with a specific syntax:
+VID中使用特定语法支持来自View的面板类face类型：
 
 === panel 
 
-*Syntax*
+*语法*
 ----
 panel <options> [<content>]
 
 <options> : optional list of settings for the panel.
 <content> : panel's VID content description (block!).
 ----
-*Description*
+*描述*
 
-Constructs a child panel inside the current container, where the content is another VID block. In addition to other face options, an integer divider option can be provided, setting a grid-mode layout:
+在当前容器内构造一个子面板，其中内容是另一个VID块。 除了其他的face选项之外，还可以提供整数除数器选项，设置网格模式布局：
 
-* if the direction is across, divider represents number of columns.
-* if the direction is below, divider represents number of rows.
-
+* 如果方向是across，则分隔符表示列数。
+* 如果方向是below，则分隔符表示行数。
 
 
 === group-box 
 
-*Syntax*
+*语法*
 ----
 group-box <divider> <options> [<body>]
 
@@ -695,19 +691,19 @@ group-box <divider> <options> [<body>]
 <options> : optional list of settings for the panel.
 <body>    : panel's VID content description (block!).
 ----
-*Description*
+*描述*
 
-Constructs a child group-box panel inside the current container, where the content is another VID block. A divider argument can be provided, setting a grid-mode layout:
+在当前容器中构造一个子组合框面板，其中内容是另一个VID块。 可以提供一个分频器参数，设置网格模式布局：
 
-* if the direction is `across`, divider represents number of columns.
-* if the direction is `below`, divider represents number of rows.
+* 如果方向是across，则分隔符表示列数。
+* 如果方向是below，则分隔符表示行数。
 
-NOTE: Providing a string! value as option will set the group-box title text.
+注意：提供一个`string!`值作为选项将设置组框标题文本。
 
 
 === tab-panel 
 
-*Syntax*
+*语法*
 ----
 tab-panel <options> [<name> <body>...]
 
@@ -715,16 +711,16 @@ tab-panel <options> [<name> <body>...]
 <name>    : a tab's title (string!).
 <body>    : a tab's content as VID description (block!).
 ----
-*Description*
+*描述*
 
-Constructs a tab-panel panel inside the current container. The spec block must contain a pair of name and content description for each tab. Each tab's content body is a new child panel face, acting as any other panels.
+在当前容器内构建一个制表符面板面板。 规范块必须包含每个选项卡的一对名称和内容描述。 每个标签的内容正文都是一个新的子面板，充当任何其他面板。
 
 
 == Styling 
 
 === style 
 
-*Syntax*
+*语法*
 ----
 style <new> <old> <options>
 
@@ -732,8 +728,8 @@ style <new> <old> <options>
 <old>     : name of old style (word!).
 <options> : optional list of settings for the new style.
 ----
-*Description*
+*描述*
 
-Sets a new style in the current panel. The new style can be created from existing face types or from other styles. The new style is valid only in the current panel and child panels.
+在当前面板中设置新样式。 可以从现有的face类型或其他样式创建新的样式。 新风格仅在当前面板和子面板中有效。
 
-Styles can be cascaded from parent panels to child panels, so that the same style name can be redefined or extended in child panels without affecting the definitions in parent panels.
+样式可以从父面板级联到子面板，以便可以在子面板中重新定义或扩展相同的样式名称，而不会影响父面板中的定义。
