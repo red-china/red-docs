@@ -156,14 +156,14 @@ Returns   : <code> 或 <func>  对响应的进一步引用？（for further ref
 ----
 <word>: is <code>
 
-<word> : word to be set to the result of the reaction (set-word!).
-<code> : block of code that contain at least one reactive source (block!).
+<word> : word设置为响应的结果 (set-word!).
+<code> : 包含至少一个响应源的代码块 (block!).
 ----
 *Description*
 
-`is` creates a reactive formula whose result will be assigned to a word. The `<code>` block can contain references to both the wrapping object's fields, if used in a reactor's body block, and to external reactor's fields.
+`is` 创建一个响应公式，其结果将被分配到word。如果在响应器的主体块中使用，以及外部响应器的字段，`<code>`代码块可以包含对包装对象的字段的引用。
 
-NOTE: This operator creates reactive formulas which closely mimic Excel's formula model.
+备注: 这个运算符创建最接近于Excel公式模型的响应式。
 
 *Example*
 ----
@@ -182,10 +182,10 @@ a/total
 react? <obj> <field>
 react?/target <obj> <field>
 
-<obj>   : object to check (object!).
-<field> : object's field to check (word!).
+<obj>   : 检查对象 (object!).
+<field> : 检查对象的字段 (word!).
 
-Returns : a reaction (block! function!) or a none! value.
+Returns : 一个响应 (block! function!) 或者一个空值。
 ----
 *Description*
 

@@ -11,23 +11,24 @@
 * 数据导向，API少
 * 以虚拟对象树为编程接口
 * 显示系统与虚拟树之间实时或延迟的同步
-* 细致的双向绑定支持（Make two-way binding trivial to support）
+* 支持细致的双向绑定（Make two-way binding trivial to support）
 * 多后端，跨平台
 * 支持系统的，第三方的，以及自制的窗口部件
 * 低性能开销
 
 虚拟树用 face 对象构造。每个 face 对象以双向绑定映射一个图形组件。
+//根据中学生编程.pdf里提到的facet称为属性.  感觉这个facet= face +type的t的合体词
 
-== Face object
+== Face对象(Face object)
 
-Face objects are clones of `face!` template object. A field in face object is called a _facet_.
+face对象是 `face!` 模板对象的克隆. 在face对象中的一个字段被称作属性( _facet_ )。
 
-List of available facets:
+可用属性(facets)的列表:
 
 [cols="1,1,1,1,2", options="header"]
 |===
 
-|Facet | Datatype | Mandatory? | Applicability | Description
+|属性 Facet | 数据类型 Datatype | 强制性 Mandatory? | 适用性 Applicability | 描述 Description
 |type| word!| yes| all| Type of graphic component (see link:view.html#_face_types[below]).
 |offset| pair!| yes| all| Offset position from parent top-left origin.
 |size| pair!| yes| all| Size of the face.
@@ -53,44 +54,44 @@ List of available facets:
 |draw| block!| no| all| List of Draw commands to be drawn on the face.
 |===
 
-List of globally-usable flags for `flags` facet:
+下表列出属性(facet)的全局可用标记 `flags` 。 原文: List of globally-usable flags for `flags` facet:
 
 [cols="1,4", options="header"]
 |===
-|Flag | Description
+| 标记 Flag | 描述 Description
 |*all-over*| Send all `over` events to the face.
 |===
 
 
-Other face types specific flags are documented in their respective sections.
+其他face类型的具体标志在其各自的部分被记录。 原文:Other face types specific flags are documented in their respective sections.
 
 Notes:
 
-* Non-mandatory facets can be set to `none`.
-* `offset` and `size` are specified in screen pixels.
-* `offset` and `size` can sometime be set to `none` before displaying them. The View engine will take care of setting the values (like for panels in tab-panel type).
-* Display order (from back to front): color, image, text, draw.
+* 非强制性属性 (facets) 可以设置 `none`.
+* `offset` 和 `size` 用屏幕像素指定.
+* `offset` 和 `size` 在它们被显示之前有时可以设置 `none`. View引擎将负责设置值 比如 tab-panel 类型里的面板).
+* 显示顺序(从后到前): color, image, text, draw.
 
-Creating a new face is achieved by cloning the face! object and providing *at least* a valid `type` name.
+创建一个 face 可以通过克隆 face! 对象来实现，并需要提过 *至少* 一个有效的 `type` 名称.
 
     button: make face! [type: 'button]
 
-Once a face created, the `type` field is not allowed to be changed.
+一旦 face 完成创建 `type` 字段就不允许再更改.
 
-=== Options facet 
+=== 属性选项 (Options facet )
 
-Options facet holds optional facets which are used for specific behaviors:
+属性选项包含可选属性(facet),用于指定一些行为:
 
 [cols="1,4" options="header"]
 |===
-|Option| Description
+|选项 Option| 描述 Description
 |*drag&#8209;on*| Can be one of: `'down`, `'mid-down`, `'alt-down`, `'aux-down`. Used for enabling a drag'n drop operation.
 |===
 
 	
-== Font object
+== 字体对象 (Font object)
 
-Font objects are clones of `font!` template object. One font object can be referenced by one or more faces, allowing to control font properties of a group of faces from a single place.
+字体对象是从 `font!` 模板对象克隆而来. 字体对象可以被一个或多个face引用, 允许控制多个face的字体属性。
 
 [cols="1,1,1,3", options="header"]
 |===
@@ -106,20 +107,20 @@ Font objects are clones of `font!` template object. One font object can be refer
 |parent| block!| no| Internal back reference to parent face(s) _(used by View engine only)_.
 |===
 
-Notes:
+注意：
 
-* Non-mandatory facets can be set to `none`.
-* `angle` field is not yet working properly.
-* All fields value shall become optional in the future.
+* 非强制性facets可以设置为`none`。
+* `angle`字段尚未正常工作。
+* 所有字段的值将来都是可选的。
 
-Available font styles:
+有效的字体样式：
 
 * `bold`
 * `italic`
 * `underline`
 * `strike`
 
-Available anti-aliasing modes:
+有效的抗锯齿模式：
 
 * active/inactive (`anti-alias?: yes/no`)
 * ClearType mode (`anti-alias?: 'ClearType`)
@@ -127,7 +128,7 @@ Available anti-aliasing modes:
 
 == Para object 
 
-Para objects are clones of `para!` template object. One para object can be referenced by one or more faces, allowing to control para properties of a group of faces from a single place.
+Para对象是`para!`模板对象的克隆。 一个对象可由一个或多个face引用，允许从单个位置控制一组face的对象属性。
 
 [cols="1,1,3" options="header"]
 |===
@@ -142,22 +143,22 @@ Para objects are clones of `para!` template object. One para object can be refer
 |parent| block!| Internal back reference to parent face(s) _(used by View engine only)_.
 |===
 
-Notes:
+注意：
 
-* Any para fields can be set to `none`.
+* 任何para字段都可以设置为`none`。
 
 == The Face tree 
 
-Faces are organized in a tree which maps to the graphic components hierarchy on the display. The tree relations are defined from:
+face组织在一棵树中，映射到显示器上的图形组件层次结构。 树关系定义为：
 
-* `pane` facet: list one of more child face(s) in a block.
-* `parent` facet: reference to parent face.
+* `pane` facet: 列出块中一个或多个子face。
+* `parent` facet: 引用到父级face。
 
-Order of face objects in a `pane` matters, it maps to the z-ordering of graphic objects (face at head of `pane` is displayed behind all other faces, the face at tail is displayed on top of all others).
+面板对象在`pane`中的顺序很重要，它映射到图形对象的z顺序（面对`pane`的头部显示在所有其他面后面，尾部的face显示在所有其他对象的顶部）。
 
-The root of a face tree is a `screen` face. A `screen` face can only display `window` faces from its `pane` block.
+face树的根是一个`screen` face。 `screen` face只能从其`pane`块显示`window` face。
 
-In order for any face to be displayed on screen, it _must_ be connected to a `screen` face directly (for windows) or indirectly (for other face types).
+为了在屏幕上显示任何face，它可以直接（对于窗口）或间接（对于其他face类型）连接到`screen` face。
 
 image::face-tree.png[Face tree,align="center"]
 
@@ -166,7 +167,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Base 
 
-The `base` type is the most basic face type, but also the most versatile one. By default, it will only display a background of color `128.128.128`.
+`base`类型是最基本的face类型，也是最通用的。 默认情况下，它只显示`128.128.128`颜色的背景。
 
 [cols="1,3", options="header"]
 |===
@@ -178,18 +179,18 @@ The `base` type is the most basic face type, but also the most versatile one. By
 |`draw`| Transparency is fully supported for Draw primitives.
 |===
 
-Notes:
+注意：
 
-* Full composition of following facets is supported and rendered in following order: `color`, `image`, `text`, `draw`.
-* Transparency can be achieved in `color`, `image`, `text` and `draw` by specifying an alpha channel component to color tuple values: `R.G.B.A` where `A = 0` indicates full opacity and `A = 255`, full transparency.
+* 按以下顺序支持和呈现以下方面的完整组合：`color`, `image`, `text`, `draw`。
+* 透明度可以在`color`，`image`，`text`和`draw`中通过指定一个alpha通道组件来显示元组值来实现：`RGBA`，其中`A = 0`表示完全透明度，`A = 255`， 全透明度。
 
-_This face type should be used for any custom graphic component implementation._
+_该face类型应用于任何自定义图形组件实现。_
 
 '''
 
 === Text 
 
-The `text` type is a static label to be displayed.
+`text`类型是要被显示的静态标签。
 
 [cols="1,3", options="header"]
 |===
@@ -201,20 +202,20 @@ The `text` type is a static label to be displayed.
 |`options`| Supported fields: `default`.
 |===
 
-`data` facet is synchronized in real-time with `text` facet using the following conversion rules:
+`data` facet与`text` facet实时同步使用以下转换规则：
 
-* when `text` changes, `data` is set to the `load`-ed `text` value, or `none`, or to `options/default` if defined.
-* when `data` changes, `text` is set to the `form`-ed `data` value.
+* 当`text`改变时，`data`被设置为`load`-ed `text`值或`none`，如果`options/default`定义的话，也可能是此值。
+* 当`data`改变时，`text`被设置为`form`-ed `data`值。
 
-`options` facet accepts following properties:
+`options` facet接受以下属性：
 
-* `default`: can be set to any value, it will be used by the `data` facet if converting `text` returns `none`, like for non-loadable strings.
+* `default`: 可以设置为任何值，如果转换`text`返回`none`，它将被`data` facet使用，就像不可加载的字符串一样。
 
 '''
 
 === Button 
 
-This type represents a simple button.
+这种类型代表一个简单的按钮。
 
 [cols="1,4", options="header"]
 |===
@@ -235,7 +236,7 @@ This type represents a simple button.
 
 === Check 
 
-This type represents a check box, with an optional label text, displayed on left or right side.
+此类型表示复选框，带有可选的标签文本，显示在左侧或右侧。
 
 [cols="1, 4", options="header"]
 |===
@@ -256,7 +257,7 @@ This type represents a check box, with an optional label text, displayed on left
 
 === Radio 
 
-This type represents a radio button, with an optional label text, displayed on left or right side. Only one radio button per panel is allowed to be checked.
+此类型表示单选按钮，带有可选的标签文本，显示在左侧或右侧。 每个面板只能有一个单选按钮被检查。
 
 [cols="1, 4", options="header"]
 |===
@@ -278,7 +279,7 @@ This type represents a radio button, with an optional label text, displayed on l
 
 === Field 
 
-This type represents a single-line input field.
+此类型表示单行输入字段。
 
 [cols="1, 4", options="header"]
 |===
@@ -290,22 +291,22 @@ This type represents a single-line input field.
 |`flags`| Turn on/off some special field features (block!).
 |===
 
-*Supported flags:*
+*支持的Flags：*
 
-* `no-border`: removes edge decorations made by the underlying GUI framework.
+* `no-border`: 删除由底层GUI框架制成的边缘装饰。
 
-`data` facet is synchronized in real-time with `text` facet using the following conversion rules:
+`data` facet与`text` facet实时同步使用以下转换规则：
 
-* when `text` changes, `data` is set to the `load`-ed `text` value, or `none`, or to `options/default` if defined.
-* when `data` changes, `text` is set to the `form`-ed `data` value.
+* 当`text`改变时，`data`被设置为`load`-ed `text`值或`none`，如果`options/default`定义的话，也可能是此值。
+* 当`data`改变时，`text`被设置为`form`-ed `data`值。
 
-`options` facet accepts following properties:
+`options` facet接受以下属性：
 
-* `default`: can be set to any value, it will be used by the `data` facet if converting `text` returns `none`, like for non-loadable strings.
+* `default`: 可以设置为任何值，如果转换`text`返回`none`，它将被`data` facet使用，就像不可加载的字符串一样。
 
-NOTE:
+注意：
 
-* `selected` will be used in future to control highlighted part of the input text.
+* `selected`将来会用于控制突出部分的输入文本。
 
 [cols="1, 1, 3", options="header"]
 |===
@@ -320,7 +321,7 @@ NOTE:
 
 === Area 
 
-This type represents a multi-line input field.
+此类型表示多行输入字段。
 
 [cols="1, 4", options="header"]
 |===
@@ -330,14 +331,14 @@ This type represents a multi-line input field.
 |`flags`| Turn on/off some special area features (block!).
 |===
 
-*Supported flags:*
+*支持的flags：*
 
-* `no-border`: removes edge decoration made by the underlying GUI framework.
+* `no-border`: 删除由底层GUI框架制成的边缘装饰。
 
-Notes:
+注意：
 
-* `selected` will be used in future to control highlighted part of the input text.
-* A vertical scroll-bar can appear if all lines of text cannot be visible in the area (might be controlled by a `flags` option in the future).
+* `selected`将来会用于控制突出部分的输入文本。
+* 如果所有文本行在该区域中都不可见，则可能会出现垂直滚动条（可能由将来的`flags`选项控制）。
 
 [cols="1, 1, 2", options="header"]
 |===
@@ -350,7 +351,7 @@ Notes:
 
 === Text-list 
 
-This type represents a vertical list of text strings, displayed in a fixed frame. A vertical scrollbar appears automatically if the content does not fit the frame.
+此类型表示在固定框架中显示的文本字符串的垂直列表。 如果内容不符合框架，则会自动显示垂直滚动条。
 
 [cols="1, 4", options="header"]
 |===
@@ -368,14 +369,14 @@ This type represents a vertical list of text strings, displayed in a fixed frame
 |`change`| `on-change`| Occurs after a `select` event. `selected` facet refers to the *new* selected entry index.
 |===
 
-Notes:
+注意：
 
-* number of visible items cannot yet be defined by user.
+* 用户无法定义可见项目的数量。
 
 
 === Drop-list 
 
-This type represents a vertical list of text strings, displayed in a foldable frame. A vertical scrollbar appears automatically if the content does not fit the frame.
+此类型表示文本字符串的垂直列表，显示在可折叠框架中。 如果内容超出框架，则会自动显示垂直滚动条。
 
 [cols="1, 4", options="header"]
 |===
@@ -387,7 +388,7 @@ This type represents a vertical list of text strings, displayed in a foldable fr
 |`selected`| Index of selected string or none value if no selection (read/write).
 |===
 
-The `data` facet accepts arbitrary values, but only string values will be added to the list and displayed. Extra values of non-string datatype can be used to create associative arrays, using strings as keys. The `selected` facet is a 1-based integer index indicating the position of the selected string in the list, and not in the `data` facet.
+`data` facet接受任意值，只有字符串值被添加到列表中并显示。 非字符串数据类型的额外值可用于创建关联数组，使用字符串作为键。 `selected` facet是一个基于1的整数索引，指示列表中所选字符串的位置，而不是在`data`方面。
 
 [cols="1, 1, 3", options="header"]
 |===
@@ -397,14 +398,14 @@ The `data` facet accepts arbitrary values, but only string values will be added 
 |`change`| `on-change`| Occurs after a `select` event. `selected` facet refers to the *new* selected entry index.
 |===
 
-Notes:
+注意：
 
-* number of visible items cannot yet be defined by user.
+* 用户无法定义可见项目的数量。
 
 
 === Drop-down 
 
-This type represents an edit field with a vertical list of text strings displayed in a foldable frame. A vertical scrollbar appears automatically if the content does not fit the frame.
+此类型表示具有显示在可折叠框架中的文本字符串的垂直列表的编辑字段。 如果内容超出框架，则会自动显示垂直滚动条。
 
 [cols="1, 4", options="header"]
 |===
@@ -414,7 +415,7 @@ This type represents an edit field with a vertical list of text strings displaye
 |`selected`| Index of selected string or none value if no selection (read/write).
 |===
 
-The `data` facet accepts arbitrary values, but only string values will be added to the list and displayed. Extra values of non-string datatype can be used to create associative arrays, using strings as keys. The `selected` facet is a 1-based integer index indicating the position of the selected string in the list, and not in the `data` facet.
+`data` facet接受任意值，只有字符串值被添加到列表中并显示。 非字符串数据类型的额外值可用于创建关联数组，使用字符串作为键。 `selected` facet是一个基于1的整数索引，指示列表中所选字符串的位置，而不是在`data`方面。
 
 [cols="1, 1, 3", options="header"]
 |===
@@ -424,14 +425,14 @@ The `data` facet accepts arbitrary values, but only string values will be added 
 |`change`| `on-change`| Occurs after a `select` event. `selected` facet refers to the *new* selected entry index.
 |===
 
-Notes:
+注意：
 
-* number of visible items cannot yet be defined by user.
+* 用户无法定义可见项目的数量。
 
 
 === Progress 
 
-This type represents an horizontal or vertical progress bar.
+此类型表示水平或垂直进度条。
 
 [cols="1, 4", options="header"]
 |===
@@ -441,14 +442,14 @@ This type represents an horizontal or vertical progress bar.
 |`data`| Value representing the progression (percent! or float! value).
 |===
 
-Notes:
+注意：
 
-* if a float value is used for `data`, it needs to be between 0.0 and 1.0.
+* 如果一个浮点值用于`data`，则需要在0.0到1.0之间。
 
 
 === Slider 
 
-This type represents a cursor which can be moved along an horizontal or vertical axis.
+这种类型表示可沿水平或垂直轴移动的光标。
 
 [cols="1, 4", options="header"]
 |===
@@ -457,14 +458,14 @@ This type represents a cursor which can be moved along an horizontal or vertical
 |`data`| Value representing the cursor position (percent! or float! value).
 |===
 
-Notes:
+注意：
 
-* if a float value is used for `data`, it needs to be between 0.0 and 1.0.
+* 如果一个浮点值用于`data`，则需要在0.0到1.0之间。
 
 
 === Camera 
 
-This type is used to display a video camera feed.
+此类型用于显示摄像机馈送。
 
 [cols="1, 4", options="header"]
 |===
@@ -474,16 +475,15 @@ This type is used to display a video camera feed.
 |`selected`| Select the camera to display from `data` list, using an integer index. If set to `none`, the camera feed is disabled.
 |===
 
-Notes:
+注意：
 
-* The `data` facet is initially set to `none`. The list of cameras is fetched during the first call to `show` on the camera face.
-* It is possible to capture the content of a camera face using `to-image` on the face.
-
+* `data` face最初设置为`none`。 相机列表在第一次调用相机face上的`show`时被取出。
+* 可以使用face上的`to-image`来捕捉相机face的内容。
 
 
 === Panel 
 
-A panel is a container for other faces.
+面板是其他face的容器。
 
 [cols="1, 4", options="header"]
 |===
@@ -493,16 +493,16 @@ A panel is a container for other faces.
 |`pane`| Block of children faces. Order in block defines z-order on display.
 |===
 
-Notes:
+注意：
 
-* Children `offset` coordinates are relative to parent panel top-left corner.
-* Children faces are clipped into the panel frame.
+* 子face`offset`坐标相对于父面板左上角。
+* 子face被裁剪在面板框架中。
 
 '''
 
 === Tab-panel 
 
-A tab-panel is list of panels where only one can be visible at a given time. A list of panels names is displayed as "tabs", and used to switch between the panels.
+选项卡面板是在给定时间只有一个可见的面板列表。 面板名称列表显示为“选项卡”，用于在面板之间切换。
 
 [cols="1, 4", options="header"]
 |===
@@ -519,17 +519,16 @@ A tab-panel is list of panels where only one can be visible at a given time. A l
 |`change`| on-change| Occurs when the user selects a new tab. `event/picked` holds the index of the newly selected tab. `selected` property is updated just after this event.
 |===
 
-Notes:
+注意：
 
-* Both `data` and `pane` facets need to be filled in order for the tab-panel to display properly.
-* If `pane` contains more panels than specified tabs, they will be ignored.
-* When adding/removing a tab, the corresponding panel needs to be added/removed too in/from `pane` list.
-
+* 需要填写`data`和`pane`两个面以使选项卡面板正常显示。
+* 如果`pane`包含比指定选项卡更多的面板，它们将被忽略。
+* 添加/删除选项卡时，相应的面板需要在`pane`列表中添加/删除。
 
 
 === Window 
 
-Represents a window displayed on the OS desktop.
+表示OS桌面上显示的窗口。
 
 [cols="1, 4", options="header"]
 |===
@@ -545,7 +544,7 @@ Represents a window displayed on the OS desktop.
 |===
 
 
-*Supported flags:*
+*支持的flags：*
 
 * `modal`: makes the window modal, disabling all previously opened windows.
 * `resize`: enable window resizing (default is fixed size, not resizeable).
@@ -556,14 +555,14 @@ Represents a window displayed on the OS desktop.
 * `no-buttons`: remove all buttons from window's drag bar.
 * `popup`: alternative smaller frame decoration (Windows only).
 
-Notes:
+注意：
 
-* Using the `popup` keyword at the beginning of the menu specification block will force a contextual menu in the window, instead of a menu bar by default.
+* 使用菜单规范块开头的`popup`关键字将强制窗口中的上下文菜单，而不是默认情况下的菜单栏。
 
 
 === Screen 
 
-Represents a graphic display unit connected to the computer (usually a monitor).
+表示连接到计算机（通常是显示器）的图形显示单元。
 
 [cols="1, 4", options="header"]
 |===
@@ -573,12 +572,12 @@ Represents a graphic display unit connected to the computer (usually a monitor).
 |`pane`| List of windows to display on the screen (block!).
 |===
 
-All window faces which are displayed need to be children of a screen face.
+显示的所有窗口面都需要是screen face的子类。
 
 
 === Group-box 
 
-A group-box is a container for other faces, with a visible frame around it. _This is a temporary style which will be removed once we have the support for `edge` facet._
+组合框是其他face的容器，周围有可见的框架。 这是一种临时风格，一旦我们得到'edge` facet的支持就会被删除。
 
 [cols="1, 4", options="header"]
 |===
@@ -587,43 +586,43 @@ A group-box is a container for other faces, with a visible frame around it. _Thi
 |`pane`| Block of children faces. Order in block defines z-order on display.
 |===
 
-Notes:
+注意：
 
-* Children `offset` coordinates are relative to group-box's top-left corner.
-* Children faces are clipped into the group-box frame.
+* 子类`offset`坐标是相对于分组框的左上角。
+* 子类的face被裁剪到group-box框架中。
 
 
 == Face life cycle 
 
-. Create a face object from the `face!` prototype.
-. Insert the face object in a face tree connected to a screen face.
-. Use `show` to render the face object on screen.
-.. system resources are allocated at this point
-.. `face/state` block is set.
-. Remove the face from the pane to remove it from the display.
-. The garbage collector will take care of releasing the system resources associated when the face is not referenced anymore.
+. 从`face!`原型创建一个face对象。
+. 将face对象插入连接到screen face的face树。
+. 使用`show`在屏幕上渲染face对象。
+.. 此时分配系统资源。
+.. `face/state` 块被设置。
+. 从窗格中取出face以将其从显示屏上移除。
+. 垃圾收集器将会在不再引用face的同时释放相关的系统资源。
 
-Notes:
+注意：
 
-* A `free` function might be provided for manual control of system resources freeing for resources hungry applications.
+* 可以提供`free`功能，手动控制系统资源释放饥饿应用程序的资源。
 
 == SHOW function 
 
-*Syntax*
+*语法*
 ----
 show <face>
 
 <face>: clone of face! object or block of face objects or names (using word! values).
 ----
 
-*Description*
+*描述*
 
-This function is used to update a face or a list of faces on screen. Only a face which is referenced in a face tree connected to a screen face can be properly rendered on screen. When called the first time, system resources will be allocated, the `state` facet will be set and the graphic component will be displayed on screen. Subsequent calls will reflect on screen any change made to the face object. If `pane` facet is defined, `show` will also apply to the children faces recursively.
+此功能用于更新屏幕上的face或face列表。 只有在连接到屏幕的face树中引用的face才能在屏幕上正确渲染。 当第一次调用时，将分配系统资源，将会设置`state`面，图形组件将显示在屏幕上。 随后的调用会在屏幕上反映对face对象所做的任何更改。 如果定义了`pane` facet，那么`show`也会递归地应用于子face。
 
 
 *State facet*
 
-_The following information is provided only for reference, in normal operation, the `state` facet should be left untouched by the user. However, it can be accessed if OS API are called directly by user or if View engine behavior has to be modified._
+_以下提供信息仅供参考，在正常操作中，`state` facet应由用户保持不变。 但是，如果OS API直接由用户调用或者如果需要修改View引擎行为，则可以访问它。_
 
 [cols="1, 4", options="header"]
 |===
@@ -634,43 +633,43 @@ _The following information is provided only for reference, in normal operation, 
 |4 (drag-offset)| Stores the starting mouse cursor offset position when entering face dragging mode (pair! none!).
 |===
 
-Notes:
+注意：
 
-* After a call to `show`, `changes` field is reset to 0 and `deferred` field block is cleared.
-* A `handle!` datatype will be used in the future for opaque OS handles.
+* 在调用`show`后，`changes`字段被重置为0，`deferred`字段块被清除。
+* 将来将会使用`handle!`数据类型来处理不透明的操作系统句柄。
 
-== Realtime vs deferred updating anchor:realtime-vs-deferred-updating[]
+== 实时vs延期更新 anchor:realtime-vs-deferred-updating[]
 
-The View engine has two different modes for updating the display after changes are done to the face tree:
+View引擎有两种不同的模式用于在face树完成更改后更新显示：
 
-* Realtime updating: any change to a face is immediately rendered on screen.
+* 实时更新：任何face变化都会立即显示在屏幕上。
 
-* Deferred updating: all changes to a face are not propagated on screen, until `show` is called on the face, or on the parent face.
+* 延期更新：对脸部的所有更改都不会在屏幕上传播，直到在face或父face上调用`show`。
 
-The switching between those modes is controlled by the `system/view/auto-sync?` word: if set to `yes`, the realtime updating mode is on (default mode), if set to `no`, View engine will defer all updates.
+这些模式之间的切换由`system/view/auto-sync`字控制：如果设置为`yes`，则实时更新模式为（默认模式），如果设置为`no`，则View引擎将延迟 所有更新。
 
-The motivations for realtime updating by default are:
+默认情况下实时更新的动机有：
 
-* Simpler and shorter source code, no need to call `show` after any face change.
-* Less learning overhead for beginners.
-* Good enough for simple or prototype apps.
-* Simplifies experimentation from console.
+* 更简单和更短的源代码，无需在任何改变后调用`show`。
+* 初学者的学习开销较少
+* 足够简单或原型应用程序。
+* 简化控制台的实验。
 
-Deferred mode updates many changes at the same time on screen in order to avoid glitches or when best performance is the goal.
+延迟模式在屏幕上同时更新许多更改，以避免毛刺或达到最佳性能目标。
 
-Notes:
+注意：
 
-* This is a big difference with the Rebol/View engine which only has deferred mode support.
+* 这与只有延迟模式支持的Rebol/View引擎有很大的区别。
 
-== Two-way binding 
+== 双向绑定
 
-Face objects rely on the Red ownership system to bind the object with the series used in facets, so that any change in one of the facet (even a deep change) is detected by the face object and processed according to the current synchronization mode (realtime or deferred).
+面对对象依靠Red所有权系统将对象与face中使用的系列绑定在一起，使face对象检测到任何一个方面（即使是深刻变化）的任何变化，并根据当前的同步模式(实时或延期）进行处理。
 
-On the other side, changes made to the rendered graphic objects are reflected instantly in the corresponding facets. For example, typing in a `field` face will reflect the input in the `text` facet in live mode.
+另一方面，对渲染图形对象进行的更改会立即反映在相应的方面。 例如，键入`field` face将在实时模式下反映`text` facet的输入。
 
-This two-way binding simplifies the interaction with the graphic objects for the programmer, without the need of any specific API. Modifying the facets using the series actions is enough.
+这种双向绑定简化了与程序员的图形对象的交互，而不需要任何特定的API。 使用系列动作修改方面就足够了。
 
-Example:
+例子：
 ----
 view [
     list: text-list data ["John" "Bob" "Alice"]
@@ -680,7 +679,7 @@ view [
 ----
 == Events 
 
-=== Event names 
+=== 事件名 
 
 [cols="1, 1, 3", options="header"]
 |===
@@ -723,15 +722,15 @@ view [
 |*time*| timer| The delay set by face's `rate` facet expired.
 |===
 
-Notes:
+注意：
 
-* touch events are not available for Windows XP.
-* One or more `moving` events always precedes a `move` one.
-* One or more `resizing` events always precedes a `resize` one.
+* 触摸事件不适用于Windows XP。
+* 一个或多个`moving`事件总是在`move`之前。
+* 一个或多个`resize`事件总是在`resize`之前。
 
-=== Event! datatype 
+=== Event!数据类型
 
-An event value is an opaque object holding all the information about a given event. You access the event fields using path notation.
+事件值是一个不透明的对象，保存有关给定事件的所有信息。 您可以使用路径符号访问事件字段。
 
 [cols="1, 4", options="header"]
 |===
@@ -751,7 +750,7 @@ An event value is an opaque object holding all the information about a given eve
 |`shift?`| Returns `true` if the SHIFT key was pressed (logic!).
 |===
 
-List of possible flags from `event/flags` :
+来自`event/flags`的可能标志的列表：
 
 * `away`
 * `down`
@@ -761,11 +760,11 @@ List of possible flags from `event/flags` :
 * `control`
 * `shift`
 
-Notes:
+注意：
 
-* All fields (except `type`) are read-only. Setting `type` is only used internally by the View engine.
+* 所有字段（`type`除外）都是只读的。 设置`type`仅由View引擎内部使用。
 
-Here is the list of special keys returned as words by `event/key`:
+这里是由`event/key`作为单词返回的特殊键的列表：
 
 * `page-up`
 * `page-down`
@@ -790,7 +789,7 @@ Here is the list of special keys returned as words by `event/key`:
 * `F11`
 * `F12`
 
-The following extra key names can be returned by `event/key` only for `key-down` and `key-up` messages:
+只有`key-down`和`key-up`消息可以通过`event/key`返回以下额外的密钥名称：
 
 * `left-control`
 * `right-control`
@@ -802,9 +801,9 @@ The following extra key names can be returned by `event/key` only for `key-down`
 
 === Actors 
 
-Actors are handler functions for View events. They are defined in an free-form object (no prototype provided) referred by `actors` facet. All actors have the same specification block.
+Actors是View事件的处理函数。 它们由`actors` facet引用的自由格式对象（未提供原型）定义。 所有Actors都具有相同的规格块。
 
-*Syntax*
+*语法*
 ----
 on-<event>: func [face [object!] event [event!]]
 
@@ -812,26 +811,26 @@ on-<event>: func [face [object!] event [event!]]
 face    : face object which receives the event
 event   : event value.
 ----
-In addition to the GUI events, it is possible to define an `on-create` actor which will be called when the face is shown for the first time, just before system resources are allocated for it. Unlike other actors, `on-create` has only one argument, `face`.
+除了GUI事件之外，还可以定义一个`on-create`的actor，当第一次显示face时，就会在系统资源被分配之前被调用。 与其他actor不同，`on-create`只有一个参数`face`。
 
-*Return value*
+*返回值*
 ----
 'stop : exit the event loop.
 'done : stops the event from flowing to the next face.
 ----
-Other returned values have no effect.
+其他返回值无效。
 
-=== Event flow 
+=== 事件流
 
-Events are usually generated at a specific screen position and assigned to the closest front face. However, the event is travelling from one face to another in the ancestors hierarchy in two directions commonly known as:
+事件通常在特定屏幕位置生成，并分配给最接近的正面。 然而，事件是在祖先层级中从一个face到另一个在两个方向上通常被称为：
 
-* event *capturing*: event goes from window face down to the front face where the event originated. For each face, a `detect` event is generated and the corresponding handler called if provided.
+* 事件*捕获*: 事件从窗口面朝下到事件发生的正面。 对于每个face，生成一个`detect`事件，并且如果提供了相应的处理程序。
 
-* event *bubbling*: event goes front face to parent window. For each face, the local event handler is called.
+* 事件*冒泡*: 事件前面到父窗口。 对于每个face，调用本地事件处理程序。
 
 image::event-flow.png[Event flow,align="center"]
 
-Typical event flow path:
+典型事件流程：
 
 . A click event is generated on the button, global handlers are processed (see next section).
 . Event capturing stage starts:
@@ -843,18 +842,18 @@ Typical event flow path:
 .. The panel gets the event next. Panel's `on-click` handler gets called.
 .. The window gets the event last, its `on-click` handler gets called.
 
-Notes:
+注意：
 
-* Event cancellation is achieved by returning `'done` word from any event handler.
-* Event capturing is not enabled by default for performance reasons. Set `system/view/capturing?: yes` to enable it.
+* 通过从任何事件处理程序返回`done`来实现事件取消。
+* 由于性能原因，默认情况下未启用事件捕获。 设置`system/view/capture?: yes`启用它。
 
-=== Global event handlers 
+=== 全局事件处理器
 
-Before entering the event flow path, specific pre-processing can be achieved using the so-called "global event handlers". Following API is provided for adding and removing them.
+在进入事件流程之前，可以使用所谓的“全局事件处理程序”来实现特定的预处理。 提供以下API用于添加和删除它们。
 
 ==== insert-event-func
 
-*Syntax*
+*语法*
 ----
 insert-event-func <handler>
 
@@ -862,33 +861,33 @@ insert-event-func <handler>
 
 Handler's function specification: func [face [object!] event [event!]]
 ----    
-*Return value*
+*返回值*
 ----
-The newly added handler function (function!).
+新添加的处理函数（function!）。
 ----    
-*Description*
+*描述*
 
-Installs a global handler function, which can pre-process events before they reach the face handlers. All global handlers are called on each event, so the handler body code needs to optimize speed and memory usage. If a block is provided as argument, it will be converted to a function using the `function` constructor.
+安装一个全局处理函数，它可以在事件到达处理程序之前进行事先处理。 所有全局处理程序在每个事件上被调用，因此处理器主体代码需要优化速度和内存使用。 如果一个块作为参数提供，它将使用`function`构造函数转换为一个函数。
 
-The return value of the handler function:
+处理函数的返回值：
 
-* `none`  : the event can be processed by other handlers (none!).
-* `'done` : other global handlers are skipped but event is propagated to child faces (word!).
-* `'stop` : exit the event loop (word!).
+* `none`  : 事件可以由其他处理程序处理（none!）。
+* `'done` : 其他全局处理程序将被跳过，但事件会传播到子窗口（word!）。
+* `'stop` : 退出事件循环（word!）。
 
-A reference to the handler function is returned and should be saved if it needs to be removed later.
+返回对处理程序函数的引用，如果需要稍后删除，则应该保存它。
 
 ==== remove-event-func
 
-*Syntax*
+*语法*
 ----
 remove-event-func <handler>
 
 <handler> : a previously installed event handler function.
 ----
-*Description*
+*描述*
 
-Disables a previously installed global event handler by removing it from the internal list.
+通过从内部列表中删除先前安装的全局事件处理程序来禁用它。
 
 == System/view object anchor:system-view-object[]
 
@@ -912,23 +911,23 @@ Disables a previously installed global event handler by removing it from the int
 |===
 
 
-== Including View component 
+== 引入View组件
 
-View component is not included by default on *compiling*. To include it, the main Red script have to declare the dependency in the header using the `Needs` field:
+*编译*默认情况下不包含View组件。 要包括它，主Red脚本必须使用`Needs`字段来声明头中的依赖关系。
 ----
 Red [
     Needs: 'View
 ]
 ----
-NOTE:
-Using consoles auto-generated by `red` binary will include the View component on platforms where it is available, `Needs` header field is therefore not required in user scripts run from those consoles.
+注意：
+使用`red`二进制自动生成的控制台将在可用的平台上包含View组件，因此在这些控制台运行的用户脚本中不需要`Needs`头字段。
 
-== Extra functions 
+== 额外的函数
 
 [cols="1, 4", options="header"]
 |===
 
-|Function | Description
+|函数 | 描述
 |*view*| Render on screen a window from a face tree or a block of VID code. Enters an event loop unless `/no-wait` *refinement* is used.
 |*unview*| Destroy one or more windows.
 |*layout*| Convert a block of VID code into a face tree.
@@ -942,7 +941,7 @@ Using consoles auto-generated by `red` binary will include the View component on
 |===
 
 
-_To be added:_
+_待补：_
 
-* menu facet specification
-* Image! datatype description
+* 菜单face规范
+* image!数据类型描述
