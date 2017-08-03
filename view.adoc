@@ -608,21 +608,21 @@ _该face类型应用于任何自定义图形组件实现。_
 
 == SHOW function 
 
-*Syntax*
+*语法*
 ----
 show <face>
 
 <face>: clone of face! object or block of face objects or names (using word! values).
 ----
 
-*Description*
+*描述*
 
-This function is used to update a face or a list of faces on screen. Only a face which is referenced in a face tree connected to a screen face can be properly rendered on screen. When called the first time, system resources will be allocated, the `state` facet will be set and the graphic component will be displayed on screen. Subsequent calls will reflect on screen any change made to the face object. If `pane` facet is defined, `show` will also apply to the children faces recursively.
+此功能用于更新屏幕上的face或face列表。 只有在连接到屏幕的face树中引用的face才能在屏幕上正确渲染。 当第一次调用时，将分配系统资源，将会设置`state`面，图形组件将显示在屏幕上。 随后的调用会在屏幕上反映对face对象所做的任何更改。 如果定义了`pane` facet，那么`show`也会递归地应用于子face。
 
 
 *State facet*
 
-_The following information is provided only for reference, in normal operation, the `state` facet should be left untouched by the user. However, it can be accessed if OS API are called directly by user or if View engine behavior has to be modified._
+_以下提供信息仅供参考，在正常操作中，`state` facet应由用户保持不变。 但是，如果OS API直接由用户调用或者如果需要修改View引擎行为，则可以访问它。_
 
 [cols="1, 4", options="header"]
 |===
@@ -633,43 +633,43 @@ _The following information is provided only for reference, in normal operation, 
 |4 (drag-offset)| Stores the starting mouse cursor offset position when entering face dragging mode (pair! none!).
 |===
 
-Notes:
+注意：
 
-* After a call to `show`, `changes` field is reset to 0 and `deferred` field block is cleared.
-* A `handle!` datatype will be used in the future for opaque OS handles.
+* 在调用`show`后，`changes`字段被重置为0，`deferred`字段块被清除。
+* 将来将会使用`handle!`数据类型来处理不透明的操作系统句柄。
 
-== Realtime vs deferred updating anchor:realtime-vs-deferred-updating[]
+== 实时vs延期更新 anchor:realtime-vs-deferred-updating[]
 
-The View engine has two different modes for updating the display after changes are done to the face tree:
+View引擎有两种不同的模式用于在face树完成更改后更新显示：
 
-* Realtime updating: any change to a face is immediately rendered on screen.
+* 实时更新：任何face变化都会立即显示在屏幕上。
 
-* Deferred updating: all changes to a face are not propagated on screen, until `show` is called on the face, or on the parent face.
+* 延期更新：对脸部的所有更改都不会在屏幕上传播，直到在face或父face上调用`show`。
 
-The switching between those modes is controlled by the `system/view/auto-sync?` word: if set to `yes`, the realtime updating mode is on (default mode), if set to `no`, View engine will defer all updates.
+这些模式之间的切换由`system/view/auto-sync`字控制：如果设置为`yes`，则实时更新模式为（默认模式），如果设置为`no`，则View引擎将延迟 所有更新。
 
-The motivations for realtime updating by default are:
+默认情况下实时更新的动机有：
 
-* Simpler and shorter source code, no need to call `show` after any face change.
-* Less learning overhead for beginners.
-* Good enough for simple or prototype apps.
-* Simplifies experimentation from console.
+* 更简单和更短的源代码，无需在任何改变后调用`show`。
+* 初学者的学习开销较少
+* 足够简单或原型应用程序。
+* 简化控制台的实验。
 
-Deferred mode updates many changes at the same time on screen in order to avoid glitches or when best performance is the goal.
+延迟模式在屏幕上同时更新许多更改，以避免毛刺或达到最佳性能目标。
 
-Notes:
+注意：
 
-* This is a big difference with the Rebol/View engine which only has deferred mode support.
+* 这与只有延迟模式支持的Rebol/View引擎有很大的区别。
 
-== Two-way binding 
+== 双向绑定
 
-Face objects rely on the Red ownership system to bind the object with the series used in facets, so that any change in one of the facet (even a deep change) is detected by the face object and processed according to the current synchronization mode (realtime or deferred).
+面对对象依靠Red所有权系统将对象与face中使用的系列绑定在一起，使face对象检测到任何一个方面（即使是深刻变化）的任何变化，并根据当前的同步模式(实时或延期）进行处理。
 
-On the other side, changes made to the rendered graphic objects are reflected instantly in the corresponding facets. For example, typing in a `field` face will reflect the input in the `text` facet in live mode.
+另一方面，对渲染图形对象进行的更改会立即反映在相应的方面。 例如，键入`field` face将在实时模式下反映`text` facet的输入。
 
-This two-way binding simplifies the interaction with the graphic objects for the programmer, without the need of any specific API. Modifying the facets using the series actions is enough.
+这种双向绑定简化了与程序员的图形对象的交互，而不需要任何特定的API。 使用系列动作修改方面就足够了。
 
-Example:
+例子：
 ----
 view [
     list: text-list data ["John" "Bob" "Alice"]
@@ -679,7 +679,7 @@ view [
 ----
 == Events 
 
-=== Event names 
+=== 事件名 
 
 [cols="1, 1, 3", options="header"]
 |===
@@ -722,15 +722,15 @@ view [
 |*time*| timer| The delay set by face's `rate` facet expired.
 |===
 
-Notes:
+注意：
 
-* touch events are not available for Windows XP.
-* One or more `moving` events always precedes a `move` one.
-* One or more `resizing` events always precedes a `resize` one.
+* 触摸事件不适用于Windows XP。
+* 一个或多个`moving`事件总是在`move`之前。
+* 一个或多个`resize`事件总是在`resize`之前。
 
-=== Event! datatype 
+=== Event!数据类型
 
-An event value is an opaque object holding all the information about a given event. You access the event fields using path notation.
+事件值是一个不透明的对象，保存有关给定事件的所有信息。 您可以使用路径符号访问事件字段。
 
 [cols="1, 4", options="header"]
 |===
@@ -750,7 +750,7 @@ An event value is an opaque object holding all the information about a given eve
 |`shift?`| Returns `true` if the SHIFT key was pressed (logic!).
 |===
 
-List of possible flags from `event/flags` :
+来自`event/flags`的可能标志的列表：
 
 * `away`
 * `down`
@@ -760,11 +760,11 @@ List of possible flags from `event/flags` :
 * `control`
 * `shift`
 
-Notes:
+注意：
 
-* All fields (except `type`) are read-only. Setting `type` is only used internally by the View engine.
+* 所有字段（`type`除外）都是只读的。 设置`type`仅由View引擎内部使用。
 
-Here is the list of special keys returned as words by `event/key`:
+这里是由`event/key`作为单词返回的特殊键的列表：
 
 * `page-up`
 * `page-down`
@@ -789,7 +789,7 @@ Here is the list of special keys returned as words by `event/key`:
 * `F11`
 * `F12`
 
-The following extra key names can be returned by `event/key` only for `key-down` and `key-up` messages:
+只有`key-down`和`key-up`消息可以通过`event/key`返回以下额外的密钥名称：
 
 * `left-control`
 * `right-control`
@@ -801,9 +801,9 @@ The following extra key names can be returned by `event/key` only for `key-down`
 
 === Actors 
 
-Actors are handler functions for View events. They are defined in an free-form object (no prototype provided) referred by `actors` facet. All actors have the same specification block.
+Actors是View事件的处理函数。 它们由`actors` facet引用的自由格式对象（未提供原型）定义。 所有Actors都具有相同的规格块。
 
-*Syntax*
+*语法*
 ----
 on-<event>: func [face [object!] event [event!]]
 
@@ -811,26 +811,26 @@ on-<event>: func [face [object!] event [event!]]
 face    : face object which receives the event
 event   : event value.
 ----
-In addition to the GUI events, it is possible to define an `on-create` actor which will be called when the face is shown for the first time, just before system resources are allocated for it. Unlike other actors, `on-create` has only one argument, `face`.
+除了GUI事件之外，还可以定义一个`on-create`的actor，当第一次显示face时，就会在系统资源被分配之前被调用。 与其他actor不同，`on-create`只有一个参数`face`。
 
-*Return value*
+*返回值*
 ----
 'stop : exit the event loop.
 'done : stops the event from flowing to the next face.
 ----
-Other returned values have no effect.
+其他返回值无效。
 
-=== Event flow 
+=== 事件流
 
-Events are usually generated at a specific screen position and assigned to the closest front face. However, the event is travelling from one face to another in the ancestors hierarchy in two directions commonly known as:
+事件通常在特定屏幕位置生成，并分配给最接近的正面。 然而，事件是在祖先层级中从一个face到另一个在两个方向上通常被称为：
 
-* event *capturing*: event goes from window face down to the front face where the event originated. For each face, a `detect` event is generated and the corresponding handler called if provided.
+* 事件*捕获*: 事件从窗口面朝下到事件发生的正面。 对于每个face，生成一个`detect`事件，并且如果提供了相应的处理程序。
 
-* event *bubbling*: event goes front face to parent window. For each face, the local event handler is called.
+* 事件*冒泡*: 事件前面到父窗口。 对于每个face，调用本地事件处理程序。
 
 image::event-flow.png[Event flow,align="center"]
 
-Typical event flow path:
+典型事件流程：
 
 . A click event is generated on the button, global handlers are processed (see next section).
 . Event capturing stage starts:
@@ -842,18 +842,18 @@ Typical event flow path:
 .. The panel gets the event next. Panel's `on-click` handler gets called.
 .. The window gets the event last, its `on-click` handler gets called.
 
-Notes:
+注意：
 
-* Event cancellation is achieved by returning `'done` word from any event handler.
-* Event capturing is not enabled by default for performance reasons. Set `system/view/capturing?: yes` to enable it.
+* 通过从任何事件处理程序返回`done`来实现事件取消。
+* 由于性能原因，默认情况下未启用事件捕获。 设置`system/view/capture?: yes`启用它。
 
-=== Global event handlers 
+=== 全局事件处理器
 
-Before entering the event flow path, specific pre-processing can be achieved using the so-called "global event handlers". Following API is provided for adding and removing them.
+在进入事件流程之前，可以使用所谓的“全局事件处理程序”来实现特定的预处理。 提供以下API用于添加和删除它们。
 
 ==== insert-event-func
 
-*Syntax*
+*语法*
 ----
 insert-event-func <handler>
 
@@ -861,33 +861,33 @@ insert-event-func <handler>
 
 Handler's function specification: func [face [object!] event [event!]]
 ----    
-*Return value*
+*返回值*
 ----
-The newly added handler function (function!).
+新添加的处理函数（function!）。
 ----    
-*Description*
+*描述*
 
-Installs a global handler function, which can pre-process events before they reach the face handlers. All global handlers are called on each event, so the handler body code needs to optimize speed and memory usage. If a block is provided as argument, it will be converted to a function using the `function` constructor.
+安装一个全局处理函数，它可以在事件到达处理程序之前进行事先处理。 所有全局处理程序在每个事件上被调用，因此处理器主体代码需要优化速度和内存使用。 如果一个块作为参数提供，它将使用`function`构造函数转换为一个函数。
 
-The return value of the handler function:
+处理函数的返回值：
 
-* `none`  : the event can be processed by other handlers (none!).
-* `'done` : other global handlers are skipped but event is propagated to child faces (word!).
-* `'stop` : exit the event loop (word!).
+* `none`  : 事件可以由其他处理程序处理（none!）。
+* `'done` : 其他全局处理程序将被跳过，但事件会传播到子窗口（word!）。
+* `'stop` : 退出事件循环（word!）。
 
-A reference to the handler function is returned and should be saved if it needs to be removed later.
+返回对处理程序函数的引用，如果需要稍后删除，则应该保存它。
 
 ==== remove-event-func
 
-*Syntax*
+*语法*
 ----
 remove-event-func <handler>
 
 <handler> : a previously installed event handler function.
 ----
-*Description*
+*描述*
 
-Disables a previously installed global event handler by removing it from the internal list.
+通过从内部列表中删除先前安装的全局事件处理程序来禁用它。
 
 == System/view object anchor:system-view-object[]
 
@@ -911,23 +911,23 @@ Disables a previously installed global event handler by removing it from the int
 |===
 
 
-== Including View component 
+== 引入View组件
 
-View component is not included by default on *compiling*. To include it, the main Red script have to declare the dependency in the header using the `Needs` field:
+*编译*默认情况下不包含View组件。 要包括它，主Red脚本必须使用`Needs`字段来声明头中的依赖关系。
 ----
 Red [
     Needs: 'View
 ]
 ----
-NOTE:
-Using consoles auto-generated by `red` binary will include the View component on platforms where it is available, `Needs` header field is therefore not required in user scripts run from those consoles.
+注意：
+使用`red`二进制自动生成的控制台将在可用的平台上包含View组件，因此在这些控制台运行的用户脚本中不需要`Needs`头字段。
 
-== Extra functions 
+== 额外的函数
 
 [cols="1, 4", options="header"]
 |===
 
-|Function | Description
+|函数 | 描述
 |*view*| Render on screen a window from a face tree or a block of VID code. Enters an event loop unless `/no-wait` *refinement* is used.
 |*unview*| Destroy one or more windows.
 |*layout*| Convert a block of VID code into a face tree.
@@ -941,7 +941,7 @@ Using consoles auto-generated by `red` binary will include the View component on
 |===
 
 
-_To be added:_
+_待补：_
 
-* menu facet specification
-* Image! datatype description
+* 菜单face规范
+* image!数据类型描述
