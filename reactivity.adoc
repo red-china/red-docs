@@ -152,20 +152,22 @@ Returns   : <code> 或 <func>  对响应的进一步引用？（for further ref
 
 === is 
 
-*Syntax*
+*语法*
+
 ----
 <word>: is <code>
 
 <word> : word设置为响应的结果 (set-word!).
 <code> : 包含至少一个响应源的代码块 (block!).
 ----
-*Description*
+*说明*
 
 `is` 创建一个响应公式，其结果将被分配到word。如果在响应器的主体块中使用，以及外部响应器的字段，`<code>`代码块可以包含对包装对象的字段的引用。
 
 备注: 这个运算符创建最接近于Excel公式模型的响应式。
 
-*Example*
+*示例*
+
 ----
 a: make reactor! [x: 1 y: 2 total: is [x + y]]
 
@@ -177,7 +179,8 @@ a/total
 ----
 === react? 
 
-*Syntax*
+*语法*
+
 ----
 react? <obj> <field>
 react?/target <obj> <field>
@@ -187,9 +190,11 @@ react?/target <obj> <field>
 
 Returns : 一个响应 (block! function!) 或者一个空值。
 ----
-*Description*
+*说明*
 
-`react?` checks if an object's field is a reactive source . If it is, the first reaction found where that object's field is present as a source, will be returned, otherwise `none` is returned. `/target` refinement checks if the field is a target instead of a source, and will return the first reaction found targeting that field or `none` if none matches.
+`react?` 检查某对象字段是否为响应源。若是，则该字段找到的第一个响应将作为源被返回，否则返回 `none` 。 
+`/target` 选项
+refinement checks if the field is a target instead of a source, and will return the first reaction found targeting that field or `none` if none matches.
 
 === clear-reactions  
 
