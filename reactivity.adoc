@@ -193,70 +193,78 @@ Returns : 一个响应 (block! function!) 或者一个空值。
 *说明*
 
 `react?` 检查某对象字段是否为响应源。若是，则该字段找到的第一个响应将作为源被返回，否则返回 `none` 。 
-`/target` 选项
-refinement checks if the field is a target instead of a source, and will return the first reaction found targeting that field or `none` if none matches.
+`/target` 选项则是检查字段是否为目标。若是则返回第一个以此字段为目标的响应，否则返回 `none` 。
 
 === clear-reactions  
 
-*Syntax*
+*语法*
+
 ----
 clear-reactions
 ----
-*Description*
 
-Removes all defined reactions, unconditionally.
+*说明*
+
+无条件移除所有定义的响应。
 
 === dump-reactions 
 
-*Syntax*
+*语法*
+
 ----
 dump-reactions
 ----
-*Description*
 
-Outputs a list of registered reactions for debug purposes.
+*说明*
 
-== Reactive Objects  
+基于调试目的，输出所有已注册响应的列表。
 
-Ordinary objects in Red do not exhibit reactive behaviors. In order for an object to be a reactive source, it needs to be constructed from one of the following reactor prototypes.
+== 响应对象
+
+Red中的常规对象不会表现响应行为。要使对象成为响应源，需要使用下列响应器原型之一来构造。
 
 === reactor!  
 
-*Syntax*
+*语法*
+
 ----
 make reactor! <body>
 
-<body> : body block of the object  (block!).
+<body> : 对象的主体块  (block!).
 
-Returns : a reactive object.
+返回 : 一个响应化的对象
 ----
-*Description*
 
-Constructs a new reactive object from the body block. In the returned object, setting a field to a new value will trigger reactions defined for that field.
+*说明*
 
-NOTE: The body may contain `is` expressions.
+用body块构造响应化对象。在返回的对象中，若字段赋给新值，将触发该字段所定义的响应。
+
+注意：主体块body中可能包含 `is` 表达式。
 
 === deep-reactor! 
 
-*Syntax*
+*语法*
+
 ----
 make deep-reactor! <body>
 
-<body> : body block of the object  (block!).
+<body> : 对象的主体块  (block!).
 
-Returns : a reactive object.
+返回 : 一个响应化对象
 ----
-*Description*
 
-Constructs a new reactive object from the body block. In the returned object, setting a field to a new value or changing a series the field refers to, including nested series, will trigger reactions defined for that field.
+*说明*
 
-NOTE: The body may contain `is` expressions.
+用主体块body构造一个响应化对象。在返回的对象中，若字段赋给新值，或是改变其引用的序列，包括嵌套序列，将触发该字段所定义的响应。
 
-*Example*
+注意：主体块body中可能包含 `is` 表达式。
 
-This shows how change to a serie, even a nested one, triggers a reaction.
+*示例*
 
-NOTE: It is up to the user to prevent cycles at this time. For example, if a `deep-reactor!` changes series values in a reactor formula (e.g. `is`), it may create endless reaction cycles.
+此例展示如何改变序列甚至嵌套序列而触发了响应。
+
+注意：目前，防止循环取决于用户。例如，若一个 `deep-reactor` 在响应器公式（例如 `is` ）中改变了序列的值，可能会创造无限响应循环。
+
 ----
 r: make deep-reactor! [
     x: [1 2 3]
