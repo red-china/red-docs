@@ -609,6 +609,7 @@ _该face类型应用于任何自定义图形组件实现。_
 == SHOW function 
 
 *语法*
+
 ----
 show <face>
 
@@ -670,6 +671,7 @@ View引擎有两种不同的模式用于在face树完成更改后更新显示：
 这种双向绑定简化了与程序员的图形对象的交互，而不需要任何特定的API。 使用系列动作修改方面就足够了。
 
 例子：
+
 ----
 view [
     list: text-list data ["John" "Bob" "Alice"]
@@ -677,6 +679,7 @@ view [
     button "Change" [lowercase pick list/data list/selected]
 ]
 ----
+
 == Events 
 
 === 事件名 
@@ -804,6 +807,7 @@ view [
 Actors是View事件的处理函数。 它们由`actors` facet引用的自由格式对象（未提供原型）定义。 所有Actors都具有相同的规格块。
 
 *语法*
+
 ----
 on-<event>: func [face [object!] event [event!]]
 
@@ -814,6 +818,7 @@ event   : event value.
 除了GUI事件之外，还可以定义一个`on-create`的actor，当第一次显示face时，就会在系统资源被分配之前被调用。 与其他actor不同，`on-create`只有一个参数`face`。
 
 *返回值*
+
 ----
 'stop : exit the event loop.
 'done : stops the event from flowing to the next face.
@@ -854,6 +859,7 @@ image::event-flow.png[Event flow,align="center"]
 ==== insert-event-func
 
 *语法*
+
 ----
 insert-event-func <handler>
 
@@ -861,10 +867,13 @@ insert-event-func <handler>
 
 Handler's function specification: func [face [object!] event [event!]]
 ----    
+
 *返回值*
+
 ----
 新添加的处理函数（function!）。
 ----    
+
 *描述*
 
 安装一个全局处理函数，它可以在事件到达处理程序之前进行事先处理。 所有全局处理程序在每个事件上被调用，因此处理器主体代码需要优化速度和内存使用。 如果一个块作为参数提供，它将使用`function`构造函数转换为一个函数。
@@ -880,11 +889,13 @@ Handler's function specification: func [face [object!] event [event!]]
 ==== remove-event-func
 
 *语法*
+
 ----
 remove-event-func <handler>
 
 <handler> : a previously installed event handler function.
 ----
+
 *描述*
 
 通过从内部列表中删除先前安装的全局事件处理程序来禁用它。
@@ -913,7 +924,7 @@ remove-event-func <handler>
 
 == 引入View组件
 
-*编译*默认情况下不包含View组件。 要包括它，主Red脚本必须使用`Needs`字段来声明头中的依赖关系。
+*编译* 默认情况下不包含View组件。 要包括它，主Red脚本必须使用`Needs`字段来声明头中的依赖关系。
 ----
 Red [
     Needs: 'View
