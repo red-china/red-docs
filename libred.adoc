@@ -89,6 +89,7 @@ red_value redDo(const char* source)
 评估作为字符串传递的Red表达式，并返回最后一个Red值。
 
 *例子*
+
 ----
 redDo("a: 123");
 
@@ -106,6 +107,7 @@ red_value redDoFile(const char* filename)
 加载并评估文件名引用的Red脚本并返回最后一个Red值。文件名格式使用Red独立于操作系统的约定（基本上是Unix风格）。
 
 *例子*
+
 ----
 redDoFile("hello.red");
 redDoFile("/c/dev/red/demo.red");
@@ -118,6 +120,7 @@ red_value redDoBlock(red_block code)
 评估参数块并返回最后一个Red值。
 
 *例子*
+
 ----
 redDoBlock(redBlock(redWord("print"), redInteger(42)));
 ----
@@ -129,6 +132,7 @@ red_value redCall(red_word name, ...)
 调用名称字引用的Red函数（`any-function`类型），传递任何所需的参数（作为Red值）。 返回函数的最后一个Red值。 参数列表*必须*以“null”或“0”值终止，作为结束标记。
 
 *例子*
+
 ----
 redCall(redWord("random"), redInteger(6), 0);     // returns a random integer! value between 1 and 6
 ----
@@ -144,6 +148,7 @@ red_value redRoutine(red_word name, const char* spec, void* func_ptr)
 定义为新的红色例程名称，以_spec_作为规范块，_func-ptr_ C函数指针为body。 C函数*必须*返回一个红色值（`redUnset（）`可以表示没有使用返回值）。
 
 *例子*
+
 ----
 #include "red.h"
 #include <stdio.h>
@@ -170,6 +175,7 @@ long redSymbol(const char* word)
 返回与加载的word（作为C字符串提供）相关联的符号ID。 然后可以将此ID传递到需要符号ID而不是字值的其他libRed API函数。
 
 *例子*
+
 ----
 long a = redSymbol("a");
 redSet(a, redInteger(42));
@@ -265,6 +271,7 @@ red_block redBlock(red_value v,...)
 返回一个新的块！ 系列从参数列表构建。 列表*必须*以“null”或“0”值终止，作为结束标记。
 
 *例子*
+
 ----
 redBlock(0);                                  // Creates an empty block
 redBlock(redInteger(42), redWord("hi"), 0);   // Creates [42 hi] block
@@ -278,6 +285,7 @@ red_path redPath(red_value v, ...)
 返回一条新path！系列从参数列表构建。 列表*必须*以“null”或“0”值终止，作为结束标记。
 
 *例子*
+
 ----
 redDo("a: [b 123]");
 long res = redGetPath(redPath(redWord("a"), redWord("b"), 0));
@@ -292,6 +300,7 @@ red_path redLoadPath(const char* path)
 返回path！系列由一个表示为C字符串的路径构建。 这提供了一种构建路径的快速方法，而不单独构建每个元素。
 
 *例子*
+
 ----
 redGetPath(redLoadPath("a/b"));    // Creates and evaluates the a/b path! value.
 ----
@@ -304,6 +313,7 @@ red_value redMakeSeries(unsigned long type, unsigned long slots)
 返回一个新series！ 类型_类型_和足够的大小存储_slots_元素。 这是一个通用的系列构造函数。 该类型需要是“RedType”枚举值之一。
 
 *例子*
+
 ----
 redMakeSeries(RED_TYPE_PAREN, 2);  // Creates a paren! series
 
@@ -631,6 +641,7 @@ Function redBlockVB(ParamArray args() As Variant) As Long
 返回一个新的block!系列从参数列表构建。 参数号是可变的，仅由VisualBasic值组成。
 
 *例子*
+
 ----
 redProbe redBlockVB()              ' Creates an empty block
 redProbe redBlockVB(42, "hello")   ' Creates the [42 "hello" hi] block
@@ -644,6 +655,7 @@ Function redPathVB(ParamArray args() As Variant) As Long
 返回一条新path!系列从参数列表构建。 参数号是可变的，仅由VisualBasic值组成。
 
 *例子*
+
 ----
 redDo("a: [b 123]")
 res = redGetPath(redPathVB("a", "b"))
@@ -657,6 +669,7 @@ Function redCallVB(ParamArray args() As Variant) As Long
 调用由传递的字符串（第一个参数）引用的Red函数（“any-function！”类型），最后传递一些参数（作为VisualBasic值）。 返回函数的最后一个值。 参数号是可变的，仅由VisualBasic值组成。
 
 *例子*
+
 ----
 redCallVB("random", 6);            ' returns a random integer! value between 1 and 6
 ----
