@@ -1,6 +1,6 @@
 == Red GUI架构 ==
 
-image::../images/view-overview.png[Overview,align="center"]
+image::https://github.com/red/docs/blob/master/images/view-overview.png[Overview,align="center"]
 
 === VID
 
