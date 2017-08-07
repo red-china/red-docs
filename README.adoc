@@ -13,7 +13,7 @@ _目前项目还处于开发阶段，所有只有少数信息能够作为文档�
 | link:README.adoc[]       |    已完成   | link:https://github.com/pixcai[pixcai]
 | link:date.adoc[]         |    未开始   | 
 | link:draw.adoc[]         |    未开始   | 
-| link:gui.adoc[]          |    未开始   | 
+| link:gui.adoc[]          |    已完成   | link:https://github.com/pixcai[pixcai]
 | link:libred.adoc[]       |    未开始   | 
 | link:map.adoc[]          |    未开始   | 
 | link:preprocessor.adoc[] |    未开始   | 

@@ -1,36 +1,36 @@
-== Red GUI架构 ==
+== Red GUI架构(Architecture) ==
 
 image::../images/view-overview.png[Overview,align="center"]
 
 === VID
 
-VID代表可视化接口方言(Visual Interface Dialect)。它是Red的方言之一，旨在以最简单有效的方式来规定一个图形组件所拥有的属性、布局以及事件处理函数。VID代码会在运行时被编译到一种faces树结构以便用于显示。
+VID代表可视化接口方言(Visual Interface Dialect)。它是Red的方言之一，旨在以最简单有效的方式规定一个图形组件所拥有的属性、布局以及事件处理函数。VID代码会在运行时被编译到一种便于显示的`face`树结构。
 
 === View
- 
+
 GUI引擎包含以下几个部分：
 
-* 平台独立的faces管理引擎
-* 响应式行为事件
+* 平台独立的`face`管理引擎
+* 响应式动作事件
 * Draw方言解释器
 * 平台特定的后端
 
 === React
 
-响应式行为可以直接用VID方言定义或者也可以直接用REACT函数指定。
+响应式动作可以直接用VID方言定义或者也可以直接用`REACT`函数指定。
 
 === Draw
 
-Draw是Red的一种2D矢量绘图方言。它有以下几种使用方式：
+Draw是Red的一种2D矢量绘图方言。它可以用不同的方式指定：
 
 * 在VID布局中使用
-* 直接在任何face对象的`draw`属性中使用
-* 使用DRAW函数直接绘制到图像上
+* 直接在任何`face`对象的`draw`属性中使用
+* 使用`DRAW`函数直接绘制到图像上
 
-=== 平台特定的后端
+=== 平台特定的后端(Platform-specific backends)
 
 因为内部API允许多个后端(OS/图形系统绑定)，所以View引擎可以在多个不同的环境中实现。为了完整的支持Draw方言，每个后端必须支持2D绘图操作。
 
 声明：
 
-VID、Draw以及大部分的View(除了响应式部分)都是Carl Sassenrath在Rebol中实现的。Red View是全新的，它对某些功能有所增强并且是独立实现的，响应式行为就是一个最好的例子。
+VID、Draw以及大部分的View(除了响应式部分)都是Carl Sassenrath在Rebol中实现的。Red View是全新的，它对某些功能有所增强并且是独立实现的，响应式动作就是一个最好的例子。
