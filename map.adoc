@@ -1,29 +1,29 @@
-= Map! datatype
+= Map!数据类型
 :toc:
 :numbered:
 
-== 概要
+== 概要(Abstract)
 
-map是一个拥有key/value的关联数组。它提供了一种快速获取(内部使用哈希表结构)、方便和专用的语法。和`hash!`不同的是，map不是一个序列，所以它不存在偏移和位置的说法。从概念上讲，`map!`是一种处于`hash!`和`object!`之间的数据类型。
+`map`表示一个拥有键/值对的关联数组。它提供了一种快速访问(内部使用哈希表)、便捷和专用的语法。和`hash!`不同的是，`map`不是一个序列，所以它不存在偏移和位置的概念。理论上讲，`map!`是一种处于`hash!`和`object!`之间的数据类型。
 
-== 字面量语法
+== 字面量语法(Literal syntax)
 ----
 #(<key> <value>...)
 
-<key>   : hashed key, accepted types are: any-word!, any-string!, number!, char!, pair!, tuple!
-<value> : any-type! value
+<key>   : 哈希键，接受类型为：`any-word!`，`any-string!`，`number!`，`char!`，`pair!`，`tuple!`
+<value> : `any-type!`值
 ----
-== 构造语法
+== 构造语法(Creation syntax)
 ----
 make map! <spec>
 
-<spec> : block of key/value pairs or an integer value
+<spec> : 键/值对组成的`block`或者整数值
 ----
-如果_spec_是个整数，一个包含预分配大小的空map将会被返回。
+如果_spec_是个整数，一个包含预分配大小的空`map!`将会被返回(通常是为了动态计算`map`)。
 
 注意：
 
-* map自身或spec block必须包含偶数个元素，否则会产生错误。
+* `map` body或_spec_ block必须包含偶数个元素，否则会产生错误。
 * 值不是经过*reduce*产生的，所以某些值必须使用构造语法，比如`logic!`。
 
 例子：
@@ -41,18 +41,18 @@ make map! [a 1 'b 2 "c" 3]
     "c" 3
 )
 ----
-如果key是*any-word!*类型，为了使map的内容看起来更像键值对，在map中key的类型会被转换为*set-word!*。要访问这些key，不需要再提供set-word，简单的word就够了。同样地，`keys-of`反射器会返回这些word，这大大简化了之后的处理过程(特别是匹配操作，匹配words比匹配set-words容易多了)。
+如果键是*any-word!*类型，为了使`map`的内容看起来更像键/值对，在`map`中键的类型会被转换为*set-word!*。要访问这些键，不需要再提供`set-word`，简单的`word`就够了。同样地，`keys-of`反射器会返回`word`而不是`set-word`，这大大简化了之后的处理过程(特别是匹配操作，匹配`word`比匹配`set-word`容易多了)。
 
 注意：
 
 * 和`hash!`以及`block!`一样, `map!`的查找操作默认是**大小写不敏感的**。
-* 如果指定了`none`作为value，那么相应的key不会被创建(参考“删除键”部分)。
-* 在创建map的时候所有的key都是深度拷贝的。
-* 在创建map的时候，如果value的值是序列，则value不会被深度拷贝。这个由用户自己决定是否优化(因为序列值可以在多处通用)。
+* 如果指定了`none`作为值，那么相应的key不会被创建(参考”删除键“部分)。
+* 在创建`map`的时候所有的键都是深度拷贝的。
+* 在创建`map`的时候，如果值是`series!`类型，则值不会被拷贝，这个选项留给用户(这样可以优化常见用例的资源)。
 
-另一种创建map的方式是使用`copy`动作来复制一个已有的map。
+另一种创建`map`的方式是使用`copy`动作来复制一个已有的`map`。
 
-== 获取值
+== 获取值(Retrieving values)
 
 使用路径：
 ----

@@ -1,4 +1,4 @@
-== Red GUI架构(Architecture) ==
+== Red GUI架构 ==
 
 image::../images/view-overview.png[Overview,align="center"]
 
