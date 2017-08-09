@@ -10,14 +10,14 @@
 ----
 #(<key> <value>...)
 
-<key>   : 哈希键，接受类型为：`any-word!`，`any-string!`，`number!`，`char!`，`pair!`，`tuple!`
-<value> : `any-type!`值
+<key>   : hashed key, accepted types are: scalar!, all-word!, any-string!
+<value> : any-type! value
 ----
 == 构造语法(Creation syntax)
 ----
 make map! <spec>
 
-<spec> : 键/值对组成的`block`或者整数值
+<spec> : block of key/value pairs or an integer value
 ----
 如果_spec_是个整数，一个包含预分配大小的空`map!`将会被返回(通常是为了动态计算`map`)。
 
@@ -41,14 +41,14 @@ make map! [a 1 'b 2 "c" 3]
     "c" 3
 )
 ----
-如果键是*any-word!*类型，为了使`map`的内容看起来更像键/值对，在`map`中键的类型会被转换为*set-word!*。要访问这些键，不需要再提供`set-word`，简单的`word`就够了。同样地，`keys-of`反射器会返回`word`而不是`set-word`，这大大简化了之后的处理过程(特别是匹配操作，匹配`word`比匹配`set-word`容易多了)。
+如果键是**any-word!**类型，为了使`map`的内容看起来更像键/值对，在`map`中键的类型会被转换为*set-word!*。要访问这些键，不需要再提供`set-word`，简单的`word`就够了。同样地，`keys-of`反射器会返回`word`而不是`set-word`，这大大简化了之后的处理过程(特别是匹配操作，匹配`word`比匹配`set-word`容易多了)。
 
 注意：
 
 * 和`hash!`以及`block!`一样, `map!`的查找操作默认是**大小写不敏感的**。
-* 如果指定了`none`作为值，那么相应的key不会被创建(参考”删除键“部分)。
+* 如果指定了`none`作为值，那么相应的键不会被创建(参考”删除键“部分)。
 * 在创建`map`的时候所有的键都是深度拷贝的。
-* 在创建`map`的时候，如果值是`series!`类型，则值不会被拷贝，这个选项留给用户(这样可以优化常见用例的资源)。
+* 在创建`map`的时候，如果值是`series!`类型，则值不会被拷贝，此选项留给用户(这样可以优化常见用例的资源)。
 
 另一种创建`map`的方式是使用`copy`动作来复制一个已有的`map`。
 
@@ -75,7 +75,7 @@ select <map> <key>
 get/case '<map>/<key>
 select/case <map> <key>
 ----
-如果访问一个map中不存在的key，结果将是`none`。
+如果访问一个`map`中不存在的键，结果将是`none`。
 
 例子：
 
@@ -91,7 +91,7 @@ select/case m 'ab
 == 10
 ----
 
-== 改变键和值
+== 改变键和值(Changing keys and values)
 
 使用路径：
 ----
@@ -124,12 +124,12 @@ put/case <map> <key> <value>
 extend/case <map> <spec>
 ----
 
-`extend`可以一次性接收多个key，所以它很适合用来修改大量数据。
+`extend`可以一次性接收多个键，所以它很适合用来修改大量数据。
 
 注意：
 
-* 如果设置一个map中不存在的key，则会**自动创建它**.
-* 如果添加的key和map原有的key同名，则map中的key会被更新(默认情况下key是不区分大小写的)。
+* 如果设置一个map中不存在的键，将会**自动创建它**.
+* 如果添加的键和`map`原有的键同名，则`map`中的键会被更新(默认情况下键是不区分大小写的)。
 
 例子：
 ----
@@ -174,9 +174,9 @@ m
 )
 ----
 
-== 删除键
+== 删除键(Deleting keys)
 
-要删除map中的key/value，只要设置key为`none`即可，具体可以采用以下几种方式：
+要删除`map`中的键/值，只要设置键为`none`即可，具体可以采用以下几种方式：
 
 例子：
 ----
@@ -197,37 +197,37 @@ m
 )
 ----
 
-注意：上面例子中传递`none!`类型的值时必须使用构造语法。因为`none`是`none!`类型的值，`[d none]`表示`d`的值为`none`，而`[d #[none]]`表示`d`的值是`none!`类型，即`d`没有值，所以删除了`d`。
+注意：上面例子中传递`none!`类型的值时必须使用构造语法。
 
-你也可以用`clear`动作一次性清空map：
+你也可以用`clear`动作一次性清空`map`：
 ----
 clear #(a 1 b 2 c 3)
 == #()
 ----
 
-== 反射
+== 反射(Reflection)
 
-* `find` 检查map中是否存在指定的key。如果存在返回`true`，否则返回`none`。
+* `find` 检查`map`中是否存在指定的键。如果存在返回`true`，否则返回`none`。
 
  find #(a 123 b 456) 'b
  == true
 
-* `length?` 返回map中key/value的个数。
+* `length?` 返回`map`中键/值对的个数。
 
  length? #(a 123 b 456)
  == 2
 
-* `keys-of` 返回包含map中所有key的block(set-words被转换为words)。
+* `keys-of` 返回包含`map`中所有键的`block`(set-words被转换为words)。
 
  keys-of #(a: 123 b: 456)
  == [a b]
 
-* `values-of` 返回包含map中所有value的block。
+* `values-of` 返回包含`map`中所有值的`block`。
 
  values-of #(a: 123 b: 456)
  == [123 456]
 
-* `body-of` 返回包含map中所有key/value的block。
+* `body-of` 返回包含`map`中所有键/值对的`block`。
 
  body-of #(a: 123 b: 456)
  == [a: 123 b: 456]
