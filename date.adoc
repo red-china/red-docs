@@ -1,24 +1,24 @@
-= Date! 日期数据类型
+= Date!数据类型
 :toc:
 :numbered:
 
-== 摘要 (Abstract)
+== 概要(Abstract)
 
-`Date!` 值表示公历日期。 一个date变量值，也可以包含可选的时间和时区信息。 日期的时间以24小时格式表示 (包括可选的时区信息). Red日期类型也广泛支持 https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] 输入格式。
+`date!`值表示公历日期。一个`date!`变量值，也可以包含可选的时间和时区信息。 日期的时间以24小时格式表示(包括可选的时区信息)。Red日期类型也广泛支持 https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] 输入格式。
 
-Note:
+注意：
 
-* `date!` 使用 https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar[proleptic Gregorian calendar]，可延伸到1582年以后。 在使用 `date!` 日期表示历史时应注意前公历的日期！(原文:Care should be taken when trying to represent historical, pre-Gregorian dates using `date!` values.)
+* `date!`使用 https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar[proleptic Gregorian calendar]，可延伸到1582年以后。 在使用 `date!` 日期表示历史时应注意前公历的日期。
 
-* 支持的日期范围从 `1/Jan/-16384` 到 `31/Dec/16383`, 通过数学运算进行换算。 在输入时，出于实际情况，该范围简化为从`1/Jan/-9999` 到 `31/Dec/9999`。(原文: that range is reduced to `1/Jan/-9999` to `31/Dec/9999` for practical reasons.)
+* 支持的日期范围从 `1/Jan/-16384` 到 `31/Dec/16383`，通过数学运算进行换算。在输入时，出于实际情况，该范围简化为从`1/Jan/-9999` 到 `31/Dec/9999`。
 
-== 创建 (Creation)
+== 创建(Creation)
 
-`Date!` 变量可以使用字面语法创建， 或者在运行时使用`make`构造函数或`to`转换为日期类型。
+`date!`变量可以使用字面语法创建，或者在运行时使用`make`构造函数或`to`转换为日期类型。
 
 === 字面语法(Literal syntax)
 
-支持多种不同的字面语法格式， 包括所有Rebol日期格式和大多数ISO日期标准。
+支持多种不同的字面语法格式，包括Rebol的所有日期格式和大多数ISO日期标准格式。
 ----
 <date>/<time>
 <date>/<time><zone>
@@ -61,45 +61,43 @@ Additional <date> formats when followed by T:
     <ss>
     <ss>.<dec>
 
-<sep>    : 分隔符号使用 `-` 或 `/`
-<yyyy>   : 3 或 4 位数字代表年份 (4 位数字表示国际标准日期-ISO dates)
-<yy>     : 2 位数字表示的年份，代表相对于2000年
-<m>      : 1或2位数字代表月份
-<mm>     : 2位数字代表月份
-<mon>	 : 3个字母代表月份
+<sep>    : 分隔符号使用`-`或`/`
+<yyyy>   : 3或4位数字，代表年份(4位数字表示ISO日期)
+<yy>     : 2位数字表示的年份，相对于2000年
+<m>      : 1或2位数字，代表月份
+<mm>     : 2位数字，代表月份
+<mon>	 : 3个字母，代表月份
 <month>  : 月份的英语全名
-<d>      : 一个数字表示一周中的某一天 (1 到 7)
-<dd>     : 1或2位数字表示当月的某一天
-<ddd>    : 3位数字代表一年中的某一天
-<ww>     : 2位数字表示一年中的某一周
-<time>   : time! 变量
-<hour>   : 1或2位数字表示小时数
-<min>    : 1或2位数字表示分钟
-<ss>     : 1或2位数字代表秒
-<dec>    : 秒的小数
-<sign>   : `+` 或 `-` 符号 (不能省略)
-<min15>  : 和 <min> 相同但能被15整除，刻数。
-<hhmm>   : 4位数字，表示小时和分钟 (无分隔符)
-<hhmmss> : 6位数字，表示小时，分和秒（无分隔符）
+<d>      : 一个数字，表示一周中的某一天(1到7)
+<dd>     : 1或2位数字，表示当月的某一天
+<ddd>    : 3位数字，代表一年中的某一天
+<ww>     : 2位数字，表示一年中的某一周
+<time>   : `time!`变量
+<hour>   : 1或2位数字，表示小时
+<min>    : 1或2位数字，表示分钟
+<ss>     : 1或2位数字，表示秒
+<dec>    : 秒数
+<sign>   : `+`或`-`符号 (不能省略)
+<min15>  : 和`<min>`相同但能被15整除，刻数。
+<hhmm>   : 4位数字，表示小时和分钟(无分隔符)
+<hhmmss> : 6位数字，表示小时、分和秒(无分隔符)
 ----
 
-//注释: 保留原文是方便后来者校对或修正直到认为可以删除的时候再删
-(原文:Many different input formats for literal dates are accepted. (exceeding the specified digit numbers or beyond a field's norm) will result in a syntax error. When serialized again (e.g. for displaying), only the following canonical formats are used:)
-日期字面语法接受许多不同的输入格式。超出范围值 (超过指定的数字或超出字段的规范)将导致返回一个语法错误。当再次序列化（例如作屏显）时，仅使用以下规范格式:
+日期字面语法接受许多不同的输入格式。超出范围(超过指定的数字或超出字段的规范)将导致返回一个语法错误。当再次序列化(例如作屏显)时，仅使用以下规范格式:
 
 ----
 <dd>-<mon>-<yyyy>
 <dd>-<mon>-<yyyy>/<hour>:<min>:<sec>
 <dd>-<mon>-<yyyy>/<hour>:<min>:<sec><sign><hour>:<min15>
 ----
-当时间和/或区域字段未设置时，它们会被省略。 对于负日期值，使用 `/` 分隔符而不是 `-` 来提高可读性。
+当时间和/或区域字段未设置时，它们会被省略。对于负日期值，使用`/`分隔符而不是`-`来提高可读性。
 
-Notes:
+注意：
 
-* 当使用字母指定一个月时，使用其英文名称表示该月份，并且不区分大小写。
-* 当一个年份仅用两位数字 （`yy`）指定时：如果yy<50，则被解释为 '20yy' 年，否则解释为 '19yy' 年。
+* 当使用单词指定月份时，应使用其英文名称表示该月份，单词不区分大小写。
+* 当一个年份仅用两位数字(`yy`)指定时：如果`yy < 50`，则被解释为”20yy“年，否则解释为“19yy”年。
 
-有效的日期输入例子如下: (Examples of valid input dates:)
+有效的日期输入例子如下：
 
 ----
 1999-10-5
@@ -136,7 +134,7 @@ Notes:
 2017-153T10:50:00-4:00
 ----
 
-=== 运行时创建 (Runtime creation)
+=== 运行时创建(Runtime creation)
 
 ----
 make date! [<day> <month> <year>]
