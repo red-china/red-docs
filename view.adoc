@@ -8,10 +8,10 @@
 
 此 Red/View (或 View) 组件，是Red编程语言的图形系统。其设计目标：
 
-* 数据导向，API少
+* 数据导向，极简API
 * 以虚拟对象树为编程接口
 * 显示系统与虚拟树之间实时或延迟的同步
-* 支持细致的双向绑定（Make two-way binding trivial to support）
+* 很容易添加双向绑定支持
 * 多后端，跨平台
 * 支持系统的，第三方的，以及自制的窗口部件
 * 低性能开销
@@ -29,17 +29,17 @@ face对象是 `face!` 模板对象的克隆. 在face对象中的一个字段被�
 |===
 
 |属性 Facet | 数据类型 Datatype | 强制性 Mandatory? | 适用性 Applicability | 描述 Description
-|type| word!| yes| all| Type of graphic component (see link:view.html#_face_types[below]).
-|offset| pair!| yes| all| Offset position from parent top-left origin.
-|size| pair!| yes| all| Size of the face.
-|text| string!| no| all| Label text displayed in the face.
-|image| image!| no| some| Image displayed in the face background.
-|color| tuple!| no| some| Background color of the face in R.G.B or R.G.B.A format.
-|menu| block!| no| all| Menu bar or contextual menu.
-|data| any-type!| no| all| Content data of the face.
-|enabled?| logic!| yes| all| Enable or disable input events on the face.
-|visible?| logic!|	yes| all| Display or hide the face.
-|selected| integer!| no| some| For lists types,  index of currently selected element.
+|type| word!| yes| all| 图形组件的类型 (see link:view.html#_face_types[below]).
+|offset| pair!| yes| all| 相对parent左上起点的偏移位置
+|size| pair!| yes| all| 大小
+|text| string!| no| all| 文本
+|image| image!| no| some| 背景图片
+|color| tuple!| no| some| R.G.B或R.G.B.A格式的背景色
+|menu| block!| no| all| 菜单栏或上下文菜单(弹出菜单/右键菜单)
+|data| any-type!| no| all| 内容数据
+|enabled?| logic!| yes| all| 是否启用输入事件
+|visible?| logic!|	yes| all| 是否可见
+|selected| integer!| no| some| 对于lists类型, 当前选中的元素索引
 |flags| block!, word!| no|	some| List of special keywords altering the display or behavior of the face.
 |options| block!| no| some| Extra face properties in a [name: value] format.
 |parent| object!| no| all|	Back-reference to parent face (if any).
