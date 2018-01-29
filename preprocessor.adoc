@@ -1,95 +1,100 @@
-= 预处理器
+= 预处理器（Preprocessor）
 :toc:
 :toc-title: 目录
 :numbered:
 
 
-== 概念
+== 概念（Concept）
 
-Red预处理器是Red的一种方言，可以转换Red源码在常规的Red语言特定层之上。 转换是通过Red源码中的内联预处理器关键字(称为`directives`)实现的。这些指令将会处理：
+Red 预处理器是 Red 的一种方言，它允许使用一个在常规 Red 语言之上的特定的层来转换 Red 源码。转换是通过在 Red 源码中内联预处理器关键字（称为 `directives`（指令））达到的。这些指令被处理的时机为：
 
-* 当Red源码被编译的时候
-* 当Red源码通过`do`函数调用文件参数执行的时候
-* 当`expand-directives`函数在block值上被调用的时候
+* 当 Red 源码被编译的时候
+* 当 Red 源码通过传有一个文件参数的 `do` 函数被运行的时候
+* 当 `expand-directives` 函数在区块值上被调用的时候
+TODO：考量上句的翻译
 
-预处理器在加载阶段(LOADing phase)之后被调用，所以它处理Red值，而不是文本形式的源码。
+预处理器在加载阶段之后被调用，所以它处理的是 Red 值而不是文本形式的源码。
 
-指令分类：
+指令类别：
 
-* 条件指令：根据表达式执行的结果包含代码。
+* 条件指令：根据表达式的结果包含代码。
 * 控制指令：控制预处理器的行为。
-* 宏：使用函数转换代码，启用更复杂的转换。
+* 宏：使用函数转换代码，它允许更复杂的转换。
 
-指令被表示为一个特定的`issue!`值(以`#`开头)。
+指令以特定的 `issue!` 值来表示（以一个 `#` 符号开头）。
 
-当指令被处理的时候，它会被替换为它返回的结果值(有些指令没有返回值，所以它们仅仅只是被移除)。这就是源码转换是如何实现的。
+当一个指令被处理的时候，它会被替换为它返回的结果值（有些指令没有返回值，所以它们仅会被移除），这就是达成源码的转换的方法。
 
-注意：Red/System有它自己的 http://static.red-lang.org/red-system-specs-light.html#section-16[预处理器]，它和Red的预处理相似，但是更底层并且应用到文本形式的源码。
+NOTE: Red/System 有它自己的 http://static.red-lang.org/red-system-specs-light.html#section-16[预处理器]，是类似的，不过它是在底层，并且应用在的是文本形式的源码上。
 
-=== 配置对象
+=== 配置对象（Config object）
 
-在条件表达式或宏中，为了访问编译源码时提供的设置，有一个隐式的`config`对象被提供。这些设置经常用于在条件表达式中包含代码。详细的设置列表可以在 https://github.com/red/red/blob/master/system/compiler.r#L31[这里] 查看。
+它在条件表达式与宏中提供了一个隐含的 `config` 对象，以给与用于编译源码的设定的访问，这些设定经常用于有条件地包含代码。全面的设定清单可以从 https://github.com/red/red/blob/master/system/compiler.r#L31[这里] 找到。
 
-*例子：*
+*例：*
     
     #if config/OS = 'Windows [#include %windows.red]
 
-注意：
-当在运行时(从Red的解释器中)使用预处理器时，`config`对象也有效，并且可以反射在编译Red可执行文件到可运行代码时的选项。
+NOTE: 当在运行时（从 Red 的解释器）使用预处理器时，`config` 对象也有效，而且它会反映用来编译目前用来运行代码的该 Red 可执行文件的选项。
 
-=== 执行上下文
+=== 执行语境（Execution context）
 
-为了避免暴露words到全局上下文，以造成不必要的副作用，在指令中的所有表达式都限定在特定的上下文中。上下文延伸到在条件表达式、宏和`#do`指令的每个set-word。
+为了避免泄露单词到全局语境，造成多余的副作用，所有在指令中使用的表达式都绑定到一个专用的语境中。语境会随着用于条件表达式、宏和 `#do` 指令的每个设词扩展。
 
-提示：
+TIP:
 
-* 可以用以下表达式打印输出隐藏上下文：
+* 可以使用以下表达式打印出隐藏的语境的内容：
         
         #do [probe self]
         
-* 当在运行时使用的时候，隐藏上下文也可以用以下形式直接访问：
+* 当在运行时被使用的时候，隐藏的语境也可以使用以下形式直接访问：
         
         probe preprocessor/exec
 
-=== 实现笔记
+=== 实现的注解（Implementation note）
 
-当前，那些用在编译时的指令中的表达式都是用Rebol2解释器执行的，由它来运行工具链代码。这是临时的，以后会尽可能地切换为Red执行器。与此同时，为了在运行时(将来还包含编译时)和Red解释器兼容，确保你的表达式和宏代码也可以用Red运行。
+当前，用在编译时的指令中的表达式都是用 Rebol2 解释器执行的，因为它运行着工具链的代码。这是临时的，应会尽块地把它切换为一个 Red 执行器。在此期间要确保你的表达式和宏代码也可以用 Red 运行，以在运行时（未来还包含编译时）和 Red 解释器兼容。
 
-== 宏
+== 宏（Macros）
 
-Red预处理器支持定义宏函数(简称为*macros*)来实现更复杂的转换。宏允许高效的元编程，即执行花费在编译时而不是运行时。Red在运行时已经有很强的元编程能力，但是，为了使得Red源码在编译器和解释器运行等效，宏也可以在运行时被解析。
+Red 预处理器支持定义宏函数（简称 *macros*）来实现更复杂的转换。宏允许以高效的形式进行元编程，它执行的代价花费在编译时而不是运行时。在运行时 Red 已经有很强的元编程能力，不过为了使 Red 源码在编译器和解释器运行地一样好，宏也可以在运行时被解析。
 
-注意：没有读取时间宏。考虑到用解析方言对文本形式的源进行预处理是多么简单，这种支持现在是多余的。
+NOTE: 没有读取时（读者）宏。考虑到用 Parse 方言对文本形式的源进行预处理已经是如此简单，这种支持现在是多余的。
 
 预处理器支持两种类型的宏：
 
-=== 命名宏
+=== 命名宏（Named macros）
 
-这种类型的宏是高级的，因为预处理器负责为用户获取参数和替换返回值。典型的形式是：
+这种类型的宏是高级的，预处理器负责为用户获取参数和替换返回值。典型的形式是：
 
     #macro name: func [arg1 arg2... /local word1 word2...][...code...]
     
-这样定义一个宏之后，源码中每个出现`name`的地方，都会触发以下步骤：
+这样定义一个宏之后，源码中每个遇到 `name` 单词的地方，都会触发以下步骤：
 
 . 获取参数值。
 . 用参数调用宏函数。
 . 用函数的最后一个值替换宏调用及其参数。
-. 从替换值(允许递归执行宏)的地方恢复预处理器。
+. 从替换了值的地方恢复预处理器（为了允许宏的递归执行）。
 
-注意：目前不支持指定参数类型。
+NOTE: 目前不支持指定参数类型。
 
-*例子：*
+*例：*
+
 ----
 Red []
 #macro make-KB: func [n][n * 1024]
 print make-KB 64
 ----  
-将会输出：
+
+结果将为：
+
 ----
 Red []
 print 65536
 ----
-在一个宏中调用另一个宏：
+
+从一个宏中调用其他宏：
+
 ----
 Red []
 #macro make-KB: func [n][n * 1024]
@@ -97,44 +102,54 @@ Red []
 
 print make-MB 1
 ----  
-将会输出：
+
+结果将为：
+
 ----  
 Red []
 print 1048576
 ----
-=== 模式匹配宏
 
-与匹配单词和获取参数相反，这种类型的宏按照Parse方言的规则或关键字来匹配宏。和命名宏相同，返回值被用作匹配模式的替换值。
+=== 模式匹配宏（Pattern-matching macros）
 
-虽然，也有这种类型的宏的低级版本，采用`[manual]属性触发`。在这种情况下，没有隐式的行为，而是由用户完全控制。它不会自动替换匹配的值，而是取决于宏函数应用所需的转换并设置处理的恢复点。
+这种类型的宏以 Parse 方言的规则或关键字来匹配一个模式，而不是匹配一个单词并获取参数。像命名宏一样，返回值被当作匹配到的模式的替换品。
+
+不过，也有这种类型的宏的一个低级版本，它以 `[manual]` 属性触发。在这种情况下没有隐含的行为，而是给与用户完全的控制。自动替换不会发生，期望的转换的应用和处理的恢复点的设置都取决于宏函数。
 
 模式匹配宏的典型形式为：
+
 ----
  #macro <rule> func [<attribute> start end /local word1 word2...][...code...]
 ----
-`<rule>`部分可以是：
 
-* lit-word!值：用来匹配指定的word。
-* word!值：Parse关键字，和数据类型名字相同或者用`skip`匹配*所有*的值。
-* block!值：Parse方言规则。
+`<rule>` 部分可以是：
 
-`start`和`end`参数是引用划定匹配模式的源代码。返回值需要是对恢复位置的引用。
+* 一个 `lit-word!` 值：用来匹配一个特定的单词。
+* 一个 `word!` 值：一个 Parse 关键字，比如一个数据类型的名字，或者用 `skip` 匹配 *所有* 的值。
+* 一个 `block!` 值：一组 Parse 方言规则。
 
-`<attribute>`可以是`[manual]`，使得触发宏的低级手动模式。
+`start` 和 `end` 参数是在源码中界定匹配到的模式的引用。返回值需为一个对恢复位置的引用。
 
-*例子：*
+`<attribute>` 可以是 `[manual]`，它会触发宏的低级手动模式。
+
+*例：*
+
 ----
 Red []
 
 #macro integer! func [s e][s/1 + 1]
 print 1 + 2
 ----
-将会输出：
+
+结果将为：
+
 ----
 Red []
 print 2 + 3 
 ----
-使用*manual*模式，相同的宏可以被写作：
+
+使用 *manual* 模式，同样的宏可以被写作：
+
 ----
 Red []
 
@@ -142,7 +157,8 @@ Red []
 print 1 + 2
 ----
   
-使用block规则创建一个变元函数：
+使用一个规则区块来创建一个可变参数函数：
+
 ----
 Red []
 #macro ['max some [integer!]] func [s e][
@@ -150,43 +166,55 @@ Red []
 ]
 print max 4 2 3 8 1
 ----
-将会输出：
+
+结果将为：
+
 ----
 Red []
 print 8 
 ----
-== 指令
+
+== 指令（Directives）
 
 === #if 
 
 *语法*
+
 ----
 #if <expr> [<body>]
 
-<expr> : expression whose last value will be used as a condition.
-<body> : code to be included if <expr> is true.
+<expr> : 表达式，它的最后一个值会被用作一个条件.
+<body> : 若 <expr> 为 true，将会被包含的代码.
 ----
+
 *描述*
 
-如果条件表达式为真，则包含一段代码。如果包含`<body>`块，它也将被传递给预处理器。
+如果条件表达式为真，则包含一整个区块的代码。如果包含了 `<body>` 区块，它也将被传递给预处理器。
 
-*例子*
+*例*
+
 ----
 Red []
 
 #if config/OS = 'Windows [print "OS is Windows"]
 ----
-如果在Windows运行的话将会输出以下结果：
+
+如果在 Windows 下运行，结果将为以下代码：
+
 ----
 Red []
 
 print "OS is Windows"
 ----
-否则的话，仅仅输出：
+
+否则结果将仅为：
+
 ----
 Red []
 ----
-也可以利用`#do`指令定义你自己的word，使得可以用在条件表达式后：
+
+也可以使用 `#do` 指令定义你自己的单词，它可以用在之后的条件表达式当中：
+
 ----
 Red []
 
@@ -194,60 +222,74 @@ Red []
 
 #if debug? [print "running in debug mode"]
 ----
-将会输出：
+
+结果将为：
+
 ----
 Red []
 
 print "running in debug mode"
 ----
+
 === #either 
 
 *语法*
+
 ----
 #either <expr> [<true>][<false>]
 
-<expr>  : expression whose last value will be used as a condition.
-<true>  : code to be included if <expr> is true.
-<false> : code to be included if <expr> is false.
+<expr>  : 表达式，它的最后一个值会被用作一个条件.
+<true>  : 若 <expr> 为 true，将会被包含的代码.
+<false> : 若 <expr> 为 false，将会被包含的代码.
 ----
+
 *描述*
 
-根据条件表达式选择要包含的代码块。包括块也将传递给预处理器。
+根据一个条件表达式选择要包含的一个代码区块，包含了的区块也会被传递给预处理器。
 
-*例子*
+*例*
+
 ----
 Red []
 
 print #either config/OS = 'Windows ["Windows"]["Unix"]
 ----
-如果在Windows运行的话将会输出以下结果：
+
+如果在 Windows 下运行，结果将为以下代码：
+
 ----
 Red []
 
 print "Windows"
 ----
-否则的话，将会输出：
+
+否则结果将为：
+
 ----
 Red []
 
 print "Unix"
 ----
+
 === #switch 
 
 *语法*
+
 ----
 #switch <expr> [<value1> [<case1>] <value2> [<case2>] ...]
 #switch <expr> [<value1> [<case1>] <value2> [<case2>] ... #default [<default>]]
 
-<valueN>  : value to match.
-<caseN>   : code to be included if last tested value matched.
-<default> : code to be included if no other value matched.
+<valueN>  : 要匹配的值.
+<caseN>   : 若最后一个测试过的值匹配，将会被包含的代码.
+<default> : 若没有其他值是匹配的，将会被包含的代码.
 ----
+
 *描述*
 
-选择一个代码块，根据它的值选择是否包含多个代码块中的一个。所包含的块也将传递给预处理器。
+根据一个值在多个选择中选取要包含的一个代码区块，包含了的区块也会被传递给预处理器。
 
-*例子*
+*例*
+
 ----
 Red []
 
@@ -257,26 +299,32 @@ print #switch config/OS [
     MacOSX  ["macOS"]
 ]
 ----   
-如果在Windows运行的话将会输出以下结果：
+
+如果在 Windows 下运行，结果将为：
+
 ----
 Red []
 
 print "Windows"
 ----
+
 === #case 
 
 *语法*
+
 ----
 #case [<expr1> [<case1>] <expr2> [<case2>] ...]
 
-<exprN> : conditional expression.
-<caseN> : code to be included if last conditional expression was true.
+<exprN> : 条件表达式.
+<caseN> : 若最后一个条件表达式为 true，将会被包含的代码.
 ---- 
+
 *描述*
 
-选择一个代码块，根据它的值选择是否包含多个代码块中的一个。所包含的块也将传递给预处理器。
+根据一个值在多个选择中选取要包含的一个代码区块，包含了的区块也会被传递给预处理器。
 
-*例子*
+*例*
+
 ----
 Red []
 
@@ -288,38 +336,45 @@ print #case [
     level >= 4 ["Hard"]
 ]
 ----  
-将会输出：
+
+结果将为：
+
 ----
 Red []
 
 print "Medium"
 ----
+
 === #include 
 
 *语法*
 ----
 #include <file>
 
-<file> : Red file to be included (file!).
+<file> : 要包含的 Red 文件 (file!).
 ----  
+
 *描述*
 
-在编译时进行评估时，读取并将参数文件内容包含在当前位置。 该文件可以包含与当前脚本绝对或相对的路径。 当红色解释器运行时，该指令只是被替换为`do`，并且不会包含文件。
+在编译时被执行时，读取并将参数文件内容包含在当前位置。该文件可以包含对于当前脚本绝对或相对的路径。当被 Red 解释器运行时，该指令只是被替换为一个 `do`，不会包含文件。
 
 === #do 
 
 *语法*
+
 ----
 #do [<body>]
 #do keep [<body>]
 
-<body> : any Red code.
-----    
+<body> : 任意 Red 代码.
+----
+
 *描述*
 
-执行隐藏上下文中的body块。 如果使用`keep`，则将指令和参数替换为“body”的结果。
+在隐藏的语境中执行区块体。如果使用了 `keep`，则将指令和参数替换为 `body` 执行的结果。
 
-*例子*
+*例*
+
 ----
 Red []
 
@@ -329,7 +384,9 @@ print ["2 + 3 =" #do keep [2 + 3]]
     
 #if a < 0 [print "negative"]
 ----    
-将会输出：
+
+结果将为：
+
 ----
 Red []
 
