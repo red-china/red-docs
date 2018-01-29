@@ -24,7 +24,6 @@ Draw 区块可以使用 `draw` 函数直接渲染在图像之上，或在 View �
 
 image::../images/coord-system.png[Coord-system,align="center"]
 
-
 === 直线（Line）
 
 *语法*
@@ -198,8 +197,8 @@ image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> crop <
 <bottom-left>  : （可选）图像左下角的坐标 (pair!).
 <bottom-right> : （可选）图像右下角的坐标 (pair!).
 <color>        : （可选）用来使其透明的基本色 (tuple! word!).
-<offset>       : （可选）开始裁切的位置 (pair!).
-<size>         : （可选）裁切的尺寸 (pair!).
+<offset>       : （可选）开始裁剪的位置 (pair!).
+<size>         : （可选）裁剪的尺寸 (pair!).
 ----
 
 *描述*
@@ -209,7 +208,7 @@ image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> crop <
 注：
 
 * 四个点的模式尚未实现，它将允许用 4 个任意摆放的边来拉伸图像。
-* `border` 可选模式尚未实现
+* `border`（边框）可选模式尚未实现
 
 === 文本（Text）
 
@@ -320,7 +319,7 @@ pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal> <spr
 
 设置用于绘制操作的菱形渐变。传播方法可接受以下的值：`pad`（填充）、`repeat`（重复）、`reflect`（反射）（目前在 Windows 平台下 `pad` 跟 `repeat` 相同）。
 
-从焦点到由上角落与下角落定义的矩形的边缘描画菱形渐变。起始颜色将描画在焦点处，终止颜色将描画在圆的边缘。
+从焦点到由上角落与下角落定义的矩形的边缘描画菱形渐变。起始颜色将描画在焦点处，终止颜色将描画在菱形的边缘。
 
 ==== 图案画笔（Pattern pen）
 
@@ -330,8 +329,8 @@ pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal> <spr
 pen pattern <size> <start> <end> <mode> [<commands>]
 
 <size>     : 绘制 <commands> 的内部图像的大小 (pair!).
-<start>    : （可选）内部图像中裁切部分的上角落 (pair!).
-<end>      : （可选）内部图像中裁切部分的下角落 (pair!).
+<start>    : （可选）内部图像中裁剪部分的上角落 (pair!).
+<end>      : （可选）内部图像中裁剪部分的下角落 (pair!).
 <mode>     : （可选）平铺模式 (word!).
 <commands> : 定义图案的 Draw 命令区块.
 ----
@@ -373,7 +372,7 @@ pen off
 
 停止后续命令的所有轮廓绘制操作。
 
-=== 填充画笔（Fill-pen）
+=== 填充笔（Fill-pen）
 
 此命令定义了其他需要填充操作的命令（封闭形状）的填充模式。从简单的单一颜色到嵌套的自定义形状与渐变，许多不同的选项都可以使用。
 
@@ -451,7 +450,7 @@ fill-pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal>
 
 设置用于填充操作的菱形渐变。传播方法可接受以下的值：`pad`（填充）、`repeat`（重复）、`reflect`（反射）（目前在 Windows 平台下 `pad` 跟 `repeat` 相同）。
 
-从焦点到由上角落与下角落定义的矩形的边缘描画菱形渐变。起始颜色将描画在焦点处，终止颜色将描画在圆的边缘。
+从焦点到由上角落与下角落定义的矩形的边缘描画菱形渐变。起始颜色将描画在焦点处，终止颜色将描画在菱形的边缘。
 
 ==== 图案填充（Pattern fill）
 
@@ -461,8 +460,8 @@ fill-pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal>
 fill-pen pattern <size> <start> <end> <mode> [<commands>]
 
 <size>     : 绘制 <commands> 的内部图像的大小 (pair!).
-<start>    : （可选）内部图像中裁切部分的上角落 (pair!).
-<end>      : （可选）内部图像中裁切部分的下角落 (pair!).
+<start>    : （可选）内部图像中裁剪部分的上角落 (pair!).
+<end>      : （可选）内部图像中裁剪部分的下角落 (pair!).
 <mode>     : （可选）平铺模式 (word!).
 <commands> : 定义图案的 Draw 命令区块.
 ----
@@ -481,8 +480,8 @@ fill-pen pattern <size> <start> <end> <mode> [<commands>]
 fill-pen bitmap  <image> <start> <end> <mode>
 
 <image> : 用于平铺的图像 (image!).
-<start> : （可选）图像裁切部分的上角落 (pair!).
-<end>   : （可选）图像裁切部分的下角落 (pair!).
+<start> : （可选）图像裁剪部分的上角落 (pair!).
+<end>   : （可选）图像裁剪部分的下角落 (pair!).
 <mode>  : （可选）平铺模式 (word!).
 ----
 
@@ -586,26 +585,30 @@ matrix <matrix-setup>
 matrix 'pen <matrix-setup>
 matrix 'fill-pen <matrix-setup>
 
-<matrix-setup> : 前/后乘以当前矩阵的矩阵（原文:the matrix which is pre/post-multiplied to current matrix） (block!).
+<matrix-setup> : 前/后乘以当前矩阵的矩阵 (block!).
 ----
+
 *描述*
 
-执行矩阵乘法。 当前的变换矩阵前乘以这个矩阵（原文:Performs matrix multiplication. The current transformation matrix is pre-multiplied by this matrix）.
+执行矩阵乘法。当前的变换矩阵前会被这个矩阵前乘。
 
- `matrix-setup` 必须有6个数字值 (number!)在里面。 
+`matrix-setup` 区块里必须有 6 个数值（number!）。
+
 ----
 matrix [a b c d e f]
 ----
-块内部用于构建以下转换矩阵:
+
+区块里的值用于构建以下的变换矩阵：
+
 ----
 |a c e|
 |b d f|
 |0 0 1|
 ----
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 分别对当前画笔或填充笔应用乘法（原文:the multiplication is applied respectively to the current pen or current fill-pen）.
+当 `'pen` 或 `'fill-pen` 原词被使用时，乘法分别会应用到当前画笔或当前填充笔上。
 
-=== 矩阵阶（Matrix-order）
+=== 矩阵顺序（Matrix-order）
 
 *语法*
 
@@ -614,9 +617,10 @@ matrix-order <mode>
 
 <mode> : 'append 或 'prepend (word!).
 ----
+
 *描述*
 
-定义后续矩阵运算中的新矩阵，对当前矩阵预乘（`prepend`, 默认模式）或后乘（`append`）.（原文: Defines if new matrices in subsequent matrix operations, are pre-multiplied (`prepend`, default mode）or post-multiplied（`append`）to the current matrix).
+定义后续矩阵操作中的新矩阵是对当前矩阵前乘（`prepend`，默认模式）还是后乘（`append`）的。
 
 === 重置矩阵（Reset-matrix）
 
@@ -627,11 +631,12 @@ reset-matrix
 reset-matrix 'pen
 reset-matrix 'fill-pen
 ----
+
 *描述*
 
-将当前变换矩阵重置为单位矩阵（原文:Resets the current transformation matrix to a unit matrix.）
+将当前变换矩阵重置为单位矩阵。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 重置分别应用于当前的画笔或当前的填充笔。（原文:the reset is applied respectively to the current pen or current fill-pen.）
+当 `'pen` 或 `'fill-pen` 原词被使用时，重置分别会应用到当前的画笔或当前的填充笔上。
 
 ----
 |1 0 0|
@@ -648,24 +653,26 @@ invert-matrix
 invert-matrix 'pen
 invert-matrix 'fill-pen
 ----
+
 *描述*
 
-对当前变换矩阵应用代数矩阵求逆操作（原文:Applies an algebraic matrix inversion operation on the current transformation matrix.）
+在当前变换矩阵上应用代数矩阵求逆操作。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时，求逆操作被用于当前的画笔或当前的填充笔。（原文: the inversion is applied respectively to the current pen or current fill-pen.）
+当 `'pen` 或 `'fill-pen` 原词被使用时，求逆操作分别会应用于当前的画笔或当前的填充笔上。
 
-=== 推（Push）
+=== 压栈（Push）
 
 *语法*
 
 ----
 push <draw-block>
 
-<draw-block> : 绘制、绘图命令块 (block!).
+<draw-block> : Draw 命令区块 (block!).
 ----
+
 *描述*
 
-在栈上保存当前状态（转换，裁剪区域和画笔设置transformations, clipping region, and pen settings）. 然后，您可以在PUSH的命令块内更改当前的转换矩阵、画笔等。在PUSH命令块之后，当前状态将从堆栈中的弹出并恢复。PUSH命令可以嵌套。（原文：You can then change the current transformation matrix, pens etc. inside the PUSH command block. After the PUSH command block, the current state is restored by pop from the stack. The PUSH command can be nested.）
+保存当前状态（变换、裁剪区域和画笔设置）到栈上。然后你可以在这个 PUSH 命令区块内更改当前的变换矩阵和画笔等等。在 PUSH 命令区块后，当前状态会出栈并还原到当前状态。PUSH 命令可以嵌套。
 
 === 旋转（Rotate）
 
@@ -676,15 +683,16 @@ rotate <angle> <center> [<commands>]
 rotate 'pen <angle>
 rotate 'fill-pen <angle>
 
-<angle>    : 以度为单位的角度值，整数或浮点类型均可 (integer! float!).
+<angle>    : 以角度为单位的角 (integer! float!).
 <center>   : （可选）旋转中心 (pair!).
-<commands> : （可选）Draw方言命令。
+<commands> : （可选）Draw 方言命令.
 ----
+
 *描述*
 
-设置一个给定点的顺时针旋转，以度为单位。 如果不用可选项 `center`, 旋转将使用当前用户坐标系统的原点作旋转中心点。 负号可用于逆时针旋转。 当一个命令块作为最后一个参数提供时， 旋转将仅应用于该块中的命令。
+设置一个给定点的顺时针旋转，以度为单位。如果不提供可选项 `center`，将会关于当前用户坐标系统的原点旋转。负数可用于逆时针旋转。当提供的最后一个参数为区块时，旋转将仅应用于该区块中的命令。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 旋转将分别施加到当前画笔或当前的填充笔。（原文:the rotation is applied respectively to the current pen or current fill-pen.）
+当 `'pen` 或 `'fill-pen` 原词被使用时，旋转分别会应用到当前的画笔或当前的填充笔上。
 
 === 缩放（Scale）
 
@@ -695,15 +703,16 @@ scale <scale-x> <scale-y> [<commands>]
 scale 'pen <scale-x> <scale-y>
 scale 'fill-pen <scale-x> <scale-y>
 
-<scale-x>  : 基于X的增量 (number!).
-<scale-y>  : 基于Y的增量 (number!).
-<commands> : （可选）Draw方言命令。
+<scale-x>  : X 缩放值 (number!).
+<scale-y>  : Y 缩放值 (number!).
+<commands> : （可选）Draw 方言命令.
 ----
+
 *描述*
 
-设置缩放量。 需指定两个倍增值; 使用大于1的值来增加放大比例; 使用小于1的值来缩小它。 当一个命令块作为最后一个参数提供时， 缩放将仅应用于该块中的命令。
+设置缩放值。给定值为乘数；使用大于 1 的值来增加缩放；使用小于 1 的值来缩小它。当提供的最后一个参数为区块时，缩放将仅应用于该区块中的命令。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 缩放将分别应用于当前画笔或当前的填充笔。
+当 `'pen` 或 `'fill-pen` 原词被使用时，缩放分别会应用于当前的画笔或当前的填充笔上。
 
 === 平移（Translate）
 
@@ -714,14 +723,15 @@ translate <offset> [<commands>]
 translate 'pen <offset>
 translate 'fill-pen <offset>
 
-<offset>   : the translation amounts (pair!).
-<commands> : （可选）Draw方言命令。
+<offset>   : 平移量 (pair!).
+<commands> : （可选）Draw 方言命令.
 ----
+
 *描述*
 
-设置绘图命令的原点。 使用多个平移命令将具有累积效应。当一个命令块作为最后一个参数提供时，平移操作将仅应用于该块中的命令。
+设置绘图命令的原点。多个平移命令将具有累积效应。当提供的最后一个参数为区块时，平移操作将仅应用于该区块中的命令。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 平移操作将分别应用于当前的画笔或当前填充笔。
+当 `'pen` 或 `'fill-pen` 原词被使用时，平移操作分别会应用到当前的画笔或当前的填充笔上。
 
 === 倾斜（Skew）
 
@@ -732,17 +742,18 @@ skew <skew-x> <skew-y> [<commands>]
 skew 'pen <skew-x> <skew-y>
 skew 'fill-pen <skew-x> <skew-y>
 
-<skew-x>   : x轴倾斜度数 (integer! float!).
-<skew-y>   : （可选）y轴倾斜度数 (integer! float!).
-<commands> : （可选）Draw方言命令。
+<skew-x>   : 沿 x 轴的倾斜度，以角度为单位 (integer! float!).
+<skew-y>   : （可选）沿 y 轴的倾斜度，以角度为单位 (integer! float!).
+<commands> : （可选）Draw 方言命令.
 ----
+
 *描述*
 
-使用给定的度数基于原始坐标系统倾斜（原文:Sets a coordinate system skewed from the original by the given number of degrees）. 如果 `<skew-y>` 可选项没有被提供， 将被假定为零。 当命令块作为最后一个参数提供时， 倾斜将仅应用于该块中的命令。
+设置一个原先倾斜了给定度数的坐标系统。如果没有提供 `<skew-y>`，将被认为是零。当提供的最后一个参数为区块时，倾斜将仅应用于该区块中的命令。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 分别对当前的画笔或当前填充笔施加倾斜。
+当 `'pen` 或 `'fill-pen` 原词被使用时，倾斜分别会应用到当前的画笔或当前填充笔上。
 
-=== 转换（Transform）
+=== 变换（Transform）
 
 *语法*
 
@@ -751,18 +762,19 @@ transform <angle> <center> <scale-x> <scale-y> <translation> [<commands>]
 transform 'pen <angle> <center> <scale-x> <scale-y> <translation>
 transform 'fill-pen <angle> <center> <scale-x> <scale-y> <translation>
 
-<angle>       : 旋转角度，以度为单位 (integer! float!).
-<center>      : （可选）旋转中心点 (pair!).
-<scale-x>     : 基于X的增量 (number!).
-<scale-y>     : 基于Y的增量 (number!).
-<translation> : the translation amounts (pair!).
-<commands>    : （可选）Draw方言命令。
+<angle>       : 旋转角，以度为单位 (integer! float!).
+<center>      : （可选）旋转中心 (pair!).
+<scale-x>     : X 缩放值 (number!).
+<scale-y>     : Y 缩放值 (number!).
+<translation> : 平移量 (pair!).
+<commands>    : （可选）Draw 方言命令.
 ----
+
 *描述*
 
-设置转换，如平移，缩放和旋转。 当一个块作为最后一个参数提供时， 该转换将仅应用于该块中的命令。
+设置变换，如平移、缩放和旋转。当提供的最后一个参数为区块时，该转换将仅应用于该区块中的命令。
 
-当 `'pen` 或 `'fill-pen` 原字（lit-words）被使用时， 该转换分别应用于当前画笔或当前的填充笔。
+当 `'pen` 或 `'fill-pen` 原词被使用时，该转换分别会应用在当前的画笔或当前的填充笔上。
 
 === 裁剪（Clip）
 
@@ -772,24 +784,24 @@ transform 'fill-pen <angle> <center> <scale-x> <scale-y> <translation>
 clip <start> <end> <mode> [<commands>]
 clip [<shape>] <mode> [<commands>]
 
-<start>    : 左上角为起点 (pair!)
-<end>      : 右下角为终点 (pair!)
-<mode>     : （可选）合并模式 (word!)
-<commands> : （可选）Draw方言命令。
-<shape>    : Shape 方言命令。
+<start>    : 裁剪区域（area）的左上角点 (pair!)
+<end>      : 裁剪区域（area）的右下角点 (pair!)
+<mode>     : （可选）裁剪区域（regions）之间的合并模式 (word!)
+<commands> : （可选）Draw 方言命令.
+<shape>    : Shape 方言命令.
 ----
+
 *描述*
 
-裁剪一个用两点定义的矩形区域（起点和终点）或 由Shape子方言命令块定义的任意形状的区域。 此裁剪适用于所有后续绘制命令。 当一个命令块作为最后一个参数提供时， 裁剪将仅应用于该块中的命令。
+定义一个由两点定义的（start 和 end）矩形裁剪区域或由内含 Shape 子方言命令的区块定义的任意形状的裁剪区域。该裁剪适用于所有后续 Draw 命令。当提供的最后一个参数为区块时，裁剪将仅应用于该区块中的命令。
 
-另外， 新的裁剪区域和前一个裁剪区域之间的组合模式， 可以设置为以下之一:
+另外，新的裁剪区域和前一个裁剪区域之间的组合模式可以设置为以下之一：
 
-* `replace`（默认）
-* `intersect`
-* `union`
-* `xor`
-* `exclude`
-
+* `replace`（替换）（默认）
+* `intersect`（交集）
+* `union`（并集）
+* `xor`（异或）
+* `exclude`（排除）
 
 == Shape 命令（Shape commands）
 
@@ -798,213 +810,220 @@ clip [<shape>] <mode> [<commands>]
 ----
 shape [<commands>]
 
-<commands> : shape 方言命令。
+<commands> : shape 方言命令.
 ----
+
 *描述*
 
-`shape` 关键字可以访问Shape子方言绘图命令（原文:The `shape`  keywords gives access to the Shape sub-dialect drawing commands）. 这种绘图方言的具体特点是: 
+`shape` 关键字可以访问 Shape 子方言绘图命令。这种绘图方言的具体特点是：
 
-* 绘图画笔（pen）的位置可以独立于绘图操作移动。（原文:the pen position for drawing can be moved independently of drawing operations.）
-* 每个绘图命令从当前笔位置开始。（原文:each drawing command starts from the current pen position.）
-* 形状能被自动关闭（无需绘制最后一个笔划回到起始位置）（原文:shapes are automatically closed (no need to draw the last stroke back to start position）.)
-* 生成的形状可以被馈送到“fill-pen”以进行简单或复杂的填充。（原文:the generated shapes can be fed to `fill-pen` for simple or sophisticated filling.）
-* 坐标可以是绝对的（如在Draw中）或相对于最后一个笔位置。（原文:coordinates can be absolute (like in Draw）or relative to the last pen position.)
+* 画笔的位置可以独立于绘图操作移动。
+* 每个绘图命令起始于当前画笔位置。
+* 形状自动闭合（无需绘制最后一个回到起始位置的笔划）。
+* 生成的形状可以传到 `fill-pen` 以进行简单的或复杂的填充。
+* 坐标可以是绝对的（像在 Draw 中）或相对于最后的画笔位置。
 
-NOTE: 默认情况下，所有绘图命令都使用绝对坐标， 使用原字（lit-word）版本的命令将命令切换到相对坐标。（原文:using the lit-word version of the command switches the command to relative coordinates.）
+NOTE: 所有绘图命令都默认使用绝对坐标，使用原词版本的命令的话会切换成相对坐标的命令。
 
 === 移动（Move）
 
 *语法*
 
 ----
- move <position>           （absolute）
-'move <position>           （relative）
+ move <position>            (absolute)
+'move <position>            (relative)
 
 <position> : 新的画笔位置 (pair!).
 ----
+
 *描述*
 
-将笔移到新位置。 不进行绘图。
+将画笔移动到新的位置，不会发生绘制。
 
-=== 线（Line）
+=== 直线（Line）
 
 *语法*
 
 ----
- line <point> <point> ...  （absolute）
-'line <point> <point> ...  （relative）
+ line <point> <point> ...   (absolute)
+'line <point> <point> ...   (relative)
 
-<point> : 坐标点 (pair!).
+<point> : 点的坐标 (pair!).
 ----
+
 *描述*
 
-在两点之间画一条线。 如果指定了更多的点，则按顺序两两相连，绘制附加的线
+在两点之间绘制一条直线。如果指定了更多的点，则以提供的顺序连接每个点，绘制额外的直线。
 
-=== 弧线（Arc）
+=== 圆弧（Arc）
 
 *语法*
 
 ----
- arc <end> <radius-x> <radius-y> <angle> sweep closed      （absolute）
-'arc <end> <radius-x> <radius-y> <angle> sweep closed      （relative）
+ arc <end> <radius-x> <radius-y> <angle> sweep closed       (absolute)
+'arc <end> <radius-x> <radius-y> <angle> sweep closed       (relative)
 
-<end>      : 弧线的终点 (pair!).
-<radius-x> : 沿x轴的圆半径 (integer! float!).
-<radius-y> : 沿y轴的圆半径 (integer! float!).
-<angle>    : 弧度的起点和终点之间的角度以度为单位 (integer! float!).
-sweep      : （可选）在正角度方向绘制弧。
-large      : （可选）产生一个膨胀的弧（随着'sweep 选项一起使用）.
+<end>      : 圆弧的终点 (pair!).
+<radius-x> : 沿 x 轴的圆半径 (integer! float!).
+<radius-y> : 沿 y 轴的圆半径 (integer! float!).
+<angle>    : 圆弧起点到终点之间的角，以度为单位 (integer! float!).
+sweep      : （可选）以正角度方向绘制圆弧。
+large      : （可选）产生一个膨胀的圆弧（伴随着 'sweep 选项）.
 
 ----
+
 *描述*
 
-在当前笔位置和终点之间用半径值绘制圆弧，弧由一个角度值定义。（原文:Draws the arc of a circle between the current pen position and the end point, using radius values. The arc is defined by one angle value.）
+在当前画笔位置与终点之间用半径值绘制圆弧，圆弧由一个角度值定义。
 
 === 曲线（Curve）
 
 *语法*
 
 ----
- curve <point> <point> <point> ...  （absolute）
-'curve <point> <point> <point> ...  （relative）
+ curve <point> <point> <point> ...   (absolute)
+'curve <point> <point> <point> ...   (relative)
 
-<point> : 坐标点 (pair!).
+<point> : 点的坐标 (pair!).
 ----
+
 *描述*
 
-从当前的笔位置开始，用一系列点绘制立方贝塞尔曲线（原文:Draws a cubic Bezier curve from a sequence of points, starting from the current pen position.）需要至少3点才能产生曲线（第一点是隐式的起点。原文:the first point is the implicit starting point）.
+从当前的画笔位置开始，用一组点的序列绘制三次贝塞尔曲线。需要至少 3 个点才能产生曲线（第一个点为隐含的起点）。
 
 === 平滑曲线（Curv）
 
 *语法*
 
 ----
- curv <point> <point> ...  （absolute）
-'curv <point> <point> ...  （relative）
+ curv <point> <point> ...   (absolute)
+'curv <point> <point> ...   (relative)
 
 <point> : 坐标点 (pair!).
 ----
+
 *描述*
 
-从当前的笔位置开始，用一系列点绘制平滑的立方贝塞尔曲线， 需要至少2点才能产生曲线（第一点是隐式的起点）.
+从当前的画笔位置开始，用一组点的序列绘制平滑三次贝塞尔曲线。需要至少 2 个点才能产生曲线（第一个点为隐含的起点）。
 
-NOTE: 来自 http://www.w3.org/TR/SVG11/paths.html
+NOTE: 摘自 http://www.w3.org/TR/SVG11/paths.html
 
-"第一个控制点被认为是在前一个命令的第二个控制点相对于当前点的反射。（如果之前没有curve曲线命令，则第一个控制点是当前点）"
-原文:"The first control point is assumed to be the reflection of the second control point on the previous command relative to the current point.（If there is no previous curve command, the first control point is the current point.）"
+“第一个控制点被认为是在前一个命令的第二个控制点相对于当前点的反演。（如果之前没有曲线命令，则第一个控制点为当前点）”
 
-=== Q曲线（Qcurve）
+=== 二次曲线（Qcurve）
 
 *语法*
 
 ----
- qcurve <point> <point> ...  （absolute）
-'qcurve <point> <point> ...  （relative）
+ qcurve <point> <point> ...   (absolute)
+'qcurve <point> <point> ...   (relative)
 
-<point> : 坐标点 (pair!).
+<point> : 点的坐标 (pair!).
 ----
+
 *描述*
 
-从当前的笔位开始，用一系列点绘制二次贝塞尔曲线（原文:Draws a quadratic Bezier curve from a sequence of points, starting from the current pen position.）需要至少2点才能产生曲线（第一点是隐式的起点）.
+从当前的画笔位置开始，用一组点的序列绘制二次贝塞尔曲线。需要至少 2 个点才能产生曲线（第一个点为隐含的起点）。
 
-=== 平滑Q曲线（Qcurv）
+=== 平滑二次曲线（Qcurv）
 
 *语法*
 
 ----
- qcurv <point>  （absolute）
-'qcurv <point>  （relative）
+ qcurv <point>   (absolute)
+'qcurv <point>   (relative)
 
-<point> : 终点 (pair!).
+<point> : 终点的坐标 (pair!).
 ----
+
 *描述*
 
-从当前笔位置到指定的终点绘制平滑二次贝塞尔曲线。
+从当前画笔位置到指定的终点绘制平滑二次贝塞尔曲线。
 
-NOTE: 查看: http://www.w3.org/TR/SVG11/paths.html
+NOTE: 参照：http://www.w3.org/TR/SVG11/paths.html
 
 === 水平线（Hline）
 
 *语法*
 
 ----
- hline <end-x>  （absolute）
-'hline <length> （relative）
+ hline <end-x>   (absolute)
+'hline <length>  (relative)
 
-<end-x>  : 沿X轴的终点位置 (integer! float!).
-<length> : 线段长度 (integer! float!).
+<end-x>  : 沿 X 轴的终点位置 (integer! float!).
+<length> : 线段的长度 (integer! float!).
 ----
+
 *描述*
 
-从当前笔位置画一条水平线。
+从当前画笔位置起绘制一条水平线。
 
 === 垂直线（Vline）
 
 *语法*
 
 ----
- vline <end-y>  （absolute）
-'vline <length> （relative）
+ vline <end-y>   (absolute)
+'vline <length>  (relative)
 
-<end-y>  : 沿着Y轴的终点位置 (integer! float!).
-<length> : 线段长度 (integer! float!).
+<end-y>  : 沿 Y 轴的终点位置 (integer! float!).
+<length> : 线段的长度 (integer! float!).
 ----
+
 *描述*
 
-从当前笔位置绘制一条垂直线。
+从当前画笔位置起绘制一条垂直线。
 
-=== 线宽（Line-width）
+=== 线条宽度（Line-width）
 
-与 Draw 方言的线宽相同。
+与 Draw 方言相同。
 
-=== 连线（Line-join）
+=== 线条接合（Line-join）
 
-与 Draw 方言的连线相同。
+与 Draw 方言相同。
 
-=== 线的两端的样式（Line-cap）
+=== 线条端点（Line-cap）
 
-与 Draw 方言的Line-cap相同。
+与 Draw 方言相同。
 
 === 画笔（Pen）
 
-与 Draw 方言的Pen相同。
+与 Draw 方言相同。
 
-=== 填充（Fill-pen）
+=== 填充笔（Fill-pen）
 
-与 Draw 方言的Fill-pen相同。
+与 Draw 方言相同。
 
+== 默认值（Default values）
 
-== 默认值（Default values ）
-
-当一个新的Draw会话开始时会使用以下默认值:
+当一个新的 Draw 会话开始时，以下默认值将被使用:
 
 [cols="2,3", options="header"]
 |===
-|属性 | 默认值
-
-|background | `white`
-|pen color |  `black`
-|filling|    `off`
-|anti-alias|	 `on`
-|font|	 `none`
-|line width|	 `1`
-|line join|	 `miter`
-|line cap| `flat`
+|属性 | 值
+|background| `white`
+|pen color | `black`
+|filling   | `off`
+|anti-alias| `on`
+|font      | `none`
+|line width| `1`
+|line join | `miter`
+|line cap  | `flat`
 |===
 
-== 子块（Sub blocks ）
+== 子区块（Sub blocks）
 
-在绘制代码内部，可以使用任意块命令进行组合。目前这是一种使语义保持不变的语法糖，这样可以更容易对操作命令分组，如提取（extraction）、插入（insertion）、删除（removal）等。 可以使用空块。
+在 Draw 代码内部，可以使用区块任意地对命令进行分组，语义保持不变。目前这仅是个语法糖，它允许对命令进行更轻松的分组操纵（尤其是提取/插入/删除）。可以使用空区块。
 
 == 源位置（Source position）
 
-Set-words可以在Draw代码中使用，用于在Draw块中记录当前位置，并能够在以后轻松访问。
+在 Draw 代码中，设词可以放在命令之间，用来记录在 Draw 区块中当前的位置，并能够在以后轻松地访问。
 
-NOTE: 如果Set-words之前的绘制块长度改变，则记录的位置将不会被更新。（原文:If the Draw block length preceeding a set-word is changed, the recorded position will not be updated. ）
+NOTE: 如果设词之前的绘制区块长度被改变了，原有的位置会随之改变，所以设词不再会指向相同的参照物。
 
-== Draw函数（Draw function）
+== Draw 函数（Draw function）
 
-可以使用`draw`函数将Draw块直接渲染到图像。
+可以使用 `draw` 函数将 Draw 块直接渲染到图像中。
 
 *语法*
 
@@ -1014,15 +1033,16 @@ draw <image> <spec>
 
 <size>  : 新图像的大小 (pair!).
 <image> : 用作画布的图像 (image!).
-<spec>  : Draw绘图命令块 (block!).
+<spec>  : Draw 命令区块 (block!).
 ----
+
 *描述*
 
-将提供的Draw命令渲染到现有的或新的图像。 函数返回一个图像变量。
+将提供的 Draw 命令渲染到现有的或新的图像中，函数返回一个图像值。
 
-== 已弃用的API（Deprecated API）
+== 弃用的 API（Deprecated API）
 
-Fill-pen 也支持一个不推荐使用的API，它仅仅是为了兼容Rebol/Draw, 它不应该被新的Red脚本使用。
+填充笔也支持一个弃用的 API，它仅是为了兼容 Rebol/Draw, 不应该在新的 Red 脚本中使用它。
 
 *语法*
 
@@ -1039,32 +1059,33 @@ fill-pen diamond <grad-offset> <grad-focal> <grad-radius>
          <grad-angle> <grad-scale-x> <grad-scale-y> <grad-color> <offset>
          <grad-color> <offset> ...
 
-<grad-type>      : 渐变类型 (word!).
-<grad-offset>    : 偏移点 (pair!).
-<grad-start-rng> : 渐变范围起点 (integer!).
-<grad-stop-rng>  : 渐变范围终点 (integer!).
-<grad-focal>     : 渐变焦点 (pair!).
-<grad-radius>    : 渐变半径 (integer!).
-<grad-angle>     : （可选）渐变的旋转度 (integer! float!).
-<grad-scale-x>   : （可选）比例X因子 (integer! float!).
-<grad-scale-y>   : （可选）比例Y因子 (integer! float!).
+<grad-type>      : 渐变的类型 (word!).
+<grad-offset>    : 相对于渐变渲染处的偏移量 (pair!).
+<grad-start-rng> : 渐变范围的起点 (integer!).
+<grad-stop-rng>  : 渐变范围的终点 (integer!).
+<grad-focal>     : 渐变的焦点 (pair!).
+<grad-radius>    : 渐变的半径 (integer!).
+<grad-angle>     : （可选）渐变的旋转，以角度为单位 (integer! float!).
+<grad-scale-x>   : （可选）X 缩放因子 (integer! float!).
+<grad-scale-y>   : （可选）Y 缩放因子 (integer! float!).
 <grad-color>     : 用于渐变填充的颜色 (tuple! word!).
 ----
+
 *描述*
 
-设置用于填充操作的颜色渐变。渐变类型的可以是: `linear`, `radial`, `diamond`.
+设置用于填充操作的颜色渐变，以下的值可以为它的类型：`linear`（线性）, `radial`（径向）, `diamond`（菱形）。
 
-例如:
+例：
 
 	fill-pen linear 0x100 0 400 red green blue box 0x100 400x300
 
 image::../images/grad-pen.png[Grad-pen,align="center"]
 
-NOTE: 渐变可以由多达256种颜色定义（原文:the gradient can be defined by up to 256 colors.）
+NOTE: 渐变可以由多达 256 种颜色定义。
 
-== 绘图源代码Graphics source code 
+== 图形源代码（Graphics source code）
 
-本文档中的图形使用Red和Draw方言生成， 这里是源代码（您可以将其复制/粘贴到Red控制台进行尝试/运行/改进）:
+本文档中的图形使用 Red 和 Draw 方言生成，这里是源代码（你可以将其复制/粘贴到 Red 控制台进行尝试/运行/改进）：
 
 ----
 Red [
@@ -1141,4 +1162,3 @@ save %grad-pen-more.png draw 600x400 [
 	fill-pen diamond 500x300 0 100 30 3.0 1.5 255.0.0 0.255.0 0.0.255 box 400x200 600x400
 ]
 ----
-
