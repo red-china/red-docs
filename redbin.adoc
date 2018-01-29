@@ -1,5 +1,6 @@
 = Redbin格式
 :toc:
+:toc-title: 目录
 :numbered:
 
 _规范版本 1_

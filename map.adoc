@@ -1,5 +1,6 @@
 = Map!数据类型
 :toc:
+:toc-title: 目录
 :numbered:
 
 == 概要(Abstract)

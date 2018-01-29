@@ -1,5 +1,6 @@
 = 代码样式指南
 :toc:
+:toc-title: 目录
 :numbered:
 
 == 介绍(Introduction)
