@@ -714,7 +714,7 @@ Visual Basic API 可用于 VB 和 VBA（来自微软 Office 应用程序）。�
 red build libRed stdcall
 ----
 
-你还会需要在项目中导入 https://github.com/red/red/blob/master/libRed/libRed.bas [`libRed.bas`] 模块文件。
+你还会需要在项目中导入 https://github.com/red/red/blob/master/libRed/libRed.bas[`libRed.bas`] 模块文件。
 
 ==== redLogic()
 
