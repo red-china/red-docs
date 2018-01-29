@@ -408,9 +408,9 @@ const char* redCString(red_string string)
 long redTypeOf(red_value value)
 ----
 
-返回一个 Red 值的类型 ID，类型 ID 值定义在 `RedType` 枚举中。参考 link:libred.adoc#_datatypes_definition[数据类型] 小节。
+返回一个 Red 值的类型 ID，类型 ID 值定义在 `RedType` 枚举中。参考 link:libred.adoc#datatypes-definition[数据类型] 小节。
 
-=== Calling a Red action
+=== 调用 Red 动作（Calling a Red action）
 
 虽然可以使用 `redCall` 调用任何Red函数，但为了方便和更好的性能，它提供了对于大部分常见的操作的一些快捷方式。
 
@@ -678,6 +678,7 @@ void redCloseLogFile(void)
 
 NOTE: 目前，日志文件 *必须* 在退出时关闭，否则它会继续保持加锁，这甚至可能导致某些宿主卡住或崩溃（如微软 Office 应用程序）。
 
+[#datatypes-definition]
 === 数据类型定义（Datatypes definition）
 
 libRed API 中的一些函数可以引用 Red 数据类型：`redTypeOf()`、`redMakeSeries()` 和 `redDatatype()`。Red 数据类型在宿主端表示为枚举（`RedType`），类型为使用以下结构的名称：
