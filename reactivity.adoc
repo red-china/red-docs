@@ -1,6 +1,7 @@
 = 响应式编程
 :imagesdir: ../images
 :toc:
+:toc-title: 目录
 :numbered:
 
 == 概念 

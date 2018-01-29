@@ -2,6 +2,7 @@
 :imagesdir: ../images
 :toc:
 :toclevels: 3
+:toc-title: 目录
 :numbered:
 
   
