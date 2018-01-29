@@ -6,39 +6,45 @@
 :numbered:
 
 
-== 概要
+== 摘要（Abstract）
 
-LibRed是Red解释器和运行时库的一个特殊版本，适合于集成到非Red语言开发的软件中。为了允许非Red软件与Red通信，libRed暴露一个极度底层的API(遵循C语言的cdecl或微软的stdcall标准)。它支持的特性有：
+LibRed 是 Red 解释器和运行时库的一个特殊版本，适合集成到 Red 之外的语言开发的软件里。为了允许非 Red 软件与 Red 交互，libRed 暴露了一个专用的底层 API（遵循 C 语言的 cdecl 或微软的 stdcall 标准），该 API 描述在该文档中。它支持的特性当中包含：
 
-* 有能力从全局或局部上下文中设置/获取一个word的值。
-* 大部分通用的Red数据类型的快捷构造器。
-* 与宿主语言(通常是C语言)兼容的Red数据类型转换函数。
-* 对宿主语言的一系列操作。
-* 回调允许Red调用宿主函数。
+* 从全局或局部语境中设置/获取一个单词的值的能力。
+* 大部分常见的 Red 数据类型的快捷构造器。
+* 与宿主语言（主要是 C 语言）兼容的 Red 数据类型的转换函数。
+* 由宿主语言发起的序列操纵。
+* 允许 Red 调用宿主语言函数的回调函数。
 * 面向控制台的调试函数。
 
-术语：名词_host_表明宿主语言或者嵌入libRed的应用程序。
+术语：名词 *宿主（host）* 用来指宿主语言或嵌入了 libRed 的应用程序。
 
-libRed使用例子可以在 https://github.com/red/red/tree/master/tests/libRed[这里]查看。
+libRed 的使用样例可以从 https://github.com/red/red/tree/master/tests/libRed[这里] 找到。
 
-== 构建libRed
+== 构建 libRed（Building libRed）
 
-构建本地版本的libRed非常简单：
+构建你的本地版本的 libRed 很简单：
+
 ----
 red build libRed
 ----
-或者从Rebol的控制台和Red的源码中构建：
+
+或者由 Rebol 的控制台和 Red 的源码构建：
+
 ----
 rc "build libRed"
 ----
-这些命令行将会构建出适合于C语言的libRed版本(采用`cdecl`ABI)。如果你需要`stdcall`ABI(为了兼容微软的应用)，你需要运行：
+
+这些命令行将会构建出用于 C 语言的版本的 libRed（采用 `cdecl` ABI）。如果你需要 `stdcall` ABI（为了兼容微软的应用），你需要使用：
+
 ----
 red build libRed stdcall
 ----
 
-== 值引用
+== 值引用（Value references）
 
-Red值可以通过libRed函数调用被返回。它们被表示为32-bit的不透明引用。这些引用的生命周期都非常短，所以它们只适合于在局部范围内使用，比如传递一个引用到另一个函数调用。设置这些引用到宿主变量也是可以的，但是它应该在设置之后立即使用。这些引用都使用一个特定的内存管理器，这个管理器将仅仅保持引用在接下来的大约50次API调用内有效。例如：
+Red 值可以通过 libRed 函数调用被返回，以 32 位的 *不透明（opaque）* 引用表示。这些引用的生命周期很短，所以它们只适合于在受限的局部范围内使用，比如传递那个引用到另一个 libRed 的函数调用。可以把这种引用赋给宿主变量，它应 *紧接其后* 被使用。这些引用使用一个特定的内存管理器，它将仅在接下来的大约 50 次 API 调用内保持引用有效。例：
+
 ----
 long a, blk;
 
@@ -54,42 +60,48 @@ for(i = 0; i < 100, i++) {
 }
 ----
 
-
 == C API
 
-C API可以用在C/C++应用程序中，但是也可以集成Red到任何一种与C兼容的编程语言之中 https://en.wikipedia.org/wiki/Foreign_function_interface[FFI]。
+C API 可以用在 C/C++ 应用程序中，也可以集成 Red 到任何其它有与 C 兼容的 https://en.wikipedia.org/wiki/Foreign_function_interface[外部函数接口（FFI）] 的编程语言中。
 
-=== 管理库
+=== 管理库（Managing the library）
 
-为了使用API中的函数，libRed_实例_需要被创建。
+为了使用 API 中的函数，需要创建 libRed *实例（instance）*。
 
-注意：当前，每个进程只允许单个libRed会话，预计将来允许对多实例的支持。
+NOTE: 当前，每个进程只允许单个 libRed 会话，预定未来会将其扩展为允许支持多实例。
 
 ==== redOpen()
+
 ----
 void redOpen(void)
 ----
-初始化一个新的Red运行时库会话。 在调用任何其他API函数之前，必须调用此函数。 在同一个过程中可以安全地调用多次，只有一个会话将被打开。
 
-注意：如果在`redOpen`之前调用了另一个函数，该函数的返回值将为`-2`，表示非法访问尝试。
+初始化一个新的 Red 运行时库会话。*必须* 在调用任何其他API函数之前调用该函数。在同一个进程中调用多次是安全的，无论如何只会打开一个会话。
+
+NOTE: 如果在 `redOpen` 之前调用了另一个函数，那个函数的返回值将为 `-2`，表明这是一次非法的访问尝试。
 
 ==== redClose()
+
 ----
 void redClose(void)
 ----
-终止当前的Red运行时库会话，释放所有分配的资源。
 
-=== Running Red code
+终止当前的 Red 运行时库会话，释放所有分配的资源。
 
-主机软件可以直接运行Red代码，使用不同级别的控制，从文本形式提供Red代码进行评估，直接调用任何Red函数，以及传递在主机端构造的参数。
+=== 运行 Red 代码（Running Red code）
+
+宿主软件可以使用不同的控制级别来直接运行 Red 代码，上到提供文本形式的 Red 代码用于执行，下到直接调用任意 Red 函数并传递在宿主端构造的参数。
 
 ==== redDo()
+
 ----
 red_value redDo(const char* source)
 ----
-评估作为字符串传递的Red表达式，并返回最后一个Red值。
 
-*例子*
+执行作为字符串传递的 Red 表达式并返回最后一个 Red 值。
+
+*例*
+
 ----
 redDo("a: 123");
 
@@ -101,50 +113,62 @@ redDo(sprintf(s, "view [text \"%s\"]", caption));
 ----
 
 ==== redDoFile()
+
 ----
 red_value redDoFile(const char* filename)
 ----
-加载并评估文件名引用的Red脚本并返回最后一个Red值。文件名格式使用Red独立于操作系统的约定（基本上是Unix风格）。
 
-*例子*
+加载并执行以 _filename_ 引用的 Red 脚本并返回最后一个 Red 值。_filename_ 格式使用 Red 独立于操作系统的惯例（基本为 Unix 风格）。
+
+*例*
+
 ----
 redDoFile("hello.red");
 redDoFile("/c/dev/red/demo.red");
 ----
 
 ==== redDoBlock()
+
 ----
 red_value redDoBlock(red_block code)
 ----
-评估参数块并返回最后一个Red值。
 
-*例子*
+执行参数区块并返回最后一个 Red 值。
+
+*例*
+
 ----
 redDoBlock(redBlock(redWord("print"), redInteger(42)));
 ----
 
 ==== redCall()
+
 ----
 red_value redCall(red_word name, ...)
 ----
-调用名称字引用的Red函数（`any-function`类型），传递任何所需的参数（作为Red值）。 返回函数的最后一个Red值。 参数列表*必须*以“null”或“0”值终止，作为结束标记。
 
-*例子*
+调用以 _name_ 单词引用的 Red 函数（`any-function` 类型），传递任何所需的参数（作为 Red 值）。返回函数的最后一个 Red 值。参数列表 *必须* 以 `null` 或 `0` 值终止，作为结束标记。
+
+*例*
+
 ----
 redCall(redWord("random"), redInteger(6), 0);     // returns a random integer! value between 1 and 6
 ----
 
-=== Registering a callback function
+=== 注册回调函数（Registering a callback function）
 
-响应Red发生的事件，或将一些Red调用重定向到主机端（如重定向“打印”或“询问”）需要一种从Red方面调用主机功能的方法。 这可以使用`redRoutine（）`函数来实现。
+响应在 Red 发生的事件或将一些 Red 的调用重定向到宿主端（如重定向 `print` 或 `ask`）需要一种从 Red 端调用宿主函数的方法。这可以使用 `redRoutine()` 函数来实现。
 
 ==== redRoutine()
+
 ----
 red_value redRoutine(red_word name, const char* spec, void* func_ptr)
 ----
-定义为新的红色例程名称，以_spec_作为规范块，_func-ptr_ C函数指针为body。 C函数*必须*返回一个红色值（`redUnset（）`可以表示没有使用返回值）。
 
-*例子*
+定义一个新的 Red 例程叫做 _name_，以 _spec_ 作为规范区块，_func-ptr_ C 函数指针做为函数体。C 函数 *必须* 返回一个 Red 值（`redUnset()` 可以用来表示没有使用返回值）。
+
+*例*
+
 ----
 #include "red.h"
 #include <stdio.h>
@@ -160,17 +184,20 @@ int main(void) {
 }
 ----
 
-=== Making Red values from C
+=== 从 C 创建 Red 值（Making Red values from C）
 
-来自libRary API的许多函数需要传递Red值（作为引用）。 以下函数是最常用数据类型的简单构造函数。
+libRed API 中的许多函数需要传递 Red 值（作为 *引用（references）*）。以下函数是最常用数据类型的简单的构造函数。
 
 ==== redSymbol()
+
 ----
 long redSymbol(const char* word)
 ----
-返回与加载的word（作为C字符串提供）相关联的符号ID。 然后可以将此ID传递到需要符号ID而不是字值的其他libRed API函数。
 
-*例子*
+返回与加载的 _word_（以 C 字符串的形式提供）相关联的符号 ID，之后可以将此 ID 传递给不需要单词值而需要符号 ID 的其他 libRed API 函数。
+
+*例*
+
 ----
 long a = redSymbol("a");
 redSet(a, redInteger(42));
@@ -178,107 +205,137 @@ printf("%l\n", redGet(a));
 ----
 
 ==== redUnset()
+
 ----
 red_unset redUnset(void)
 ----
-返回一个_unset!_值。
+
+返回一个 `unset!` 值。
 
 ==== redNone()
+
 ----
 red_none redNone(void)
 ----
-返回一个_none!_值。
+
+返回一个 `none!` 值。
 
 ==== redLogic()
+
 ----
 red_logic redLogic(long logic)
 ----
-返回一个`logic !`值。 _logic_值为“0”，给出一个“false”值，所有其他值都赋值为“true”。
+
+返回一个 `logic!` 值。_logic_ 值为 `0` 会产生 `false` 值，所有其他的值都产生 `true`。
 
 ==== redDatatype()
+
 ----
 red_datatype redDatatype(long type)
 ----
-返回一个对应于_type_ ID的“datatype！”值，它是“RedType”枚举中的一个值。
+
+返回一个对应于 _type_ ID 的 `datatype!` 值，它是 `RedType` 枚举中的一个值。
 
 ==== redInteger()
+
 ----
 red_integer redInteger(long number)
 ----
-从数字返回一个“integer！”值。
+
+从 _number_ 返回一个 `integer!` 值。
 
 ==== redFloat()
+
 ----
 red_float redFloat(double number)
 ----
-从数字返回一个`float！`值。
+
+从 _number_ 返回一个 `float!` 值。
 
 ==== redPair()
+
 ----
 red_pair redPair(long x, long y)
 ----
-从两个整数值返回一个`pair !`值。
+
+从两个整数值返回一个 `pair!` 值。
 
 ==== redTuple()
+
 ----
 red_tuple redTuple(long r, long g, long b)
 ----
-从三个整数值（通常用于表示RGB颜色）返回一个`tuple！`值。 传递的参数将被截断为8位值。
+
+从三个整数值（通常用于表示 RGB 颜色）返回一个 `tuple!` 值，传递的参数将被截断为 8 位值。
 
 ==== redTuple4()
+
 ----
 red_tuple redTuple4(long r, long g, long b, long a)
 ----
-从四个整数值（通常用于表示RGBA颜色）返回一个`tuple！`值。 传递的参数将被截断为8位值。
+
+从四个整数值（通常用于表示 RGBA 颜色）返回一个 `tuple!` 值，传递的参数将被截断为 8 位值。
 
 ==== redBinary()
+
 ----
 red_binary redBinary(const char* buffer, long bytes)
 ----
-从内存“缓冲区”指针返回一个“binary！”值，缓冲区的长度（以字节为单位）。 输入缓冲区将被内部复制。
+
+从内存 `buffer` 指针和这个缓冲的长度（以字节为单位）返回一个 `binary!` 值。输入缓冲将在内部被复制。
 
 ==== redImage()
+
 ----
 red_image redImage(long width, long height, const void* buffer, long format)
 ----
-从内存`buffer`指针返回一个`image !`值。 图像的大小以“width”和“height”的形式定义。 输入缓冲区将被内部复制。 接受的缓冲区格式有：
 
-* `RED_IMAGE_FORMAT_RGB`: 24-bit per pixel.
-* `RED_IMAGE_FORMAT_ARGB`: 32-bit per pixel, alpha channel leading.
+从内存 `buffer` 指针返回一个`image!` 值。图像的大小以 `width` 和 `height` 的形式定义，以像素为单位。输入缓冲将在内部被复制。接受的缓冲格式有：
+
+* `RED_IMAGE_FORMAT_RGB`：每一个像素 24 位。
+* `RED_IMAGE_FORMAT_ARGB`: 每一个像素 32 位，透明通道在最前。
 
 ==== redString()
+
 ----
 red_string redString(const char* string)
 ----
-从字符串指针返回一个`string！`值。 参数字符串的默认预期编码为UTF-8。 其他编码可以使用`redSetEncoding（）`函数定义。
+
+从 _string_ 指针返回一个 `string!` 值。参数字符串的默认预期编码为 UTF-8，其他编码可以使用 `redSetEncoding()` 函数定义。
 
 ==== redWord()
+
 ----
 red_word redWord(const char* word)
 ----
-从C字符串返回一个`word !`值。 参数字符串的默认预期编码为UTF-8。 其他编码可以使用`redSetEncoding（）`函数定义。 不能以字样加载的字符串将返回“error！”值。
+
+从 C 字符串返回一个 `word!` 值。参数字符串的默认预期编码为 UTF-8，其他编码可以使用 `redSetEncoding()` 函数定义，不能加载成单词的字符串将返回一个 `error!` 值。
 
 ==== redBlock()
+
 ----
 red_block redBlock(red_value v,...)
 ----
 
-返回一个新的块！ 系列从参数列表构建。 列表*必须*以“null”或“0”值终止，作为结束标记。
+从参数列表返回一个新的 `block!` 序列。列表 *必须* 以 `null` 或 `0` 值终止，作为结束标记。
 
-*例子*
+*例*
+
 ----
 redBlock(0);                                  // Creates an empty block
 redBlock(redInteger(42), redWord("hi"), 0);   // Creates [42 hi] block
 ----
 
 ==== redPath()
+
 ----
 red_path redPath(red_value v, ...)
 ----
 
-返回一条新path！系列从参数列表构建。 列表*必须*以“null”或“0”值终止，作为结束标记。
+从参数列表返回一个新的 `path!` 序列。 列表 *必须* 以 `null` 或 `0` 值终止，作为结束标记。
 
-*例子*
+*例*
+
 ----
 redDo("a: [b 123]");
 long res = redGetPath(redPath(redWord("a"), redWord("b"), 0));
@@ -286,25 +343,29 @@ printf("%l\n", redCInt32(res));    // will output 123
 ----
 
 ==== redLoadPath()
+
 ----
 red_path redLoadPath(const char* path)
 ----
 
-返回path！系列由一个表示为C字符串的路径构建。 这提供了一种构建路径的快速方法，而不单独构建每个元素。
+从一个以 C 字符串表示的路径返回 `path!` 序列。这提供了一种构建路径的快捷的方法，不用单独构建每个元素。
 
-*例子*
+*例*
+
 ----
 redGetPath(redLoadPath("a/b"));    // Creates and evaluates the a/b path! value.
 ----
 
 ==== redMakeSeries()
+
 ----
 red_value redMakeSeries(unsigned long type, unsigned long slots)
 ----
 
-返回一个新series！ 类型_类型_和足够的大小存储_slots_元素。 这是一个通用的系列构造函数。 该类型需要是“RedType”枚举值之一。
+返回一个新的 _type_ 类型的，有足够大小存储 _slots_ 个元素的 `series!`。这是一个泛用的序列构造函数。类型需要为 `RedType` 枚举值之一。
 
-*例子*
+*例*
+
 ----
 redMakeSeries(RED_TYPE_PAREN, 2);  // Creates a paren! series
 
@@ -313,64 +374,72 @@ redAppend(path, redWord("a"));
 redAppend(path, redInteger(2));    // Now path is `a/2:`
 ----
 
-=== Making C values from Red
+=== 从 Red 创建 C 值（Making C values from Red）
 
-将Red值转换为主机端是可能的，但受限于C语言中有限数量的类型。
+将 Red 值转换到 *宿主（host）* 端是可能的，然而会受限于 C 语言中有限个数量的类型。
 
 ==== redCInt32()
+
 ----
 long redCInt32(red_integer number)
 ----
 
-从红色整数返回一个32位有符号integer!值。
+从一个 Red `integer!` 值返回一个 32 位有符号整数。
 
 ==== redCDouble()
+
 ----
 double redCDouble(red_float number)
 ----
 
-从Red float!返回一个C双精度浮点值。
+从一个 Red `float!` 值返回一个 C 双精度浮点值。
 
 ==== redCString()
+
 ----
 const char* redCString(red_string string)
 ----
 
-从Red string!值返回一个UTF-8字符串缓冲区指针。 其他编码可以使用`redSetEncoding（）`函数定义。
+从一个 Red `string!` 值返回一个 UTF-8 字符串缓冲指针。其他编码可以使用 `redSetEncoding()` 函数定义。
 
 ==== redTypeOf()
+
 ----
 long redTypeOf(red_value value)
 ----
 
-返回Red值的类型ID。 类型ID值在“RedType”枚举中定义。 请参阅链接：link:libred.adoc＃_datatypes_definition[Datatypes] 部分。
+返回一个 Red 值的类型 ID，类型 ID 值定义在 `RedType` 枚举中。参考 link:libred.adoc#datatypes-definition[数据类型] 小节。
 
-=== Calling a Red action
+=== 调用 Red 动作（Calling a Red action）
 
-可以使用`redCall'调用任何Red函数，但是对于最常见的操作，为了方便和更好的性能，提供了一些快捷方式。
+虽然可以使用 `redCall` 调用任何Red函数，但为了方便和更好的性能，它提供了对于大部分常见的操作的一些快捷方式。
 
 ==== redAppend()
+
 ----
 red_value redAppend(red_series series, red_value value)
 ----
 
-将_value_追加到_series_，并返回该系列。
+将 _value_ 追加到 _series_ 中，并返回该序列首部。
 
 ==== redChange()
+
 ----
 red_value redChange(red_series series, red_value value)
 ----
 
-更改_series_中的_value_，并在更改的部分后返回序列。
+更改 _series_ 中的 _value_，并返回更改的部分之后的序列。
 
 ==== redClear()
+
 ----
 red_value redClear(red_series series)
 ----
 
-从当前索引到尾部删除_series_值，并在新尾部返回系列。
+删除 _series_ 中从当前索引到尾部的值，并在新尾部返回序列。
 
 ==== redCopy()
+
 ----
 red_value redCopy(red_value value)
 ----
@@ -378,273 +447,308 @@ red_value redCopy(red_value value)
 返回非标量值的副本。
 
 ==== redFind()
+
 ----
 red_value redFind(red_series series, red_value value)
 ----
 
-返回找到值的系列，或NONE。
+返回找到的值的序列，或返回 `none`。
 
 ==== redIndex()
+
 ----
 red_value redIndex(red_series series)
 ----
 
-返回_series_相对于头的当前索引，或返回上下文中的单词。
+返回 _series_ 相对于首部的当前的索引，或返回语境中的单词。
 
 ==== redLength()
+
 ----
 red_value redLength(red_series series)
 ----
 
-返回_series_中从当前索引到尾部的值的数量。
+返回 _series_ 中从当前索引到尾部的值的个数。
 
 ==== redMake()
+
 ----
 red_value redMake(red_value proto, red_value spec)
 ----
 
-返回由_proto_类型的_spec_创建的新值。
+返回一个从 _spec_ 创建的 _proto_ 类型的新的值。
 
 ==== redMold()
+
 ----
 red_value redMold(red_value value)
 ----
 
-返回值的源格式字符串表示形式。
+返回一个值的源格式字符串表示形式。
 
 ==== redPick()
+
 ----
 red_value redPick(red_series series, red_value value)
 ----
 
-在给定的索引_value_上返回_series_。
+返回在给定的索引 _value_ 上的 _series_。
 
 ==== redPoke()
+
 ----
 red_value redPoke(red_series series, red_value index, red_value value)
 ----
 
-使用_value_替换给定_index_上的_series_，并返回新值。
+使用 _value_ 替换给定 _index_ 上的 _series_，并返回这个新的值。
 
 ==== redPut()
+
 ----
 red_value redPut(red_series series, red_value index, red_value value)
 ----
 
-替换_series_或map中的键后面的值，并返回新值。
+替换 _series_ 或 `map!` 中接在键的后面的值，并返回这个新的值。
 
 ==== redRemove()
+
 ----
 red_value redRemove(red_series series)
 ----
 
-删除当前_series_索引的值，并在删除后返回序列号。
+删除在当前 _series_ 索引上的值，并在删除后返回序列。
 
 ==== redSelect()
+
 ----
 red_value redSelect(red_series series, red_value value)
 ----
 
-在_series_中查找_value_并返回下一个值，或NONE。
+在 _series_ 中查找 _value_ 并返回其下一个值，或返回 `none`。
 
 ==== redSkip()
+
 ----
 red_value redSkip(red_series series, red_integer offset)
 ----
 
-返回相对于当前索引的_series_。
+返回相对于当前索引的 _series_。
 
 ==== redTo()
+
 ----
 red_value redTo(red_value proto, red_value spec)
 ----
 
-将_spec_值转换为_proto_指定的数据类型。
+将 _spec_ 值转换为 _proto_ 所指定的数据类型。
 
-=== Accessing a Red word
+=== 访问 Red 单词（Accessing a Red word）
 
-设置Red字或获取Red字的值是在主机和Red运行时环境之间传递值的最直接方式。
+设置 Red 单词或获取 Red 单词的值是在 *宿主（host）* 和 Red 运行时环境之间传递值的最直接的方式。
 
 ==== redSet()
+
 ----
 red_value redSet(long id, red_value value)
 ----
 
-将从_id_符号定义的字设置为_value_。 从符号创建的词被绑定到全局上下文。 _value_由此函数返回。
+将由 _id_ 符号定义的一个单词设置为 _value_。从该符号创建的单词会被绑定到全局语境。此函数返回 _value_。
 
 ==== redGet()
+
 ----
 red_value redGet(long id)
 ----
 
-返回从_id_符号定义的单词的值。 从符号创建的词被绑定到全局上下文。
+返回由 _id_ 符号定义的一个单词的值。从该符号创建的词会被绑定到全局语境。
 
-=== Accessing a Red path
+=== 访问 Red 路径（Accessing a Red path）
 
-路径是非常灵活的方式来访问Red中的数据，因此他们在libRed中具有专用的访问器功能。 值得注意的是，它们允许访问对象上下文中的单词。
+路径是用来访问 Red 中的数据的非常灵活的方式，因此他们在 libRed 中具有专用的访问器函数。值得注意的是，它们允许访问在对象语境中的单词。
 
 ==== redSetPath()
+
 ----
 red_value redSetPath(red_path path, red_value value)
 ----
 
-将_path_设置为_value_并返回该_value。
+将一个 _path_ 设置为一个 _value_ 并返回该 _value_。
 
 ==== redGetPath()
+
 ----
 red_value redGetPath(red_path path)
 ----
 
-返回_path_引用的_value_。
+返回被 _path_ 引用的 _value_。
 
-=== Accessing a Red object field
+=== 访问 Red 对象的字段（Accessing a Red object field）
 
-当对象的字段需要多个设置/访问时，直接使用对象值而不是构建路径更简单和更好。 以下两个功能是针对这种访问量身打造的。
+当对象的字段需要进行多次设置/获取操作时，比起构建路径，直接使用对象值更简单、更好。以下两个函数是针对这种访问量身打造的。
 
-注意：这些访问器可以使用任何其他关联的数组类型，而不仅仅是`object！`。 所以通过一个“map！”也是允许的。
+NOTE: 这些访问器对任意其它关联数组类型都有效，不仅仅有 `object!`。所以它们也可以允许传递一个 `map!`。
 
 ==== redSetField()
+
 ----
 red_value redSetField(red_value object, long field, red_value value)
 ----
 
-将_object_的_field_设置为_value_并返回该_value。 _field_参数是使用`redSymbol（）`创建的符号ID。
+将 _object_ 的 _field_ 设置为 _value_ 并返回该 _value。_field_ 参数为使用 `redSymbol()` 创建的符号 ID。
 
 ==== redGetField()
+
 ----
 red_value redGetField(red_value obj, long field)
 ----
 
-返回存储在_object_的_field_中的_value_。 _field_参数是使用`redSymbol（）`创建的符号ID。
+返回存储在 _object_ 的 _field_ 中的 _value_。_field_ 参数为使用 `redSymbol()` 创建的符号 ID。
 
-=== Debugging
+=== 调试（Debugging）
 
-还提供了一些方便的调试功能。 大多数需要输出的系统shell窗口，但是可以强制打开日志窗口，或将输出重定向到文件。
+它还提供了一些方便的调试功能。虽然大多数需要系统 shell 窗口用来输出，但是强制打开一个日志窗口或将输出重定向到一个文件也是可能的。
 
 ==== redPrint()
+
 ----
 void redPrint(red_value value)
 ----
 
-在标准输出上打印_value_，或打开调试控制台。
+在标准输出中打印 _value_；若打开了调试控制台，打印在调试控制台里。
 
 ==== redProbe()
+
 ----
 red_value redProbe(red_value value)
 ----
 
-探测标准输出上的_value_，或者在调试控制台中打开。 该函数调用返回_value_。
+在标准输出中探查 _value_；若打开了调试控制台，探查在调试控制台里。该函数调用返回此 _value_。
 
 ==== redHasError()
+
 ----
 red_value redHasError(void)
 ----
 
-返回error!值，如果在以前的API调用中发生错误，或者如果没有发生错误则为null。
+如果在之前的 API 调用中发生了一个错误，返回一个 `error!` 值；或如果没有发生错误则返回 `null`。
 
 ==== redFormError()
+
 ----
 const char* redFormError(void)
 ----
 
-如果发生错误，返回包含格式化错误的UTF-8字符串指针，如果没有发生错误，则返回“null”。
+如果发生了一个错误，返回包含格式化的错误的 UTF-8 字符串指针；如果没有发生错误，则返回 `null`。
 
 ==== redOpenLogWindow()
+
 ----
 int redOpenLogWindow(void)
 ----
 
-打开日志窗口并将所有Red打印输出重定向到该窗口。 如果主机应用程序未从系统shell运行，则该功能非常有用，默认情况下，它是打印输出使用的。 如果日志窗口已经打开，多次调用此函数将不起作用。 成功返回“1”，失败时返回“0”。
+打开日志窗口并将所有 Red 打印输出重定向到该窗口。如果宿主应用程序不是从系统 shell 运行，该功能非常有用，默认使用它打印输出。如果日志窗口已经打开，多次调用此函数不会有效果。成功时返回 `1`，失败时返回 `0`。
 
-注意：仅适用于Windows平台。
+NOTE: 仅适用于 Windows 平台。
 
 ==== redCloseLogWindow()
+
 ----
 int redCloseLogWindow(void)
 ----
 
-关闭日志窗口。 当日志窗口已经关闭时调用此功能将不起作用。 成功返回“1”，失败时返回“0”。
+关闭日志窗口。当日志窗口已经关闭时调用此功能不会有效果。成功时返回 `1`，失败时返回 `0`。
 
-注意：仅适用于Windows平台。
+NOTE: 仅适用于 Windows 平台。
 
 ==== redOpenLogFile()
+
 ----
 void redOpenLogFile(const string *name)
 ----
 
-将Red打印功能的输出重定向到_name_指定的文件。 _name_中可以使用特定于OS的文件路径格式提供相对或绝对路径。
+将 Red 打印函数的输出重定向到 _name_ 所指定的文件中。_name_ 可以使用特定于操作系统的文件路径格式提供相对或绝对路径。
 
 ==== redCloseLogFile()
+
 ----
 void redCloseLogFile(void)
 ----
 
-关闭使用`redOpenLogFile（）'打开的日志文件。
+关闭使用 `redOpenLogFile()` 打开的日志文件。
 
-注意：目前，日志文件*必须*在退出时关闭，否则会保留锁定，甚至可能导致某些主机（如MS Office应用程序）中的冻结或崩溃。
+NOTE: 目前，日志文件 *必须* 在退出时关闭，否则它会继续保持加锁，这甚至可能导致某些宿主卡住或崩溃（如微软 Office 应用程序）。
 
-=== Datatypes definition
+[#datatypes-definition]
+=== 数据类型定义（Datatypes definition）
 
-来自libRed API的一些功能可以引用Red数据类型：`redTypeOf（）`，`redMakeSeries（）`和`redDatatype（）`。 Red数据类型在主机端表示为枚举（`RedType`），其中类型是使用以下方案的名称：
+libRed API 中的一些函数可以引用 Red 数据类型：`redTypeOf()`、`redMakeSeries()` 和 `redDatatype()`。Red 数据类型在宿主端表示为枚举（`RedType`），类型为使用以下结构的名称：
+
 ----
 RED_TYPE_<DATATYPE>
 ----
 
-详尽的列表可以在 https://github.com/red/red/blob/master/libRed/red.h#L120[这里] 找到。
+全面的列表可以在 https://github.com/red/red/blob/master/libRed/red.h#L120[这里] 找到。
 
 == Visual Basic API
 
-Visual Basic API可用于VB和VBA（来自MS Office应用程序）。 它与C API基本相同，因此下面将仅描述差异。 差异主要在于各种功能，分为两种：
+Visual Basic API 可用于 VB 和 VBA（来自微软 Office 应用程序）。它基本上与 C API 相同，因此以下小节将仅描述差异。差异主要在于变长函数，它们分为两种风格：
 
-* `redBlock()`, `redPath()`, `redCall()` only accept Red values, and do not require a terminal `null` or `0` value, like the C version.
-* `redBlockVB()`, `redPathVB()`, `redCallVB()` only accept VB values, which are automatically converted according to the following table:
+* `redBlock()`、`redPath()`、`redCall()` 只接收 Red 值，不要求一个终止的 `null` 或 `0` 值，就像 C 版本那样。
+* `redBlockVB()`、`redPathVB()、 `redCallVB()` 只接收 VB 值，它自动根据以下表格被转换：
 
 [cols="1,4", options="header"]
 |===
 |VisualBasic | Red
-|`vbInteger`| `integer!`
-|`vbLong`| `integer!`
-|`vbSingle`| `float!`
-|`vbDouble`| `float!`
-|`vbString`| `string!`
+|`vbInteger` | `integer!`
+|`vbLong`    | `integer!`
+|`vbSingle`  | `float!`
+|`vbDouble`  | `float!`
+|`vbString`  | `string!`
 |===
 
+==== 准备（Setting up）
 
-==== Setting up
+为了在 VB/VBA 中使用 libRed，你需要一个为 `stdcall` ABI 编译的 libRed 二进制版本。如果你需要重新编译此类版本：
 
-为了使用带有VB / VBA的libRed，您需要为“stdcall”ABI编译的libRed二进制版本。 如果您需要重新编译此类版本：
 ----
 red build libRed stdcall
 ----
 
-您还需要在项目中导入 https://github.com/red/red/blob/master/libRed/libRed.bas [`libRed.bas`] 模块文件。
+你还会需要在项目中导入 https://github.com/red/red/blob/master/libRed/libRed.bas[`libRed.bas`] 模块文件。
 
 ==== redLogic()
+
 ----
 Function redLogic(bool As Boolean) As Long
 ----
-返回从VB `boolean`值构造的Red `logic！`值。
+
+返回从 VB `boolean` 值构造的 Red `logic!` 值。
 
 ==== redBlockVB()
+
 ----
 Function redBlockVB(ParamArray args() As Variant) As Long
 ----
-返回一个新的block!系列从参数列表构建。 参数号是可变的，仅由VisualBasic值组成。
 
-*例子*
+返回一个从参数列表构建的新的 `block!` 序列。参数个数是可变的，仅由 VisualBasic 值组成。
+
+*例*
+
 ----
 redProbe redBlockVB()              ' Creates an empty block
 redProbe redBlockVB(42, "hello")   ' Creates the [42 "hello" hi] block
 ----
 
 ==== redPathVB()
+
 ----
 Function redPathVB(ParamArray args() As Variant) As Long
 ----
 
-返回一条新path!系列从参数列表构建。 参数号是可变的，仅由VisualBasic值组成。
+返回一个从参数列表构建的新的 `path!` 序列。参数个数是可变的，仅由 VisualBasic 值组成。
 
-*例子*
+*例*
+
 ----
 redDo("a: [b 123]")
 res = redGetPath(redPathVB("a", "b"))
@@ -652,21 +756,25 @@ Debug.print redCInt32(res))        ' will output 123
 ----
 
 ==== redCallVB()
+
 ----
 Function redCallVB(ParamArray args() As Variant) As Long
 ----
-调用由传递的字符串（第一个参数）引用的Red函数（“any-function！”类型），最后传递一些参数（作为VisualBasic值）。 返回函数的最后一个值。 参数号是可变的，仅由VisualBasic值组成。
 
-*例子*
+调用由传递的字符串（第一个参数）引用的 Red 函数（`any-function!` 类型），最后传递一些参数给它（作为 VisualBasic 值）。返回该函数的最后一个值。参数个数是可变的，仅由 VisualBasic 值组成。
+
+*例*
+
 ----
 redCallVB("random", 6);            ' returns a random integer! value between 1 and 6
 ----
 
-=== Registering a callback function
+=== 注册回调函数（Registering a callback function）
 
-创建可以从Red侧调用的VisualBasic函数，就像C API一样，使用`redRoutine（）`调用。 该函数的最后一个参数是一个函数指针。 在VB中，这样的指针只能用于_module_中定义的函数，但不能在_UserForm_中获取。
+创建可以从 Red 端调用的 VisualBasic 函数的做法类似于 C API，使用 `redRoutine()` 调用。该函数的最后一个参数是一个函数指针。在 VB 中，这样的指针只能从在 _module_ 而不是在 _UserForm_ 中定义的函数取得。
 
-这是Excel“Red Console”演示使用的回调：
+这是 Excel“Red 控制台”演示所使用的回调函数：
+
 ----
 Sub RegisterConsoleCB()
     redRoutine redWord("print"), "[msg [string!]]", AddressOf onConsolePrint

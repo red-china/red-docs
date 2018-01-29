@@ -204,7 +204,7 @@ image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> crop <
 
 *描述*
 
-使用提供的位置和宽度信息描画一个图像。如果图像没有提供定位信息，那么图像会被画在（at）0x0 坐标上。可选提供一个颜色值用于指定透明度。
+使用提供的位置和宽度信息描画一个图像。如果图像没有提供定位信息，那么图像会被画在 0x0 坐标上。可选提供一个颜色值用于指定透明度。
 
 注：
 
@@ -785,9 +785,9 @@ transform 'fill-pen <angle> <center> <scale-x> <scale-y> <translation>
 clip <start> <end> <mode> [<commands>]
 clip [<shape>] <mode> [<commands>]
 
-<start>    : 裁剪区域（area）的左上角点 (pair!)
-<end>      : 裁剪区域（area）的右下角点 (pair!)
-<mode>     : （可选）裁剪区域（regions）之间的合并模式 (word!)
+<start>    : 裁剪区域的左上角点 (pair!)
+<end>      : 裁剪区域的右下角点 (pair!)
+<mode>     : （可选）裁剪区域之间的合并模式 (word!)
 <commands> : （可选）Draw 方言命令.
 <shape>    : Shape 方言命令.
 ----
