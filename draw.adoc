@@ -539,7 +539,7 @@ line-join <mode>
 
 image::../images/line-join.png[Line-join,align="center"]
 
-NOTE: `miter-bevel` 模式将根据斜角长度自动选择其中一个接合模式（详情参考https://msdn.microsoft.com/en-us/library/windows/desktop/ms534148%28v=vs.85%29.aspx[此页面]）。
+NOTE: `miter-bevel` 模式将根据斜角长度自动选择其中一个接合模式（详情参考 https://msdn.microsoft.com/en-us/library/windows/desktop/ms534148%28v=vs.85%29.aspx[此页面]）。
 
 === 线条端点（Line-cap）
 
