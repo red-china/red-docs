@@ -165,7 +165,7 @@ redCall(redWord("random"), redInteger(6), 0);     // 返回一个 1 到 6 之间
 red_value redRoutine(red_word name, const char* spec, void* func_ptr)
 ----
 
-定义一个新的 Red 例程叫做 _name_，以 _spec_ 作为规格区块，_func-ptr_ C 函数指针做为函数体。C 函数 *必须* 返回一个 Red 值（`redUnset()` 可以用来表示没有使用返回值）。
+定义一个新的 Red 例程叫做 _name_，以 _spec_ 作为规格区块，_func-ptr_ C 函数指针做为主体。C 函数 *必须* 返回一个 Red 值（`redUnset()` 可以用来表示没有使用返回值）。
 
 *例*
 
