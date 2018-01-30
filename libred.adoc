@@ -49,14 +49,14 @@ Red 值可以通过 libRed 函数调用被返回，以 32 位的 *不透明（op
 long a, blk;
 
 a = redSymbol("a");
-redSet(a, redBlock(0));                   // returned reference is used immediately here
+redSet(a, redBlock(0));                   // 这里立即就使用了返回的引用
 
 blk = redGet(a);
-redPrint(blk);                            // safe reference usage
+redPrint(blk);                            // 引用的使用是安全的
 
 for(i = 0; i < 100, i++) {
-    // redAppend(blk, redNone());         // unsafe reference usage!
-    redAppend(redGet("a"), redNone());    // safe version
+    // redAppend(blk, redNone());         // 引用的使用不安全！
+    redAppend(redGet("a"), redNone());    // 安全的版本
 }
 ----
 
@@ -152,7 +152,7 @@ red_value redCall(red_word name, ...)
 *例*
 
 ----
-redCall(redWord("random"), redInteger(6), 0);     // returns a random integer! value between 1 and 6
+redCall(redWord("random"), redInteger(6), 0);     // 返回一个 1 到 6 之间的随机 integer! 值
 ----
 
 === 注册回调函数（Registering a callback function）
@@ -165,7 +165,7 @@ redCall(redWord("random"), redInteger(6), 0);     // returns a random integer! v
 red_value redRoutine(red_word name, const char* spec, void* func_ptr)
 ----
 
-定义一个新的 Red 例程叫做 _name_，以 _spec_ 作为规范区块，_func-ptr_ C 函数指针做为函数体。C 函数 *必须* 返回一个 Red 值（`redUnset()` 可以用来表示没有使用返回值）。
+定义一个新的 Red 例程叫做 _name_，以 _spec_ 作为规格区块，_func-ptr_ C 函数指针做为函数体。C 函数 *必须* 返回一个 Red 值（`redUnset()` 可以用来表示没有使用返回值）。
 
 *例*
 
@@ -322,8 +322,8 @@ red_block redBlock(red_value v,...)
 *例*
 
 ----
-redBlock(0);                                  // Creates an empty block
-redBlock(redInteger(42), redWord("hi"), 0);   // Creates [42 hi] block
+redBlock(0);                                  // 创建一个空区块
+redBlock(redInteger(42), redWord("hi"), 0);   // 创建区块 [42 hi]
 ----
 
 ==== redPath()
@@ -339,7 +339,7 @@ red_path redPath(red_value v, ...)
 ----
 redDo("a: [b 123]");
 long res = redGetPath(redPath(redWord("a"), redWord("b"), 0));
-printf("%l\n", redCInt32(res));    // will output 123
+printf("%l\n", redCInt32(res));    // 会输出 123
 ----
 
 ==== redLoadPath()
@@ -353,7 +353,7 @@ red_path redLoadPath(const char* path)
 *例*
 
 ----
-redGetPath(redLoadPath("a/b"));    // Creates and evaluates the a/b path! value.
+redGetPath(redLoadPath("a/b"));    // 创建并对该 path! a/b 进行求值。
 ----
 
 ==== redMakeSeries()
@@ -369,9 +369,9 @@ red_value redMakeSeries(unsigned long type, unsigned long slots)
 ----
 redMakeSeries(RED_TYPE_PAREN, 2);  // Creates a paren! series
 
-long path = redMakeSeries(RED_TYPE_SET_PATH, 2); // Creates a set-path!
+long path = redMakeSeries(RED_TYPE_SET_PATH, 2); // 创建一个 set-path!
 redAppend(path, redWord("a"));
-redAppend(path, redInteger(2));    // Now path is `a/2:`
+redAppend(path, redInteger(2));    // 现在 path 为 `a/2:`
 ----
 
 === 从 Red 创建 C 值（Making C values from Red）
@@ -687,7 +687,7 @@ libRed API 中的一些函数可以引用 Red 数据类型：`redTypeOf()`、`re
 RED_TYPE_<DATATYPE>
 ----
 
-全面的列表可以在 https://github.com/red/red/blob/master/libRed/red.h#L120[这里] 找到。
+全面的清单可以在 https://github.com/red/red/blob/master/libRed/red.h#L120[这里] 找到。
 
 == Visual Basic API
 
