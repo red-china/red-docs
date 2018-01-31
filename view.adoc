@@ -1,87 +1,86 @@
-= Red/View 图形引擎
+= Red/View 图形引擎（Red/View Graphic Engine）
 :imagesdir: ../images
 :toc:
 :toclevels: 3
 :toc-title: 目录
 :numbered:
 
-== 设计目标
+== 设计目标（Design goals）
 
-此 Red/View (或 View) 组件，是Red编程语言的图形系统。其设计目标：
+Red/View (或称 View) 组件是 Red 编程语言的一个图形系统。其设计目标为：
 
-* 数据导向，极简API
-* 以虚拟对象树为编程接口
+* 面向数据的极简 API
+* 以虚拟对象树作为编程接口
 * 显示系统与虚拟树之间实时或延迟的同步
-* 很容易添加双向绑定支持
-* 多后端，跨平台
-* 支持系统的，第三方的，以及自制的窗口部件
+* 让双向绑定的支持可以轻松实现
+* 拥有不同的后端并且跨平台的能力
+* 支持操作系统的、第三方的以及自定义的部件集
 * 低性能开销
 
-虚拟树用 face 对象构造。每个 face 对象以双向绑定映射一个图形组件。
-//根据中学生编程.pdf里提到的facet称为属性.  感觉这个facet= face +type的t的合体词
+虚拟树是用元件（face）对象构建起来的，每个元件对象以双向绑定映射到一个在显示器上的图形组件。
 
-== Face对象(Face object)
+== 元件对象(Face object)
 
-face对象是 `face!` 模板对象的克隆. 在face对象中的一个字段被称作属性( _facet_ )。
+元件对象是 `face!` 模板对象的拷贝，在元件对象中的一个字段被称作 _特征_ （facet）。
 
-可用属性(facets)的列表:
+可用特征的清单：
 
 [cols="1,1,1,1,2", options="header"]
 |===
 
-|属性 Facet | 数据类型 Datatype | 强制性 Mandatory? | 适用性 Applicability | 描述 Description
-|type| word!| yes| all| 图形组件的类型 (see link:view.html#_face_types[below]).
-|offset| pair!| yes| all| 相对parent左上起点的偏移位置
-|size| pair!| yes| all| 大小
-|text| string!| no| all| 文本
-|image| image!| no| some| 背景图片
-|color| tuple!| no| some| R.G.B或R.G.B.A格式的背景色
-|menu| block!| no| all| 菜单栏或上下文菜单(弹出菜单/右键菜单)
-|data| any-type!| no| all| 内容数据
-|enabled?| logic!| yes| all| 是否启用输入事件
-|visible?| logic!|	yes| all| 是否可见
-|selected| integer!| no| some| 对于lists类型, 当前选中的元素索引
-|flags| block!, word!| no|	some| List of special keywords altering the display or behavior of the face.
-|options| block!| no| some| Extra face properties in a [name: value] format.
-|parent| object!| no| all|	Back-reference to parent face (if any).
-|pane| block!| no| some| List of child face(s) displayed inside the face.
-|state| block| no| all| Internal face state info _(used by View engine only)_.
-|rate| integer!, time!| no| all| Face's timer. An integer sets a frequency, a time sets a duration, none stops it.
-|edge|	object!| no| all| _(reserved for future use)_
-|para| object!| no| all| Para object reference for text positioning.
-|font|	object!| no| all| Font object reference for setting text facet's font properties.
-|actors| object!| no| all|	User-provided events handlers.
-|extra| any-type!| no|	all| Optional user data attached to the face (free usage).
-|draw| block!| no| all| List of Draw commands to be drawn on the face.
+|特征    | 数据类型        | 强制性？ | 适用性 | 描述
+|type    | word!           | 是       | 所有   | 图形组件的类型（参考 link:view.html#_face_types[下面]）。
+|offset  | pair!           | 是       | 所有   | 相对与父元件左上角原点的偏移量。
+|size    | pair!           | 是       | 所有   | 该元件的大小。
+|text    | string!         | 否       | 所有   | 显示在该元件上的标签文本。
+|image   | image!          | 否       | 某些   | 显示在该元件背景的图片。
+|color   | tuple!          | 否       | 某些   | 该元件的背景颜色，格式为 R.G.B 或 R.G.B.A。
+|menu    | block!          | 否       | 所有   | 菜单栏或上下文菜单。
+|data    | any-type!       | 否       | 所有   | 该元件的内容数据。
+|enabled?| logic!          | 是       | 所有   | 启用或禁用在该元件上的输入事件。
+|visible?| logic!          | 是       | 所有   | 显示或隐藏该元件。
+|selected| integer!        | 否       | 某些   | 当前选中的元素的索引，用于列表类型。
+|flags   | block!, word!   | 否       | 某些   | 改变该元件的显示或行为的特殊的关键字列表。
+|options | block!          | 否       | 某些   | 额外的元件属性，格式为 [name: value]。
+|parent  | object!         | 否       | 所有   | 对父元件的反向引用（如果有的话）。
+|pane    | block!          | 否       | 某些   | 显示在该元件内部的子元件的列表。
+|state   | block!          | 否       | 所有   | 元件的内部状态的信息 *（仅被 View 引擎使用）*。
+|rate    | integer!, time! | 否       | 所有   | 元件的计时器。使用整数设置一个频率，使用时间设置一个时长，使用无来停止它。
+|edge    | object!         | 否       | 所有   | *保留以在未来使用*。
+|para    | object!         | 否       | 所有   | 用于定位文本的 Para 对象的引用。
+|font    | object!         | 否       | 所有   | 用于设置元件的字体属性的 Font 对象的引用。
+|actors  | object!         | 否       | 所有   | 用户提供的事件处理器。
+|extra   | any-type!       | 否       | 所有   | 附加于该元件上的可选的用户数据（用法自由）。
+|draw    | block!          | 否       | 所有   | 要画在元件上的 Draw 命令的列表。
 |===
 
-下表列出属性(facet)的全局可用标记 `flags` 。 原文: List of globally-usable flags for `flags` facet:
+`flags` 元件的全局可用标记的清单：
 
 [cols="1,4", options="header"]
 |===
-| 标记 Flag | 描述 Description
-|*all-over*| Send all `over` events to the face.
+| 标记     | 描述
+|*all-over*| 向该元件发送所有的 `over` 事件。
 |===
 
+其他元件类型特定的标志记录在其各自的小节中。
 
-其他face类型的具体标志在其各自的部分被记录。 原文:Other face types specific flags are documented in their respective sections.
+[NOTE]
+====
+* 非强制性特征可以设置为 `none`。
+* `offset` 和 `size` 以屏幕像素为单位指定。
+* `offset` 和 `size` 在它们被显示之前有时可以设置 `none`，View 引擎将负责设置这些值（像在 tab-panel 类型里的 panel 那样).
+* 显示顺序（从后往前）：color、image、text、draw.
+====
 
-Notes:
-
-* 非强制性属性 (facets) 可以设置 `none`.
-* `offset` 和 `size` 用屏幕像素指定.
-* `offset` 和 `size` 在它们被显示之前有时可以设置 `none`. View引擎将负责设置值 比如 tab-panel 类型里的面板).
-* 显示顺序(从后到前): color, image, text, draw.
-
-创建一个 face 可以通过克隆 face! 对象来实现，并需要提过 *至少* 一个有效的 `type` 名称.
+创建一个新的元件可以通过拷贝 `face!` 对象，并需要提供 *至少* 一个有效的 `type` 名称来达成。
 
     button: make face! [type: 'button]
 
-一旦 face 完成创建 `type` 字段就不允许再更改.
+一旦一个元件被创建，其 `type` 字段就不允许再被更改。
 
-=== 属性选项 (Options facet )
+=== 特征选项 (Options facet )
 
-属性选项包含可选属性(facet),用于指定一些行为:
+特征选项包含可选特征(facet),用于指定一些行为:
 
 [cols="1,4" options="header"]
 |===

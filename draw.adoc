@@ -10,7 +10,7 @@
 
 Draw 是 Red 语言的一个方言（DSL），它提供了一个简单、声明式的方式来指定 2D 绘图操作，这样的操作表示为有序命令的列表（用里面放着值的区块）, 可以在运行时自由地构造和更改。
 
-Draw 区块可以使用 `draw` 函数直接渲染在图像之上，或在 View 元件内使用 `draw` 属性渲染（参照 link:view.html[View 文档]）。
+Draw 区块可以使用 `draw` 函数直接渲染在图像之上，或在 View 元件内使用 `draw` 特征渲染（参照 link:view.html[View 文档]）。
 
 == 绘图命令（Draw commands）
 
