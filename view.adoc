@@ -330,7 +330,7 @@ image::face-tree.png[Face tree,align="center"]
 
 *支持的标记：*
 
-* `no-border`：删除由底层 GUI 框架创建的边缘装饰。
+* `no-border`：删除由底层 GUI 框架创建的边框装饰。
 
 [NOTE]
 ====
@@ -494,148 +494,148 @@ image::face-tree.png[Face tree,align="center"]
 [NOTE]
 ====
 * 子元件 `offset` 坐标相对于父面板的左上角。
-* 子元件会被裁剪以适应该面板框架。
+* 子元件会被裁剪以适应该面板的框架。
 ====
 
 '''
 
-=== Tab-panel 
+=== Tab-panel（选项卡面板）
 
-选项卡面板是在给定时间只有一个可见的面板列表。 面板名称列表显示为“选项卡”，用于在面板之间切换。
+选项卡面板一组面板的列表，它在一个给定时刻只有一个面板可见。面板名称列表作为“选项卡”显示，它用于切换面板。
 
 [cols="1, 4", options="header"]
 |===
-|Facet| Description
-|`type`| `'tab-panel`
-|`data`| Block of tabs names (string values).
-|`pane`| List of panels corresponding to tabs list (block!).
-|`selected`| Index of selected panel or none value (integer!) (read/write).
+|特征      | 描述
+|`type`    | `'tab-panel`
+|`data`    | 内含选项卡名字的区块（字符串值）。
+|`pane`    | 内含面板的列表，对应于选项卡列表（`block!`）。
+|`selected`| 所选面板的索引，或无值（`integer!`）（可读/写）。
 |===
 
 [cols="1, 1, 3", options="header"]
 |===
-|Event type| Handler| Description
-|`change`| on-change| Occurs when the user selects a new tab. `event/picked` holds the index of the newly selected tab. `selected` property is updated just after this event.
+|事件类型| 处理器   | 描述
+|`change`| on-change| 当用户选择一个新的面板时发生。`event/picked` 持有该新选定的选项卡的索引。`selected` 属性会在这个事件刚结束后被更新。
 |===
 
-注意：
+[NOTE]
+====
+* `data` 和 `pane` 两个特征都要填写，以正常显示选项卡面板。
+* 如果 `pane` 包含比指定的选项卡更多的面板，它们将被忽略。
+* 添加/删除选项卡时，相应的面板需要添加到 `pane` 列表/从 `pane` 列表中删除。
+====
 
-* 需要填写`data`和`pane`两个面以使选项卡面板正常显示。
-* 如果`pane`包含比指定选项卡更多的面板，它们将被忽略。
-* 添加/删除选项卡时，相应的面板需要在`pane`列表中添加/删除。
+=== Window（窗口）
 
-
-=== Window 
-
-表示OS桌面上显示的窗口。
+代表操作系统桌面上显示的窗口。
 
 [cols="1, 4", options="header"]
 |===
-|Facet| Description
-|`type`| `'window`
-|`text`| Title of the window (string!).
-|`offset`| Offset from top-left corner of the desktop screen, not counting the window's frame decorations. (pair!)
-|`size`| Size of the window, not counting the window's frame decorations. (pair!)
-|`flags`| Turn on/off some special window features (block!).
-|`menu`| Displays a menu bar in the window (block!).
-|`pane`| List of faces to display inside the window (block!).
-|`selected`| Select the face which will get the focus (object!).
+|特征      | 描述
+|`type`    | `'window`
+|`text`    | 该窗口的标题（`string!`）。
+|`offset`  | 相对于桌面屏幕左上角的偏移量，不把该窗口的边框装饰计算在内。（`pair!`）。
+|`size`    | 该窗口的大小，不把该窗口的边框装饰计算在内（`pair!`）。
+|`flags`   | 开启/关闭某些特殊的窗口特性（`block`）。
+|`menu`    | 在该窗口里显示菜单栏（`block`）。
+|`pane`    | 要在该窗口内部显示的元件列表（`block!`）。
+|`selected`| 选择将会获得焦点的元件（`object`）。
 |===
 
+*支持的标记：*
 
-*支持的flags：*
+* `modal`：使窗口变成模态，禁用所有之前打开的窗口。
+* `resize`：启用窗口缩放（默认是固定大小，不是可缩放的）。
+* `no-title`：不显示窗口标题文本。
+* `no-border`：删除窗口的边框装饰。
+* `no-min`：删除窗口的标题栏中的最小化按钮。
+* `no-max`：删除窗口的标题栏中的最大化按钮。
+* `no-buttons`：删除窗口的标题栏中的所有按钮。
+* `popup`: 另一种更小的边框装饰（仅支持 Windows）。
 
-* `modal`: makes the window modal, disabling all previously opened windows.
-* `resize`: enable window resizing (default is fixed size, not resizeable).
-* `no-title`: do not display a window title text.
-* `no-border`: remove window's frame decorations.
-* `no-min`: remove minimize button from window's drag bar.
-* `no-max`: remove maximize button from window's drag bar.
-* `no-buttons`: remove all buttons from window's drag bar.
-* `popup`: alternative smaller frame decoration (Windows only).
+[NOTE]
+====
+* 在使用菜单规格区块的开头使用 `popup` 关键字将强制使用窗口中的上下文菜单而不是默认情况下的菜单栏。
+====
 
-注意：
+=== Screen（屏幕）
 
-* 使用菜单规范块开头的`popup`关键字将强制窗口中的上下文菜单，而不是默认情况下的菜单栏。
-
-
-=== Screen 
-
-表示连接到计算机（通常是显示器）的图形显示单元。
+代表连接到该计算机的图形显示单元（通常为显示器）。
 
 [cols="1, 4", options="header"]
 |===
-|Facet| Description
+|特征  | 描述
 |`type`| `'screen`
-|`size`| Size of the screen display in pixels. Set by the View engine when started (pair!).
-|`pane`| List of windows to display on the screen (block!).
+|`size`| 该显示屏幕的大小，在 View 引擎启动时被设置（`pair!`）。
+|`pane`| 要显示在屏幕上的内含窗口的列表（`block!`）。
 |===
 
-显示的所有窗口面都需要是screen face的子类。
+所有显示的元件都需要是屏幕元件的子元件。
 
+=== Group-box（编组框）
 
-=== Group-box 
-
-组合框是其他face的容器，周围有可见的框架。 这是一种临时风格，一旦我们得到'edge` facet的支持就会被删除。
+编组框是其他元件的容器，周围有可见的边框，*这是临时的样式，一旦我们有了对 `edge` 特征的支持它就会被移除*。
 
 [cols="1, 4", options="header"]
 |===
-|Facet| Description
+|特征  | 描述
 |`type`| `'group-box`
-|`pane`| Block of children faces. Order in block defines z-order on display.
+|`pane`| 内含子元件的区块，区块中的顺序定义了在显示器上的 Z 轴次序。
 |===
 
-注意：
+[NOTE]
+====
+* 子元件 `offset` 坐标相对于编组框的左上角。
+* 子元件会被裁剪以适应该编组框的框架。
+====
 
-* 子类`offset`坐标是相对于分组框的左上角。
-* 子类的face被裁剪到group-box框架中。
+== 元件生命周期（Face life cycle）
 
+. 从 `face!` 原型创建一个元件对象。
+. 将元件对象插入到与屏幕元件相连的元件树中。
+. 使用 `show` 在屏幕上渲染元件对象。
+.. 此时系统资源被分配。
+.. `face/state` 区块被设置。
+. 从窗格中删除元件以将其从显示器上移除。
+. 垃圾收集器将负责在元件不再被引用时释放相关的系统资源。
 
-== Face life cycle 
+[NOTE]
+====
+* 之后可能会提供 `free` 函数用于为消耗大量资源的应用程序手动控制系统资源的释放。
+====
 
-. 从`face!`原型创建一个face对象。
-. 将face对象插入连接到screen face的face树。
-. 使用`show`在屏幕上渲染face对象。
-.. 此时分配系统资源。
-.. `face/state` 块被设置。
-. 从窗格中取出face以将其从显示屏上移除。
-. 垃圾收集器将会在不再引用face的同时释放相关的系统资源。
-
-注意：
-
-* 可以提供`free`功能，手动控制系统资源释放饥饿应用程序的资源。
-
-== SHOW function 
+== SHOW 函数（SHOW function）
 
 *语法*
+
 ----
 show <face>
 
-<face>: clone of face! object or block of face objects or names (using word! values).
+<face>: face! 对象的拷贝，或内含元件对象或名称（使用 word! 值）的区块.
 ----
 
 *描述*
 
-此功能用于更新屏幕上的face或face列表。 只有在连接到屏幕的face树中引用的face才能在屏幕上正确渲染。 当第一次调用时，将分配系统资源，将会设置`state`面，图形组件将显示在屏幕上。 随后的调用会在屏幕上反映对face对象所做的任何更改。 如果定义了`pane` facet，那么`show`也会递归地应用于子face。
+该功能用于更新屏幕上的元件或内含元件的列表，只有在连接到屏幕元件的元件树中被引用的元件才能正常地渲染到屏幕上。当第一次调用时，将分配系统资源，设置`state` 特征，将该图形组件显示在屏幕上，随后的调用会在屏幕上反映对元件对象所做的任何更改。如果有定义 `pane` 特征，那么 `show` 也会递归地应用于其子元件
 
+*状态特征*
 
-*State facet*
-
-_以下提供信息仅供参考，在正常操作中，`state` facet应由用户保持不变。 但是，如果OS API直接由用户调用或者如果需要修改View引擎行为，则可以访问它。_
+*以下提供信息仅供参考。在正常操作中，用户不应该动 `state` 特征，然而，如果用户要直接调用 OS API 或者要需要修改 View 引擎的行为，则可以访问它。*
 
 [cols="1, 4", options="header"]
 |===
-|Position/Field| Description
-|1 (handle)|	OS-specific handle for the graphic object (integer!).
-|2 (changes)| Bit flags array marking which facet has been changed since last call to `show` (integer!).
-|3 (deferred)| List of deferred changes since last call to `show`; when realtime updates are turned off (block! none!).
-|4 (drag-offset)| Stores the starting mouse cursor offset position when entering face dragging mode (pair! none!).
+|位置/字段      | 描述
+|1 (handle)     | 该图形对象的特定于操作系统的句柄（`integer!`）。
+|2 (changes)    | 位元标记数组，用来标记从最后一次对 `show` 的调用起哪个特性被改变过（`integer!`）。
+|3 (deferred)   | 当关闭实时更新时，内含从最后一次对 `show` 的调用起的延迟变化的列表（`block!` `none!`）。
+|4 (drag-offset)| 存储当进入元件拖拽模式时起始鼠标指针的偏移位置（`pair!` `none!`）。
 |===
 
-注意：
-
-* 在调用`show`后，`changes`字段被重置为0，`deferred`字段块被清除。
-* 将来将会使用`handle!`数据类型来处理不透明的操作系统句柄。
+[NOTE]
+====
+* 在调用 `show` 后，`changes` 字段会被重置为 0，`deferred` 字段区块会被清空。
+* 将来会用 `handle!` 数据类型来处理不透明操作系统句柄。
+====
 
 == 实时vs延期更新 anchor:realtime-vs-deferred-updating[]
 
