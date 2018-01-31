@@ -266,7 +266,7 @@ red_pair redPair(long x, long y)
 red_tuple redTuple(long r, long g, long b)
 ----
 
-从三个整数值（通常用于表示 RGB 颜色）返回一个 `tuple!` 值，传递的参数将被截断为 8 位值。
+从三个整数值（通常用于表示 RGB 颜色）返回一个 `tuple!` 值，传递的参数将被截断为 8 位元值。
 
 ==== redTuple4()
 
@@ -274,7 +274,7 @@ red_tuple redTuple(long r, long g, long b)
 red_tuple redTuple4(long r, long g, long b, long a)
 ----
 
-从四个整数值（通常用于表示 RGBA 颜色）返回一个 `tuple!` 值，传递的参数将被截断为 8 位值。
+从四个整数值（通常用于表示 RGBA 颜色）返回一个 `tuple!` 值，传递的参数将被截断为 8 位元值。
 
 ==== redBinary()
 
@@ -292,8 +292,8 @@ red_image redImage(long width, long height, const void* buffer, long format)
 
 从内存 `buffer` 指针返回一个`image!` 值。图像的大小以 `width` 和 `height` 的形式定义，以像素为单位。输入缓冲将在内部被复制。接受的缓冲格式有：
 
-* `RED_IMAGE_FORMAT_RGB`：每一个像素 24 位。
-* `RED_IMAGE_FORMAT_ARGB`: 每一个像素 32 位，透明通道在最前。
+* `RED_IMAGE_FORMAT_RGB`：每一个像素 24 位元。
+* `RED_IMAGE_FORMAT_ARGB`: 每一个像素 32 位元，透明通道在最前。
 
 ==== redString()
 
@@ -420,7 +420,7 @@ long redTypeOf(red_value value)
 red_value redAppend(red_series series, red_value value)
 ----
 
-将 _value_ 追加到 _series_ 中，并返回该序列首部。
+将 _value_ 追加到 _series_ 中，并返回该序列头部。
 
 ==== redChange()
 
@@ -460,7 +460,7 @@ red_value redFind(red_series series, red_value value)
 red_value redIndex(red_series series)
 ----
 
-返回 _series_ 相对于首部的当前的索引，或返回语境中的单词。
+返回 _series_ 相对于头部的当前的索引，或返回语境中的单词。
 
 ==== redLength()
 
@@ -687,7 +687,7 @@ libRed API 中的一些函数可以引用 Red 数据类型：`redTypeOf()`、`re
 RED_TYPE_<DATATYPE>
 ----
 
-全面的清单可以在 https://github.com/red/red/blob/master/libRed/red.h#L120[这里] 找到。
+完整的清单可以在 https://github.com/red/red/blob/master/libRed/red.h#L120[这里] 找到。
 
 == Visual Basic API
 
