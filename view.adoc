@@ -7,7 +7,7 @@
 
 == 设计目标（Design goals）
 
-Red/View (或称 View) 组件是 Red 编程语言的一个图形系统。其设计目标为：
+Red/View (或称 View) 组件是 Red 编程语言的图形系统。其设计目标为：
 
 * 面向数据的极简 API
 * 以虚拟对象树作为编程接口
@@ -17,11 +17,11 @@ Red/View (或称 View) 组件是 Red 编程语言的一个图形系统。其设�
 * 支持操作系统的、第三方的以及自定义的部件集
 * 低性能开销
 
-虚拟树是用元件（face）对象构建起来的，每个元件对象以双向绑定映射到一个在显示器上的图形组件。
+虚拟树是用元件（face）对象构建起来的，每个元件对象都以双向绑定映射到一个在显示器上的图形组件。
 
-== 元件对象(Face object)
+== 元件对象（Face object）
 
-元件对象是 `face!` 模板对象的拷贝，在元件对象中的一个字段被称作 _特征_ （facet）。
+元件对象是 `face!` 模板对象的拷贝，一个在元件对象中的字段被称作 _特征_ （facet）。
 
 可用特征的清单：
 
@@ -45,7 +45,7 @@ Red/View (或称 View) 组件是 Red 编程语言的一个图形系统。其设�
 |parent  | object!         | 否       | 所有   | 对父元件的反向引用（如果有的话）。
 |pane    | block!          | 否       | 某些   | 显示在该元件内部的子元件的列表。
 |state   | block!          | 否       | 所有   | 内部的元件状态的信息 *（仅被 View 引擎使用）*。
-|rate    | integer!, time! | 否       | 所有   | 元件的计时器。使用整数设置一个频率，使用时间设置一个时长，使用无来停止它。
+|rate    | integer!, time! | 否       | 所有   | 元件的计时器。使用整数设置频率，使用时间设置时长，使用无来停止它。
 |edge    | object!         | 否       | 所有   | *（保留以在将来使用）*。
 |para    | object!         | 否       | 所有   | 用于定位文本的 Para 对象的引用。
 |font    | object!         | 否       | 所有   | 用于设置元件的字体属性的 Font 对象的引用。
@@ -72,11 +72,11 @@ Red/View (或称 View) 组件是 Red 编程语言的一个图形系统。其设�
 * 显示顺序（从后往前）：color、image、text、draw.
 ====
 
-创建一个新的元件可以通过拷贝 `face!` 对象，并需要提供 *至少* 一个有效的 `type` 名称来达成。
+创建新的元件要通过拷贝 `face!` 对象，并 *至少* 提供一个有效的 `type` 名称来达成。
 
     button: make face! [type: 'button]
 
-一旦一个元件被创建，其 `type` 字段就不允许再被更改。
+一旦元件被创建，其 `type` 字段就不允许再被更改。
 
 === 选项特征（Options facet）
 
@@ -156,9 +156,9 @@ Red/View (或称 View) 组件是 Red 编程语言的一个图形系统。其设�
 
 元件对象在 `pane` 中的顺序的有关系的，它映射到图形对象的 Z 轴次序（在 `pane` 的头部的元件显示在所有其他元件的后面，在尾部的元件显示在所有对象的顶部）。
 
-元件树的根是一个 `screen` 元件，一个 `screen` 元件只能显示其 `pane` 区块里的 `window` 元件。
+元件树的根是 `screen` 元件，`screen` 元件只能显示其 `pane` 区块里的 `window` 元件。
 
-为了在屏幕上显示任何一个元件，它都 *必须* 得直接地（对于窗口来说）或间接地（对于其他元件类型来说）连接到一个 `screen` 元件。
+要让任何元件在屏幕上显示出来，它都 *必须* 直接地（对于窗口来说）或间接地（对于其他元件类型来说）连接到 `screen` 元件。
 
 image::face-tree.png[Face tree,align="center"]
 
@@ -167,22 +167,22 @@ image::face-tree.png[Face tree,align="center"]
 
 === Base（基元件）
 
-`base` 类型是最基本的元件类型，但它也是最全能的一种元件类型。 默认情况下，它只显示一个颜色为 `128.128.128` 的背景。
+`base` 类型是最基本的元件类型，但它也是最全能的一种元件类型。它默认只显示一个颜色为 `128.128.128` 的背景。
 
 [cols="1,3", options="header"]
 |===
 |特征   | 描述
 |`type` | `'base`
-|`image`| 可以指定一个 `image!` 值，它支持透明通道。
-|`color`| 可以指定一个背景颜色，它支持透明通道。
-|`text` | 显示在元件内部的一个可选的文本。
+|`image`| 可以指定 `image!` 值，它支持透明通道。
+|`color`| 可以指定背景颜色，它支持透明通道。
+|`text` | 显示在元件内部的可选的文本。
 |`draw` | Draw 原语完全支持透明度。
 |===
 
 [NOTE]
 ====
-* 按以下顺序支持和呈现以下方面的完整组合：`color`, `image`, `text`, `draw`。
-* 透明度可以在`color`，`image`，`text`和`draw`中通过指定一个alpha通道组件来显示元组值来实现：`RGBA`，其中`A = 0`表示完全透明度，`A = 255`， 全透明度。
+* 支持以下特征的全组合，并会以以下顺序渲染：`color`、`image`、`text`、`draw`。
+* 可以在 `color`、`image`、`text` 和 `draw` 中指定颜色元组值中的一个透明通道分量来达到透明效果：`R.G.B.A`，其中 `A = 0` 表示完全不透明，`A = 255`，表示完全透明。
 ====
 
 *该元件类型应该被用于所有的自定义图形组件的实现。*
@@ -191,7 +191,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Text（文本）
 
-`text` 类型是一个用于显示的静态标签。
+`text` 类型是用于显示的静态标签。
 
 [cols="1,3", options="header"]
 |===
@@ -216,7 +216,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Button（按钮）
 
-该类型代表一个简单的按钮。
+该类型代表简单的按钮。
 
 [cols="1,4", options="header"]
 |===
@@ -236,7 +236,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Check（复选框）
 
-该类型代表一个复选框，它带有一个可选的标签文本，文本显示在左侧或右侧。
+该类型代表复选框，它带有可选的标签文本，文本显示在左侧或右侧。
 
 [cols="1, 4", options="header"]
 |===
@@ -251,13 +251,13 @@ image::face-tree.png[Face tree,align="center"]
 [cols="1, 1, 3", options="header"]
 |===
 |事件类型| 处理器     | 描述
-|`change`| `on-change`| 当该复选框的状态被一个用户动作更改时触发。
+|`change`| `on-change`| 当该复选框的状态被用户动作更改时触发。
 |===
 
 
 === Radio（单选框）
 
-该类型代表一个单选按钮，它带有一个可选的标签文本，文本显示在左侧或右侧。每个窗格中只能有一个单选按钮被选中。
+该类型代表单选按钮，它带有可选的标签文本，文本显示在左侧或右侧。每个窗格中只能有一个单选按钮被选中。
 
 [cols="1, 4", options="header"]
 |===
@@ -277,16 +277,16 @@ image::face-tree.png[Face tree,align="center"]
 
 === Field（文本域）
 
-该类型代表一个单行输入文本域。
+该类型代表单行输入文本域。
 
 [cols="1, 4", options="header"]
 |===
-|特征  | 描述
-|`type`| `'field`
-|`text`| 输入文本；为可读/写值。
-|`data`| Value to display as text.
-|`options`| Supported fields: `default`.
-|`flags`| Turn on/off some special field features (block!).
+|特征     | 描述
+|`type`   | `'field`
+|`text`   | 输入文本；为可读/写值。
+|`data`   | 以文本显示的值。
+|`options`| 支持的字段：`default`。
+|`flags`  | 开启/关闭某些特殊的文本域特性（block!）。
 |===
 
 *支持的标记：*
@@ -318,14 +318,14 @@ image::face-tree.png[Face tree,align="center"]
 
 === Area（文本区域）
 
-该类型代表一个多行输入域。
+该类型代表多行输入域。
 
 [cols="1, 4", options="header"]
 |===
 |特征   | 描述
 |`type` | `'area`
 |`text` | 输入文本；为可读/写值。
-|`flags`| 开启/关闭某些特殊的文本区域特性。
+|`flags`| 开启/关闭某些特殊的文本区域特性（block!）。
 |===
 
 *支持的标记：*
@@ -335,7 +335,7 @@ image::face-tree.png[Face tree,align="center"]
 [NOTE]
 ====
 * `selected` 将来会用于控制的输入文本的高亮部分。
-* 如果文本行在该文本区域中不是所有都可见的，则会出现垂直滚动条（大概将来会由的某一个 `flags` 选项来控制）。
+* 如果文本行在该文本区域中不是所有都可见的，则会出现垂直滚动条（大概将来会由的某个 `flags` 选项来控制）。
 ====
 
 [cols="1, 1, 2", options="header"]
@@ -349,7 +349,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Text-list（文本列表）
 
-该类型代表含有一组文本字符串的一个垂直列表，它显示在固定的框架中。如果内容大小不符合框架，则会自动出现垂直滚动条。
+该类型代表含有一组文本字符串的垂直列表，它显示在固定的框架中。如果内容大小不符合框架，则会自动出现垂直滚动条。
 
 [cols="1, 4", options="header"]
 |===
@@ -363,7 +363,7 @@ image::face-tree.png[Face tree,align="center"]
 |===
 
 |事件类型| 处理器     | 描述
-|`select`| `on-select`| 当该列表中的一个条目被选定时发生。`selected` 特征指向 *旧的* 被选定的条目的索引。
+|`select`| `on-select`| 当该列表中的条目被选定时发生。`selected` 特征指向 *旧的* 被选定的条目的索引。
 |`change`| `on-change`| 在 `selected` 事件之后发生。`selected` 特征指向这个 *新的* 被选定的条目的索引。
 |===
 
@@ -374,7 +374,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Drop-list（下拉列表）
 
-该类型表示含有一组文本字符串的一个垂直列表，它显示在可折叠的框架中。如果内容大小不符合框架，则会自动出现垂直滚动条。
+该类型表示含有一组文本字符串的垂直列表，它显示在可折叠的框架中。如果内容大小不符合框架，则会自动出现垂直滚动条。
 
 [cols="1, 4", options="header"]
 |===
@@ -386,13 +386,13 @@ image::face-tree.png[Face tree,align="center"]
 |`selected`| 选定的字符串的索引，或若未选择，则为无值。（可读/写）
 |===
 
-`data` 特征可接收任意值，但只有字符串值才会被添加到该列表中并显示，可以以字符串作为键，使用额外的非字符串数据类型的值来创建关联数组。`selected` 特征是一个基于 1 的整数索引，表示在该列表中所选字符串的位置，而不是在 `data` 特征中的。
+`data` 特征可接收任意值，但只有字符串值才会被添加到该列表中并显示，可以以字符串作为键，使用额外的非字符串数据类型的值来创建关联数组。`selected` 特征是基于 1 的整数索引，它表示在该列表中所选字符串的位置，而不是在 `data` 特征中的位置。
 
 [cols="1, 1, 3", options="header"]
 |===
 
 |事件类型| 处理器     | 描述
-|`select`| `on-select`| 当该列表中的一个条目被选定时发生。`selected` 特征指向 *旧的* 被选定的条目的索引。
+|`select`| `on-select`| 当该列表中的条目被选定时发生。`selected` 特征指向 *旧的* 被选定的条目的索引。
 |`change`| `on-change`| 在 `selected` 事件之后发生。`selected` 特征指向这个 *新的* 被选定的条目的索引。
 |===
 
@@ -403,7 +403,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Drop-down（下拉域）
 
-该类型表示含有一组文本字符串的垂直列表的一个文本域，它显示在可折叠的框架中。如果内容大小不符合框架，则会自动出现垂直滚动条。
+该类型表示含有一组文本字符串的垂直列表的文本域，它显示在可折叠的框架中。如果内容大小不符合框架，则会自动出现垂直滚动条。
 
 [cols="1, 4", options="header"]
 |===
@@ -413,13 +413,13 @@ image::face-tree.png[Face tree,align="center"]
 |`selected`| 选定的字符串的索引，或若未选择，则为无值。（可读/写）
 |===
 
-`data` 特征可接收任意值，但只有字符串值才会被添加到该列表中并显示，可以以字符串作为键，使用额外的非字符串数据类型的值来创建关联数组。`selected` 特征是一个基于 1 的整数索引，表示在该列表中所选字符串的位置，而不是在 `data` 特征中的。
+`data` 特征可接收任意值，但只有字符串值才会被添加到该列表中并显示，可以以字符串作为键，使用额外的非字符串数据类型的值来创建关联数组。`selected` 特征是基于 1 的整数索引，它表示在该列表中所选字符串的位置，而不是在 `data` 特征中的位置。
 
 [cols="1, 1, 3", options="header"]
 |===
 
 |事件类型| 处理器     | 描述
-|`select`| `on-select`| 当该列表中的一个条目被选定时发生。`selected` 特征指向 *旧的* 被选定的条目的索引。
+|`select`| `on-select`| 当该列表中的条目被选定时发生。`selected` 特征指向 *旧的* 被选定的条目的索引。
 |`change`| `on-change`| 在 `selected` 事件之后发生。`selected` 特征指向这个 *新的* 被选定的条目的索引。
 |===
 
@@ -430,7 +430,7 @@ image::face-tree.png[Face tree,align="center"]
 
 === Progress（进度条）
 
-该类型代表一个水平的或垂直的进度条。
+该类型代表水平的或垂直的进度条。
 
 [cols="1, 4", options="header"]
 |===
@@ -442,7 +442,7 @@ image::face-tree.png[Face tree,align="center"]
 
 [NOTE]
 ====
-* 如果把一个浮点数值用于 `data`，它需要在 0.0 到 1.0 之间。
+* 如果把浮点数值用于 `data`，它需要在 0.0 到 1.0 之间。
 ====
 
 === Slider（滑块）
@@ -458,43 +458,44 @@ image::face-tree.png[Face tree,align="center"]
 
 [NOTE]
 ====
-* 如果把一个浮点数值用于 `data`，它需要在 0.0 到 1.0 之间。
+* 如果把浮点数值用于 `data`，它需要在 0.0 到 1.0 之间。
 ====
 
 === Camera（相机）
 
-此类型用于显示一个相机提要。
+该类型用于显示相机提要。
 
 [cols="1, 4", options="header"]
 |===
 |特征      | 描述
 |`type`    | `'camera`
 |`data`    | 区块形式的内含相机（可多个）的列表。
-|`selected`| 从 `data` 列表中选择要显示的相机，如果设为 `none`，则禁用相机提要。
+|`selected`| 用一个整数索引从 `data` 列表中选择要显示的相机，如果设为 `none`，则禁用相机提要。
 |===
 
 [NOTE]
 ====
 * `data` 特征最初会被设置为 `none`，这个内含相机的列表会在第一次以该相机元件为参数调用 `show` 时被取得。
-* 可以以该元件为参数调用 `to-image` 来捕捉一个相机元件的内容。
+* 可以以该元件为参数调用 `to-image` 来捕捉相机元件的内容。
 ====
 
-=== Panel 
+=== Panel（面板）
 
-面板是其他face的容器。
+面板是其他元件的容器。
 
 [cols="1, 4", options="header"]
 |===
 
-|Facet| Description
+|特征  | 描述
 |`type`| `'panel`
-|`pane`| Block of children faces. Order in block defines z-order on display.
+|`pane`| 内含子元件的区块，区块中的顺序定义了在显示器上的 Z 轴次序。
 |===
 
-注意：
-
-* 子face`offset`坐标相对于父面板左上角。
-* 子face被裁剪在面板框架中。
+[NOTE]
+====
+* 子元件 `offset` 坐标相对于父面板的左上角。
+* 子元件会被裁剪以适应该面板框架。
+====
 
 '''
 
