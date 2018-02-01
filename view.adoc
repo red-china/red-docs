@@ -54,7 +54,7 @@ Red/View (或称 View) 组件是 Red 编程语言的图形系统。其设计目�
 |draw    | block!          | 否       | 所有   | 要画在元件上的 Draw 命令的列表。
 |===
 
-`flags` 特征的全局可用标记的清单：
+`flags` 特征的全局可用的标记的清单：
 
 [cols="1,4", options="header"]
 |===
