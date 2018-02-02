@@ -28,7 +28,7 @@ NOTE: Red/System 有它自己的 http://static.red-lang.org/red-system-specs-lig
 
 === 配置对象（Config object）
 
-它在条件表达式与宏中提供了一个隐含的 `config` 对象，以给与用于编译源码的设定的访问，这些设定经常用于有条件地引入代码。全面的设定清单可以从 https://github.com/red/red/blob/master/system/compiler.r#L31[这里] 找到。
+它在条件表达式与宏中提供了一个隐含的 `config` 对象，以给与用于编译源码的设定的访问，这些设定经常用于有条件地引入代码。完整的设定清单可以从 https://github.com/red/red/blob/master/system/compiler.r#L31[这里] 找到。
 
 *例：*
     
