@@ -640,7 +640,7 @@ foreach d [#if #either #switch #case][probe d]
 
 Red 预处理器也可以在运行时工作，以便也能够从解释器中使用预处理器指令来对源代码进行求值，以一个 `file!` 值调用 `do` 时会自动调用它。请注意，以下形式可用于在不调用预处理程序的情况下 `do` 一个文件：`do load %file`。
 
-=== expand-directives 
+=== `expand-directives`
 
 *语法*
 
