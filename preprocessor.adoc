@@ -1,12 +1,11 @@
-= 预处理器（Preprocessor）
+= 预处理器
 :toc:
 :toc-title: 目录
 :numbered:
 
+== 概念
 
-== 概念（Concept）
-
-Red 预处理器是 Red 的一种方言，它允许使用一个在常规 Red 语言之上的特定的层来转换 Red 源码。转换是通过在 Red 源码中内联预处理器关键字（称为 `directives`（指令））达到的。这些指令被处理的时机为：
+Red 预处理器是 Red 的一种方言，它允许使用一个在常规 Red 语言之上的特定的层来转换 Red 源码。转换是通过在 Red 源码中内联预处理器关键字（称为__指令__）达到的。这些指令被处理的时机为：
 
 * 当 Red 源码被编译的时候
 * 当 Red 源码通过传有一个文件参数的 `do` 函数被运行的时候
@@ -24,23 +23,30 @@ Red 预处理器是 Red 的一种方言，它允许使用一个在常规 Red 语
 
 当一个指令被处理的时候，它会被替换为它返回的结果值（有些指令没有返回值，所以它们仅会被移除），这就是达成源码的转换的方法。
 
-NOTE: Red/System 有它自己的 http://static.red-lang.org/red-system-specs-light.html#section-16[预处理器]，是类似的，不过它是在底层，并且是应用在文本形式的源码上。
+[NOTE, caption=注意]
+====
+Red/System 有它自己的link:http://static.red-lang.org/red-system-specs-light.html#section-16[预处理器]，是类似的，不过它是在底层，并且是应用在文本形式的源码上。
+====
 
-=== 配置对象（Config object）
+=== 配置对象
 
-它在条件表达式与宏中提供了一个隐含的 `config` 对象，以给与用于编译源码的设定的访问，这些设定经常用于有条件地引入代码。完整的设定清单可以从 https://github.com/red/red/blob/master/system/compiler.r#L31[这里] 找到。
+它在条件表达式与宏中提供了一个隐含的 `config` 对象，以给与用于编译源码的设定的访问，这些设定经常用于有条件地引入代码。完整的设定清单可以从link:https://github.com/red/red/blob/master/system/compiler.r#L31[这里]找到。
 
 *例：*
-    
+
+[source, red]
     #if config/OS = 'Windows [#include %windows.red]
 
-NOTE: 当在运行时（从 Red 的解释器）使用预处理器时，`config` 对象也有效，而且它会反映用来编译目前用来运行代码的该 Red 可执行文件的选项。
+[NOTE, caption=注意]
+====
+当在运行时（从 Red 的解释器）使用预处理器时，`config` 对象也有效，而且它会反映用来编译目前用来运行代码的该 Red 可执行文件的选项。
+====
 
-=== 执行语境（Execution context）
+=== 执行语境
 
 为了避免泄露单词到全局语境，造成多余的副作用，所有在指令中使用的表达式都绑定到一个专用的语境中。语境会随着用于条件表达式、宏和 `#do` 指令的每个设词扩展。
 
-[TIP]
+[TIP, caption=贴士]
 ====
 * 可以使用以下表达式打印出隐藏的语境的内容：
         
@@ -51,24 +57,27 @@ NOTE: 当在运行时（从 Red 的解释器）使用预处理器时，`config` 
         probe preprocessor/exec
 ====
 
-=== 实现上的注意（Implementation note）
+=== 实现上的注意
 
 目前，用于编译时的指令里的表达式都是用 Rebol2 解释器求值的，因为它运行着工具链的代码。这是临时的，应会尽快地把它切换成一个 Red 执行器。在此期间要确保你的表达式和宏代码也可以用 Red 运行，以在运行时（未来还包含编译时）和 Red 解释器兼容。
 
-== 宏（Macros）
+== 宏
 
-Red 预处理器支持定义宏函数（简称 *宏*）来实现更复杂的转换。宏允许以高效的形式进行元编程，它执行的代价花费在编译时而不是运行时。在运行时 Red 已经有很强的元编程能力，不过为了使 Red 源码在编译器和解释器运行地一样好，宏也可以在运行时被解析。
+Red 预处理器支持定义宏函数（简称__宏__）来实现更复杂的转换。宏允许以高效的形式进行元编程，它执行的代价花费在编译时而不是运行时。在运行时 Red 已经有很强的元编程能力，不过为了使 Red 源码在编译器和解释器运行地一样好，宏也可以在运行时被解析。
 
-NOTE: 没有读取时（读者）宏。考虑到用 Parse 方言对文本形式的源进行预处理已经是如此简单，这种支持现在是多余的。
+[NOTE, caption=注意]
+====
+没有读取时（读者）宏。考虑到用 Parse 方言对文本形式的源进行预处理已经是如此简单，这种支持现在是多余的。
+====
 
 预处理器支持两种类型的宏：
 
-=== 命名宏（Named macros）
+=== 命名宏
 
 这种类型的宏是高级的，预处理器负责为用户获取参数和替换返回值。典型的形式是：
 
     #macro name: func [arg1 arg2... /local word1 word2...][...code...]
-    
+
 这样定义一个宏之后，源码中每个遇到 `name` 单词的地方，都会触发以下步骤：
 
 . 获取参数值。
@@ -76,10 +85,14 @@ NOTE: 没有读取时（读者）宏。考虑到用 Parse 方言对文本形式�
 . 用函数的最后一个值替换宏调用及其参数。
 . 从替换了值的地方恢复预处理器（为了允许宏的递归执行）。
 
-NOTE: 目前不支持指定参数类型。
+[NOTE, caption=注意]
+====
+目前不支持指定参数类型。
+====
 
 *例：*
 
+[source, red]
 ----
 Red []
 #macro make-KB: func [n][n * 1024]
@@ -88,6 +101,7 @@ print make-KB 64
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print 65536
@@ -95,6 +109,7 @@ print 65536
 
 从一个宏中调用其他宏：
 
+[source, red]
 ----
 Red []
 #macro make-KB: func [n][n * 1024]
@@ -105,19 +120,21 @@ print make-MB 1
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print 1048576
 ----
 
-=== 模式匹配宏（Pattern-matching macros）
+=== 模式匹配宏
 
 这种类型的宏以 Parse 方言的规则或关键字来匹配一个模式，而不是匹配一个单词并获取参数。像命名宏一样，返回值被当作匹配到的模式的替换品。
 
-不过，也有这种类型的宏的一个低级版本，它以 `[manual]` 特性触发。在这种情况下没有隐含的行为，而是给与用户完全的控制。自动替换不会发生，期望的转换的应用和处理的恢复点的设置都取决于宏函数。
+不过，也有这种类型的宏的一个低级版本，它以 `[manual]`（手动）特性触发。在这种情况下没有隐含的行为，而是给与用户完全的控制。自动替换不会发生，期望的转换的应用和处理的恢复点的设置都取决于宏函数。
 
 模式匹配宏的典型形式为：
 
+[source, red]
 ----
  #macro <rule> func [<attribute> start end /local word1 word2...][...code...]
 ----
@@ -125,15 +142,16 @@ print 1048576
 `<rule>` 部分可以为：
 
 * 一个 `lit-word!` 值：用来匹配一个特定的单词。
-* 一个 `word!` 值：一个 Parse 关键字，比如一个数据类型的名称，或者写 `skip` 以匹配 *所有* 的值。
+* 一个 `word!` 值：一个 Parse 关键字，比如一个数据类型的名称，或者写 `skip` 以匹配**所有**的值。
 * 一个 `block!` 值：一组 Parse 方言规则。
 
 `start` 和 `end` 参数是在源码中界定匹配到的模式的引用。返回值需为一个对恢复位置的引用。
 
-`<attribute>` 可以为 `[manual]`（手动），它会触发宏的低级手动模式。
+`<attribute>` 可以为 `[manual]`，它会触发宏的低级手动模式。
 
 *例：*
 
+[source, red]
 ----
 Red []
 
@@ -143,6 +161,7 @@ print 1 + 2
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print 2 + 3 
@@ -150,15 +169,17 @@ print 2 + 3
 
 使用 *manual* 模式，同样的宏可以被写作：
 
+[source, red]
 ----
 Red []
 
 #macro integer! func [[manual] s e][s/1: s/1 + 1 next s]
 print 1 + 2
 ----
-  
+
 使用一个规则区块来创建一个可变参数函数：
 
+[source, red]
 ----
 Red []
 #macro ['max some [integer!]] func [s e][
@@ -169,22 +190,24 @@ print max 4 2 3 8 1
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print 8 
 ----
 
-== 指令（Directives）
+== 指令
 
-=== #if 
+=== #if
 
 *语法*
 
+[source, red]
 ----
 #if <expr> [<body>]
 
-<expr> : 表达式，它的最后一个值会被用作一个条件.
-<body> : 若 <expr> 为 true，将会被引入的代码.
+<expr> : 表达式，它的最后一个值会被用作一个条件。
+<body> : 若 <expr> 为 true，将会被引入的代码。
 ----
 
 *描述*
@@ -193,6 +216,7 @@ print 8
 
 *例*
 
+[source, red]
 ----
 Red []
 
@@ -201,6 +225,7 @@ Red []
 
 如果在 Windows 下运行，结果将为以下代码：
 
+[source, red]
 ----
 Red []
 
@@ -209,12 +234,14 @@ print "OS is Windows"
 
 否则结果将仅为：
 
+[source, red]
 ----
 Red []
 ----
 
 也可以使用 `#do` 指令定义你自己的单词，它能用在之后的条件表达式当中：
 
+[source, red]
 ----
 Red []
 
@@ -225,6 +252,7 @@ Red []
 
 结果将为：
 
+[source, red]
 ----
 Red []
 
@@ -235,12 +263,13 @@ print "running in debug mode"
 
 *语法*
 
+[source, red]
 ----
 #either <expr> [<true>][<false>]
 
-<expr>  : 表达式，它的最后一个值会被用作一个条件.
-<true>  : 若 <expr> 为 true，将会被引入的代码.
-<false> : 若 <expr> 为 false，将会被引入的代码.
+<expr>  : 表达式，它的最后一个值会被用作一个条件。
+<true>  : 若 <expr> 为 true，将会被引入的代码。
+<false> : 若 <expr> 为 false，将会被引入的代码。
 ----
 
 *描述*
@@ -249,6 +278,7 @@ print "running in debug mode"
 
 *例*
 
+[source, red]
 ----
 Red []
 
@@ -257,6 +287,7 @@ print #either config/OS = 'Windows ["Windows"]["Unix"]
 
 如果在 Windows 下运行，结果将为以下代码：
 
+[source, red]
 ----
 Red []
 
@@ -265,6 +296,7 @@ print "Windows"
 
 否则结果将为：
 
+[source, red]
 ----
 Red []
 
@@ -275,13 +307,14 @@ print "Unix"
 
 *语法*
 
+[source, red]
 ----
 #switch <expr> [<value1> [<case1>] <value2> [<case2>] ...]
 #switch <expr> [<value1> [<case1>] <value2> [<case2>] ... #default [<default>]]
 
-<valueN>  : 要匹配的值.
-<caseN>   : 若最后一个测试过的值匹配，将会被引入的代码.
-<default> : 若没有其他值是匹配的，将会被引入的代码.
+<valueN>  : 要匹配的值。
+<caseN>   : 若最后一个测试过的值匹配，将会被引入的代码。
+<default> : 若没有其他值是匹配的，将会被引入的代码。
 ----
 
 *描述*
@@ -290,6 +323,7 @@ print "Unix"
 
 *例*
 
+[source, red]
 ----
 Red []
 
@@ -302,6 +336,7 @@ print #switch config/OS [
 
 如果在 Windows 下运行，结果将为：
 
+[source, red]
 ----
 Red []
 
@@ -312,11 +347,12 @@ print "Windows"
 
 *语法*
 
+[source, red]
 ----
 #case [<expr1> [<case1>] <expr2> [<case2>] ...]
 
-<exprN> : 条件表达式.
-<caseN> : 若最后一个条件表达式为 true，将会被引入的代码.
+<exprN> : 条件表达式。
+<caseN> : 若最后一个条件表达式为 true，将会被引入的代码。
 ----
 
 *描述*
@@ -325,6 +361,7 @@ print "Windows"
 
 *例*
 
+[source, red]
 ----
 Red []
 
@@ -339,6 +376,7 @@ print #case [
 
 结果将为：
 
+[source, red]
 ----
 Red []
 
@@ -349,10 +387,11 @@ print "Medium"
 
 *语法*
 
+[source, red]
 ----
 #include <file>
 
-<file> : 要引入的 Red 文件 (file!).
+<file> : 要引入的 Red 文件 (file!)。
 ----
 
 *描述*
@@ -363,31 +402,34 @@ print "Medium"
 
 *语法*
 
+[source, red]
 ----
 #do [<body>]
 #do keep [<body>]
 
-<body> : 任意 Red 代码.
+<body> : 任意 Red 代码。
 ----
 
 *描述*
 
-在隐藏的语境中对 body 区块进行求值。如果使用了 `keep`，则将指令和参数替换为 `body` 执行的结果。
+在隐藏的语境中对 `body` 区块进行求值。如果使用了 `keep`，则将指令和参数替换为 `body` 执行的结果。
 
 *例*
 
+[source, red]
 ----
 Red []
 
 #do [a: 1]
 
 print ["2 + 3 =" #do keep [2 + 3]]
-    
+
 #if a < 0 [print "negative"]
 ----
 
 结果将为：
 
+[source, red]
 ----
 Red []
 
@@ -398,14 +440,15 @@ print ["2 + 3 =" 5]
 
 *语法*
 
+[source, red]
 ----
 #macro <name> func <spec> <body>
 #macro <pattern> func <spec> <body>
 
-<name>    : 宏函数的名称 (set-word!).
-<pattern> : 用于触发宏的匹配规则 (block!, word!, lit-word!).
-<spec>    : 宏函数的规格区块.
-<body>    : 宏函数的主体区块.
+<name>    : 宏函数的名称 (set-word!)。
+<pattern> : 用于触发宏的匹配规则 (block!, word!, lit-word!)。
+<spec>    : 宏函数的规格区块。
+<body>    : 宏函数的主体区块。
 ----
 
 *描述*
@@ -414,9 +457,9 @@ print ["2 + 3 =" 5]
 
 对于命名宏，规格区块可以声明任意所需数量的参数。主体需要返回一个用于替换宏调用及其参数的值，返回一个空区块将仅删除宏调用及其参数。
 
-对于模式匹配宏，规格区块必须只声明 **两个** 参数：匹配到的模式的起始引用和结束引用。按照惯例，参数名称为：`func [start end]`，或较短的格式 `func [s e]`。默认情况下，主体需要返回一个用于替换匹配到的模式的值，返回一个空区块将仅删除匹配到的模式。
+对于模式匹配宏，规格区块必须只声明**两个**参数：匹配到的模式的起始引用和结束引用。按照惯例，参数名称为：`func [start end]`，或较短的格式 `func [s e]`。默认情况下，主体需要返回一个用于替换匹配到的模式的值，返回一个空区块将仅删除匹配到的模式。
  
-还有一个 *手动* 模式可用于模式匹配宏，可以通过在函数 *spec* 区块中放一个 `[manual]` 特性来设置：`func [[manual] start end]`。这种手动模式需要宏返回恢复位置（而不是一个替换值）。如果它需要 *重新处理* 一个被替换过的模式，那么要返回的值为 `start`。如果它需要 *跳过* 匹配到的该模式，那么要返回的值为 `end`。它也能返回其他位置，这取决于该宏要达成的转换，以及你想部分地或全部地重新处理替换值的需求。
+还有一个**手动**模式可用于模式匹配宏，可以通过在函数 *spec* 区块中放一个 `[manual]` 特性来设置：`func [[manual] start end]`。这种手动模式需要宏返回恢复位置（而不是一个替换值）。如果它需要**重新处理**一个被替换过的模式，那么要返回的值为 `start`。如果它需要**跳过**匹配到的该模式，那么要返回的值为 `end`。它也能返回其他位置，这取决于该宏要达成的转换，以及你想部分地或全部地重新处理替换值的需求。
 
 一个模式匹配宏会接收：
 
@@ -426,6 +469,7 @@ print ["2 + 3 =" 5]
 
 *例*
 
+[source, red]
 ----
 Red []
 #macro pow2: func [n][to integer! n ** 2]
@@ -435,6 +479,7 @@ print pow2 3 + pow2 4 = pow2 5
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print 100
@@ -443,6 +488,7 @@ print 9 + 16 = 25
 
 模式匹配宏例：
 
+[source, red]
 ----
 Red []
 #macro [number! '+ number! '= number!] func [s e][
@@ -454,6 +500,7 @@ print 9 + 16 = 25
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print true
@@ -461,6 +508,7 @@ print true
 
 一个手动模式的模式匹配宏：
 
+[source, red]
 ----
 Red []
 #macro ['sqrt number!] func [[manual] s e][
@@ -480,6 +528,7 @@ print sqrt -4
 
 将会输出：
 
+[source, red]
 ----
 *** SQRT Error: no negative number allowed 
 *** At: sqrt -4
@@ -490,10 +539,11 @@ print sqrt -4
 
 *语法*
 
+[source, red]
 ----
 #local [<body>]
 
-<body> : 包含局部宏定义的任意 Red 代码.
+<body> : 包含局部宏定义的任意 Red 代码。
 ----
 
 *描述*
@@ -502,6 +552,7 @@ print sqrt -4
 
 *例*
 
+[source, red]
 ----
 Red []
 print 1.0
@@ -514,6 +565,7 @@ print 2.0
 
 结果将为：
 
+[source, red]
 ----
 Red []
 print 1.0
@@ -525,6 +577,7 @@ print 2.0
 
 *语法*
 
+[source, red]
 ----
 #reset
 ----
@@ -537,6 +590,7 @@ print 2.0
 
 *语法*
 
+[source, red]
 ----
 #process [on | off]
 ----
@@ -549,6 +603,7 @@ print 2.0
 
 *例*
 
+[source, red]
 ----
 Red []
 
@@ -560,6 +615,7 @@ foreach d [#if #either #switch #case][probe d]
 
 结果将为：
 
+[source, red]
 ----
 Red []
 
@@ -571,6 +627,7 @@ foreach d [#if #either #switch #case][probe d]
 
 *语法*
 
+[source, red]
 ----
 #trace [on | off]
 ----
@@ -587,11 +644,12 @@ Red 预处理器也可以在运行时工作，以便也能够从解释器中使�
 
 *语法*
 
+[source, red]
 ----
 expand-directives [<body>]
 expand-directives/clean [<body>]
 
-<body> : 含有预处理指令的任意 Red 代码.
+<body> : 含有预处理指令的任意 Red 代码。
 ----
 
 *描述*
@@ -600,12 +658,14 @@ expand-directives/clean [<body>]
 
 *例*
 
+[source, red]
 ----
 expand-directives [print #either config/OS = 'Windows ["Windows"]["Unix"]]
 ----
 
 在 Windows 平台上会返回：
 
+[source, red]
 ----
 [print "Windows"]
 ----
