@@ -50,7 +50,10 @@ triangle <point> <point> <point>
 <point> : 三角形顶点的坐标 (pair!)。
 ----
 
-NOTE: 顶点是两条线交汇的地方，是边相交的点。
+[NOTE, caption=注意]
+====
+顶点是两条线交汇的地方，是边相交的点。
+====
 
 *描述*
 
@@ -124,7 +127,10 @@ ellipse <top-left> <size>
 
 由指定的包围盒绘制一个椭圆，`size` 参数代表于椭圆的 X 和 Y 直径。
 
-NOTE: 与 `circle` 命令相比，`ellipse` 提供了一种更紧凑、面向包围盒的方式来指定一个圆/椭圆。
+[NOTE, caption=注意]
+====
+与 `circle` 命令相比，`ellipse` 提供了一种更紧凑、面向包围盒的方式来指定一个圆/椭圆。
+====
 
 === `arc`
 
@@ -185,7 +191,10 @@ spline <point> <point> ... closed
 
 由一组点的序列绘制一个 B 样条曲线，需要至少 3 个点来生成样条曲线。可选的 `closed` 关键字将绘制一个从终点到起点的额外的线段，用来闭合这个样条曲线。
 
-NOTE: 允许只用2个点，但它们只会生成一条直线。
+[NOTE, caption=注意]
+====
+允许只用2个点，但它们只会生成一条直线。
+====
 
 === `image`
 
@@ -215,7 +224,7 @@ image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> crop <
 
 使用提供的位置和宽度信息描画一个图像。如果图像没有提供定位信息，那么图像会被画在 `0x0` 坐标上。可选提供一个颜色值用于指定透明度。
 
-[NOTE]
+[NOTE, caption=注意]
 ====
 * 四个点的模式尚未实现，它将允许用 4 个任意摆放的边来拉伸图像。
 * `border`（边框）可选模式尚未实现
@@ -237,7 +246,10 @@ text <position> <string>
 
 使用当前字体在提供的坐标处打印文本字符串。 
 
-NOTE: 如果没有选择字体或字体颜色设置为 `none`，则用画笔颜色代替。
+[NOTE, caption=注意]
+====
+如果没有选择字体或字体颜色设置为 `none`，则用画笔颜色代替。
+====
 
 === `font`
 
@@ -567,7 +579,10 @@ line-join <mode>
 
 image::../images/line-join.png[Line-join,align="center"]
 
-NOTE: `miter-bevel` 模式将根据斜角长度自动选择其中一个接合模式（详情参考link:https://msdn.microsoft.com/en-us/library/windows/desktop/ms534148%28v=vs.85%29.aspx[此页面]）。
+[NOTE, caption=注意]
+====
+`miter-bevel` 模式将根据斜角长度自动选择其中一个接合模式（详情参考link:https://msdn.microsoft.com/en-us/library/windows/desktop/ms534148%28v=vs.85%29.aspx[此页面]）。
+====
 
 === `line-cap`
 
@@ -605,7 +620,10 @@ anti-alias <mode>
 
 为后续的 Draw 命令启用/关闭反锯齿模式。
 
-NOTE: 反锯齿可以提供更好的视觉渲染，但会降低性能。
+[NOTE, caption=注意]
+====
+反锯齿可以提供更好的视觉渲染，但会降低性能。
+====
 
 === `matrix`
 
@@ -867,7 +885,10 @@ shape [<commands>]
 * 生成的形状可以传到 `fill-pen` 以进行简单的或复杂的填充。
 * 坐标可以是绝对的（像在 Draw 中）或相对于最后的画笔位置。
 
-NOTE: 所有绘图命令都默认使用绝对坐标，使用原词版本的命令的话会切换成相对坐标的命令。
+[NOTE, caption=注意]
+====
+所有绘图命令都默认使用绝对坐标，使用原词版本的命令的话会切换成相对坐标的命令。
+====
 
 === `move`
 
@@ -954,7 +975,10 @@ large      : （可选）产生一个膨胀的圆弧（伴随着 'sweep 选项�
 
 从当前的画笔位置开始，用一组点的序列绘制平滑三次贝塞尔曲线。需要至少 2 个点才能产生曲线（第一个点为隐含的起点）。
 
-NOTE: 摘自 http://www.w3.org/TR/SVG11/paths.html
+[NOTE, caption=注意]
+====
+摘自 http://www.w3.org/TR/SVG11/paths.html
+====
 
 "`第一个控制点被认为是在前一个命令的第二个控制点相对于当前点的反演。（如果之前没有曲线命令，则第一个控制点为当前点）`"
 
@@ -990,7 +1014,10 @@ NOTE: 摘自 http://www.w3.org/TR/SVG11/paths.html
 
 从当前画笔位置到指定的终点绘制平滑二次贝塞尔曲线。
 
-NOTE: 参照：http://www.w3.org/TR/SVG11/paths.html
+[NOTE, caption=注意]
+====
+参照：http://www.w3.org/TR/SVG11/paths.html
+====
 
 === `hline`
 
@@ -1071,7 +1098,10 @@ NOTE: 参照：http://www.w3.org/TR/SVG11/paths.html
 
 在 Draw 代码中，设词可以放在命令**之间**，用来记录在 Draw 区块中当前的位置，并能够在以后轻松地访问。
 
-NOTE: 如果设词之前的 Draw 区块长度被改变了，原有的位置会随之改变，所以设词不再会指向同一引用。
+[NOTE, caption=注意]
+====
+如果设词之前的 Draw 区块长度被改变了，原有的位置会随之改变，所以设词不再会指向同一引用。
+====
 
 == `draw` 函数
 
@@ -1135,7 +1165,10 @@ fill-pen diamond <grad-offset> <grad-focal> <grad-radius>
 
 image::../images/grad-pen.png[Grad-pen,align="center"]
 
-NOTE: 渐变可以由多达 256 种颜色定义。
+[NOTE, caption=注意]
+====
+渐变可以由多达 256 种颜色定义。
+====
 
 == 图形源代码
 
