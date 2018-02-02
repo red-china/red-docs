@@ -7,7 +7,7 @@
 
 == 摘要
 
-Draw 是 Red 语言的一个方言（DSL），它提供了一个简单、声明式的方式来指定 2D 绘图操作，这样的操作表示为有序命令的列表（用里面放着值的区块）, 可以在运行时自由地构造和修改。
+Draw 是 Red 语言的一个方言（DSL），它提供了一个简单、声明式的方式来指定 2D 绘图操作，这样的操作表示为有序命令的列表（用内含值的区块）, 可以在运行时自由地构造和修改。
 
 Draw 区块可以使用 `draw` 函数直接渲染在图像之上，或在 View 元件内使用 `draw` 特征渲染（参照 link:view.adoc[View 文档]）。
 
@@ -17,8 +17,8 @@ Draw 区块可以使用 `draw` 函数直接渲染在图像之上，或在 View �
 
 大多数 Draw 命令需要指定坐标，它使用的二维坐标系统为：
 
-* x 轴：在显示器上从左到右增加。
-* y 轴：在显示器上从上到下增加。
+* X 轴：在显示器上从左到右增加。
+* Y 轴：在显示器上从上到下增加。
 
 一些绘图命令需要指定长度，长度以像素为单位。
 
@@ -32,7 +32,7 @@ image::../images/coord-system.png[Coord-system,align="center"]
 ----
 line <point> <point> ...
 
-<point> : 点的坐标（pair!）。
+<point> : 点的坐标 (pair!)。
 ----
 
 *描述*
@@ -47,7 +47,7 @@ line <point> <point> ...
 ----
 triangle <point> <point> <point>
 
-<point> : 三角形顶点的坐标（pair!）。
+<point> : 三角形顶点的坐标 (pair!)。
 ----
 
 NOTE: 顶点是两条线交汇的地方，是边相交的点。
@@ -65,9 +65,9 @@ NOTE: 顶点是两条线交汇的地方，是边相交的点。
 box <top-left> <bottom-right>
 box <top-left> <bottom-right> <corner>
 
-<top-left>     : 矩形左上角的坐标（pair!）。
-<bottom-right> : 矩形右下角的坐标（pair!）。
-<corner>       : （可选）用来画圆角的圆弧的半径（integer!）。
+<top-left>     : 矩形左上角的坐标 (pair!)。
+<bottom-right> : 矩形右下角的坐标 (pair!)。
+<corner>       : （可选）用来画圆角的圆弧的半径 (integer!)。
 ----
 
 *描述*
@@ -82,7 +82,7 @@ box <top-left> <bottom-right> <corner>
 ----
 polygon <point> <point> ...
 
-<point> : 顶点坐标（pair!）。
+<point> : 顶点坐标 (pair!)。
 ----
 
 *描述*
@@ -98,10 +98,10 @@ polygon <point> <point> ...
 circle <center> <radius>
 circle <center> <radius-x> <radius-y>
 
-<center>   : 圆的圆心坐标（pair!）。
-<radius>   : 圆的半径（integer! float!）。
-<radius-x> :（椭圆模式）沿 X 轴的圆的半径（integer! float!）。
-<radius-y> :（椭圆模式）沿 Y 轴的圆的半径（integer! float!）。
+<center>   : 圆的圆心坐标 (pair!)。
+<radius>   : 圆的半径 (integer! float!)。
+<radius-x> :（椭圆模式）沿 X 轴的圆的半径 (integer! float!)。
+<radius-y> :（椭圆模式）沿 Y 轴的圆的半径 (integer! float!)。
 ----
 
 *描述*
@@ -116,8 +116,8 @@ circle <center> <radius-x> <radius-y>
 ----
 ellipse <top-left> <size>
 
-<top-left> : 椭圆的包围盒的左上角的点的坐标（pair!）。
-<size>     : 包围盒的大小（pair!）。
+<top-left> : 椭圆的包围盒的左上角的点的坐标 (pair!)。
+<size>     : 包围盒的大小 (pair!)。
 ----
 
 *描述*
@@ -135,10 +135,10 @@ NOTE: 与 `circle` 命令相比，`ellipse` 提供了一种更紧凑、面向包
 arc <center> <radius> <begin> <sweep>
 arc <center> <radius> <begin> <sweep> closed
 
-<center> : 圆的圆心的坐标（pair!）。
-<radius> : 圆的半径（pair!）。
-<begin>  : 起始角，以角度为单位（integer!）。
-<sweep>  : 圆弧的起点和终点之间的角，以角度为单位（integer!）。
+<center> : 圆的圆心的坐标 (pair!)。
+<radius> : 圆的半径 (pair!)。
+<begin>  : 起始角，以角度为单位 (integer!)。
+<sweep>  : 圆弧的起点和终点之间的角，以角度为单位 (integer!)。
 ----
 
 *描述*
@@ -154,10 +154,10 @@ arc <center> <radius> <begin> <sweep> closed
 curve <end-A> <control-A> <end-B>
 curve <end-A> <control-A> <control-B> <end-B>
 
-<end-A>     : 端点 A（pair!）。
-<control-A> : 控制点 A（pair!）。
-<control-B> : 控制点 B（pair!）。
-<end-B>     : 端点 B（pair!）。
+<end-A>     : 端点 A (pair!)。
+<control-A> : 控制点 A (pair!)。
+<control-B> : 控制点 B (pair!)。
+<end-B>     : 端点 B (pair!)。
 ----
 
 *描述*
@@ -178,7 +178,7 @@ curve <end-A> <control-A> <control-B> <end-B>
 spline <point> <point> ...
 spline <point> <point> ... closed
 
-<point> : 控制点（pair!）。
+<point> : 控制点 (pair!)。
 ----
 
 *描述*
@@ -201,14 +201,14 @@ image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color>
 image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> border
 image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> crop <offset> <size>
 
-<image>        : 用来显示的图像（image! word!）。
-<top-left>     : （可选）图像左上角的坐标（pair!）。
-<top-right>    : （可选）图像右上角的坐标（pair!）。
-<bottom-left>  : （可选）图像左下角的坐标（pair!）。
-<bottom-right> : （可选）图像右下角的坐标（pair!）。
-<color>        : （可选）用来使其透明的基本色（tuple! word!）。
-<offset>       : （可选）开始裁剪的位置（pair!）。
-<size>         : （可选）裁剪的尺寸（pair!）。
+<image>        : 用来显示的图像 (image! word!)。
+<top-left>     : （可选）图像左上角的坐标 (pair!)。
+<top-right>    : （可选）图像右上角的坐标 (pair!)。
+<bottom-left>  : （可选）图像左下角的坐标 (pair!)。
+<bottom-right> : （可选）图像右下角的坐标 (pair!)。
+<color>        : （可选）用来使其透明的基本色 (tuple! word!)。
+<offset>       : （可选）开始裁剪的位置 (pair!)。
+<size>         : （可选）裁剪的尺寸 (pair!)。
 ----
 
 *描述*
@@ -228,8 +228,8 @@ image <image> <top-left> <top-right> <bottom-left> <bottom-right> <color> crop <
 ----
 text <position> <string>
 
-<position> : 这个字符串会被打印在的坐标（pair!）。
-<string>   : 要打印的字符串（string!）。
+<position> : 这个字符串会被打印在的坐标 (pair!)。
+<string>   : 要打印的字符串 (string!)。
 ----
 
 *描述*
@@ -246,7 +246,7 @@ NOTE: 如果没有选择字体或字体颜色设置为 `none`，则用画笔颜�
 ----
 font <font>
 
-<font> : 要使用的新的字体对象（object! word!）。
+<font> : 要使用的新的字体对象 (object! word!)。
 ----
 
 *描述*
@@ -265,7 +265,7 @@ font <font>
 ----
 pen <color>
 
-<color> : 用于绘制的新颜色（tuple! word!）。
+<color> : 用于绘制的新颜色 (tuple! word!)。
 ----
 
 *描述*
@@ -280,11 +280,11 @@ pen <color>
 ----
 pen linear <color1> <offset> ... <colorN> <offset> <start> <end> <spread>
 
-<color1/N> : 渐变颜色的列表（tuple! word!）。
-<offset>   : （可选）渐变颜色的偏移（float!）。
+<color1/N> : 渐变颜色的列表 (tuple! word!)。
+<offset>   : （可选）渐变颜色的偏移 (float!)。
 <start>    : （可选）起点（pair!）。 
-<end>      : （可选，除非有 <start>）终点（pair!）。
-<spread>   : （可选）传播方法（word!）。
+<end>      : （可选，除非有 <start>）终点 (pair!)。
+<spread>   : （可选）传播方法 (word!)。
 ----
 
 *描述*
@@ -301,12 +301,12 @@ pen linear <color1> <offset> ... <colorN> <offset> <start> <end> <spread>
 ----
 pen radial <color1> <offset> ... <colorN> <offset> <center> <radius> <focal> <spread>
 
-<color1/N> : 渐变颜色的列表（tuple! word!）。
-<offset>   : （可选）渐变颜色的偏移（float!）。
-<center>   : （可选）圆心（pair!）。
-<radius>   : （可选，除非有 <center>）用于沿着描画的圆的半径（integer! float!）。
-<focal>    : （可选）焦点（pair!）。
-<spread>   : （可选）传播方法（word!）。
+<color1/N> : 渐变颜色的列表 (tuple! word!)。
+<offset>   : （可选）渐变颜色的偏移 (float!)。
+<center>   : （可选）圆心 (pair!)。
+<radius>   : （可选，除非有 <center>）用于沿着描画的圆的半径 (integer! float!)。
+<focal>    : （可选）焦点 (pair!)。
+<spread>   : （可选）传播方法 (word!)。
 ----
 
 *描述*
@@ -323,12 +323,12 @@ pen radial <color1> <offset> ... <colorN> <offset> <center> <radius> <focal> <sp
 ----
 pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal> <spread>
 
-<color1/N> : 渐变颜色的列表（tuple! word!）。
-<offset>   : （可选）渐变颜色的偏移（float!）。
-<upper>    : （可选）矩形的上角落（pair!）。
-<lower>    : （可选，除非有 <upper>）矩形的下角落（pair!）。
-<focal>    : （可选）焦点（pair!）。
-<spread>   : （可选）传播方式（word!）。
+<color1/N> : 渐变颜色的列表 (tuple! word!)。
+<offset>   : （可选）渐变颜色的偏移 (float!)。
+<upper>    : （可选）矩形的上角落 (pair!)。
+<lower>    : （可选，除非有 <upper>）矩形的下角落 (pair!)。
+<focal>    : （可选）焦点 (pair!)。
+<spread>   : （可选）传播方式 (word!)。
 ----
 
 *描述*
@@ -345,10 +345,10 @@ pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal> <spr
 ----
 pen pattern <size> <start> <end> <mode> [<commands>]
 
-<size>     : 绘制 <commands> 的内部图像的大小（pair!）。
-<start>    : （可选）内部图像中裁剪部分的上角落（pair!）。
-<end>      : （可选）内部图像中裁剪部分的下角落（pair!）。
-<mode>     : （可选）平铺模式（word!）。
+<size>     : 绘制 <commands> 的内部图像的大小 (pair!)。
+<start>    : （可选）内部图像中裁剪部分的上角落 (pair!)。
+<end>      : （可选）内部图像中裁剪部分的下角落 (pair!)。
+<mode>     : （可选）平铺模式 (word!)。
 <commands> : 定义图案的 Draw 命令区块。
 ----
 
@@ -358,7 +358,7 @@ pen pattern <size> <start> <end> <mode> [<commands>]
 
 默认起点为 `0x0`，终点为 `<size>`。
 
-==== 位图画笔）
+==== 位图画笔
 
 *语法*
 
@@ -366,10 +366,10 @@ pen pattern <size> <start> <end> <mode> [<commands>]
 ----
 pen bitmap  <image> <start> <end> <mode>
 
-<image> : 用于平铺的图像（image!）。
-<start> : （可选）图像裁剪部分的上角落（pair!）。
-<end>   : （可选）图像裁剪部分的下角落（pair!）。
-<mode>  : （可选）平铺模式（word!）。
+<image> : 用于平铺的图像 (image!)。
+<start> : （可选）图像裁剪部分的上角落 (pair!)。
+<end>   : （可选）图像裁剪部分的下角落 (pair!)。
+<mode>  : （可选）平铺模式 (word!)。
 ----
 
 *描述*
@@ -403,7 +403,7 @@ pen off
 ----
 fill-pen <color>
 
-<color> : 用于填充的新颜色（tuple! word!）。
+<color> : 用于填充的新颜色 (tuple! word!)。
 ----
 
 *描述*
@@ -418,11 +418,11 @@ fill-pen <color>
 ----
 fill-pen linear <color1> <offset> ... <colorN> <offset> <start> <end> <spread>
 
-<color1/N> : 渐变颜色的列表（tuple! word!）。
-<offset>   : （可选）渐变色偏移（float!）。
+<color1/N> : 渐变颜色的列表 (tuple! word!)。
+<offset>   : （可选）渐变色偏移 (float!)。
 <start>    : （可选）起点（pair!）。 
-<end>      : （可选，除非有 <start>）终点（pair!）。
-<spread>   : （可选）传播方法（word!）。
+<end>      : （可选，除非有 <start>）终点 (pair!)。
+<spread>   : （可选）传播方法 (word!)。
 ----
 
 *描述*
@@ -439,12 +439,12 @@ fill-pen linear <color1> <offset> ... <colorN> <offset> <start> <end> <spread>
 ----
 fill-pen radial <color1> <offset> ... <colorN> <offset> <center> <radius> <focal> <spread>
 
-<color1/N> : 渐变颜色的列表（tuple! word!）。
-<offset>   : （可选）渐变色偏移（float!）。
-<center>   : （可选）圆心（pair!）。
-<radius>   : （可选，除非有 <center>）用于沿着描画的圆的半径（integer! float!）。
-<focal>    : （可选）焦点（pair!）。
-<spread>   : （可选）传播方法（word!）。
+<color1/N> : 渐变颜色的列表 (tuple! word!)。
+<offset>   : （可选）渐变色偏移 (float!)。
+<center>   : （可选）圆心 (pair!)。
+<radius>   : （可选，除非有 <center>）用于沿着描画的圆的半径 (integer! float!)。
+<focal>    : （可选）焦点 (pair!)。
+<spread>   : （可选）传播方法 (word!)。
 ----
 
 *描述*
@@ -461,12 +461,12 @@ fill-pen radial <color1> <offset> ... <colorN> <offset> <center> <radius> <focal
 ----
 fill-pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal> <spread>
 
-<color1/N> : 渐变颜色的列表（tuple! word!）。
-<offset>   : （可选）渐变颜色的偏移（float!）。
+<color1/N> : 渐变颜色的列表 (tuple! word!)。
+<offset>   : （可选）渐变颜色的偏移 (float!)。
 <upper>    : （可选）矩形的上角落。（pair!）。 
-<lower>    : （可选，除非有 <upper>）矩形的下角落（pair!）。
-<focal>    : （可选）焦点（pair!）。
-<spread>   : （可选）传播方式（word!）。
+<lower>    : （可选，除非有 <upper>）矩形的下角落 (pair!)。
+<focal>    : （可选）焦点 (pair!)。
+<spread>   : （可选）传播方式 (word!)。
 ----
 
 *描述*
@@ -483,10 +483,10 @@ fill-pen diamond <color1> <offset> ... <colorN> <offset> <upper> <lower> <focal>
 ----
 fill-pen pattern <size> <start> <end> <mode> [<commands>]
 
-<size>     : 绘制 <commands> 的内部图像的大小（pair!）。
-<start>    : （可选）内部图像中裁剪部分的上角落（pair!）。
-<end>      : （可选）内部图像中裁剪部分的下角落（pair!）。
-<mode>     : （可选）平铺模式（word!）。
+<size>     : 绘制 <commands> 的内部图像的大小 (pair!)。
+<start>    : （可选）内部图像中裁剪部分的上角落 (pair!)。
+<end>      : （可选）内部图像中裁剪部分的下角落 (pair!)。
+<mode>     : （可选）平铺模式 (word!)。
 <commands> : 定义图案的 Draw 命令区块。
 ----
 
@@ -504,10 +504,10 @@ fill-pen pattern <size> <start> <end> <mode> [<commands>]
 ----
 fill-pen bitmap  <image> <start> <end> <mode>
 
-<image> : 用于平铺的图像（image!）。
-<start> : （可选）图像裁剪部分的上角落（pair!）。
-<end>   : （可选）图像裁剪部分的下角落（pair!）。
-<mode>  : （可选）平铺模式（word!）。
+<image> : 用于平铺的图像 (image!)。
+<start> : （可选）图像裁剪部分的上角落 (pair!)。
+<end>   : （可选）图像裁剪部分的下角落 (pair!)。
+<mode>  : （可选）平铺模式 (word!)。
 ----
 
 *描述*
@@ -537,7 +537,7 @@ fill-pen off
 ----
 line-width <value>
 
-<value> : 新的线条宽度，以像素为单位（integer!）。
+<value> : 新的线条宽度，以像素为单位 (integer!)。
 ----
 
 *描述*
@@ -552,7 +552,7 @@ line-width <value>
 ----
 line-join <mode>
 
-<mode> : 新的线条接合模式（word!）。
+<mode> : 新的线条接合模式 (word!)。
 ----
 
 *描述*
@@ -576,7 +576,7 @@ NOTE: `miter-bevel` 模式将根据斜角长度自动选择其中一个接合模
 ----
 line-cap <mode>
 
-<mode> : 新的线条端点模式（word!）。
+<mode> : 新的线条端点模式 (word!)。
 ----
 
 *描述*
@@ -616,14 +616,14 @@ matrix <matrix-setup>
 matrix 'pen <matrix-setup>
 matrix 'fill-pen <matrix-setup>
 
-<matrix-setup> : 前/后乘以当前矩阵的矩阵（block!）。
+<matrix-setup> : 前/后乘以当前矩阵的矩阵 (block!)。
 ----
 
 *描述*
 
 执行矩阵乘法。当前的变换矩阵前会被这个矩阵前乘。
 
-`matrix-setup` 区块里必须有 6 个数值（number!）。
+`matrix-setup` 区块里必须有 6 个数值 (number!)。
 
 [source, red]
 ----
@@ -648,7 +648,7 @@ matrix [a b c d e f]
 ----
 matrix-order <mode>
 
-<mode> : 'append 或 'prepend（word!）。
+<mode> : 'append 或 'prepend (word!)。
 ----
 
 *描述*
@@ -703,7 +703,7 @@ invert-matrix 'fill-pen
 ----
 push <draw-block>
 
-<draw-block> : Draw 命令区块（block!）。
+<draw-block> : Draw 命令区块 (block!)。
 ----
 
 *描述*
@@ -720,8 +720,8 @@ rotate <angle> <center> [<commands>]
 rotate 'pen <angle>
 rotate 'fill-pen <angle>
 
-<angle>    : 以角度为单位的角（integer! float!）。
-<center>   : （可选）旋转中心（pair!）。
+<angle>    : 以角度为单位的角 (integer! float!)。
+<center>   : （可选）旋转中心 (pair!)。
 <commands> : （可选）Draw 方言命令。
 ----
 
@@ -741,8 +741,8 @@ scale <scale-x> <scale-y> [<commands>]
 scale 'pen <scale-x> <scale-y>
 scale 'fill-pen <scale-x> <scale-y>
 
-<scale-x>  : X 缩放值（number!）。
-<scale-y>  : Y 缩放值（number!）。
+<scale-x>  : X 缩放值 (number!)。
+<scale-y>  : Y 缩放值 (number!)。
 <commands> : （可选）Draw 方言命令。
 ----
 
@@ -762,7 +762,7 @@ translate <offset> [<commands>]
 translate 'pen <offset>
 translate 'fill-pen <offset>
 
-<offset>   : 平移量（pair!）。
+<offset>   : 平移量 (pair!)。
 <commands> : （可选）Draw 方言命令。
 ----
 
@@ -782,8 +782,8 @@ skew <skew-x> <skew-y> [<commands>]
 skew 'pen <skew-x> <skew-y>
 skew 'fill-pen <skew-x> <skew-y>
 
-<skew-x>   : 沿 x 轴的倾斜度，以角度为单位（integer! float!）。
-<skew-y>   : （可选）沿 y 轴的倾斜度，以角度为单位（integer! float!）。
+<skew-x>   : 沿 x 轴的倾斜度，以角度为单位 (integer! float!)。
+<skew-y>   : （可选）沿 y 轴的倾斜度，以角度为单位 (integer! float!)。
 <commands> : （可选）Draw 方言命令。
 ----
 
@@ -803,11 +803,11 @@ transform <angle> <center> <scale-x> <scale-y> <translation> [<commands>]
 transform 'pen <angle> <center> <scale-x> <scale-y> <translation>
 transform 'fill-pen <angle> <center> <scale-x> <scale-y> <translation>
 
-<angle>       : 旋转角，以度为单位（integer! float!）。
-<center>      : （可选）旋转中心（pair!）。
-<scale-x>     : X 缩放值（number!）。
-<scale-y>     : Y 缩放值（number!）。
-<translation> : 平移量（pair!）。
+<angle>       : 旋转角，以度为单位 (integer! float!)。
+<center>      : （可选）旋转中心 (pair!)。
+<scale-x>     : X 缩放值 (number!)。
+<scale-y>     : Y 缩放值 (number!)。
+<translation> : 平移量 (pair!)。
 <commands>    : （可选）Draw 方言命令。
 ----
 
@@ -877,7 +877,7 @@ NOTE: 所有绘图命令都默认使用绝对坐标，使用原词版本的命�
  move <position>            （绝对）
 'move <position>            （相对）
 
-<position> : 新的画笔位置（pair!）。
+<position> : 新的画笔位置 (pair!)。
 ----
 
 *描述*
@@ -893,7 +893,7 @@ NOTE: 所有绘图命令都默认使用绝对坐标，使用原词版本的命�
  line <point> <point> ...   （绝对）
 'line <point> <point> ...   （相对）
 
-<point> : 点的坐标（pair!）。
+<point> : 点的坐标 (pair!)。
 ----
 
 *描述*
@@ -909,10 +909,10 @@ NOTE: 所有绘图命令都默认使用绝对坐标，使用原词版本的命�
  arc <end> <radius-x> <radius-y> <angle> sweep closed       （绝对）
 'arc <end> <radius-x> <radius-y> <angle> sweep closed       （相对）
 
-<end>      : 圆弧的终点（pair!）。
-<radius-x> : 沿 x 轴的圆半径（integer! float!）。
-<radius-y> : 沿 y 轴的圆半径（integer! float!）。
-<angle>    : 圆弧起点到终点之间的角，以度为单位（integer! float!）。
+<end>      : 圆弧的终点 (pair!)。
+<radius-x> : 沿 x 轴的圆半径 (integer! float!)。
+<radius-y> : 沿 y 轴的圆半径 (integer! float!)。
+<angle>    : 圆弧起点到终点之间的角，以度为单位 (integer! float!)。
 sweep      : （可选）以正角度方向绘制圆弧。
 large      : （可选）产生一个膨胀的圆弧（伴随着 'sweep 选项）。
 ----
@@ -930,7 +930,7 @@ large      : （可选）产生一个膨胀的圆弧（伴随着 'sweep 选项�
  curve <point> <point> <point> ...   （绝对）
 'curve <point> <point> <point> ...   （相对）
 
-<point> : 点的坐标（pair!）。
+<point> : 点的坐标 (pair!)。
 ----
 
 *描述*
@@ -946,7 +946,7 @@ large      : （可选）产生一个膨胀的圆弧（伴随着 'sweep 选项�
  curv <point> <point> ...   （绝对）
 'curv <point> <point> ...   （相对）
 
-<point> : 坐标点（pair!）。
+<point> : 坐标点 (pair!)。
 ----
 
 *描述*
@@ -966,7 +966,7 @@ NOTE: 摘自 http://www.w3.org/TR/SVG11/paths.html
  qcurve <point> <point> ...   （绝对）
 'qcurve <point> <point> ...   （相对）
 
-<point> : 点的坐标（pair!）。
+<point> : 点的坐标 (pair!)。
 ----
 
 *描述*
@@ -982,7 +982,7 @@ NOTE: 摘自 http://www.w3.org/TR/SVG11/paths.html
  qcurv <point>   （绝对）
 'qcurv <point>   （相对）
 
-<point> : 终点的坐标（pair!）。
+<point> : 终点的坐标 (pair!)。
 ----
 
 *描述*
@@ -1000,8 +1000,8 @@ NOTE: 参照：http://www.w3.org/TR/SVG11/paths.html
  hline <end-x>   （绝对）
 'hline <length>  （相对）
 
-<end-x>  : 沿 X 轴的终点位置（integer! float!）。
-<length> : 线段的长度（integer! float!）。
+<end-x>  : 沿 X 轴的终点位置 (integer! float!)。
+<length> : 线段的长度 (integer! float!)。
 ----
 
 *描述*
@@ -1017,8 +1017,8 @@ NOTE: 参照：http://www.w3.org/TR/SVG11/paths.html
  vline <end-y>   （绝对）
 'vline <length>  （相对）
 
-<end-y>  : 沿 Y 轴的终点位置（integer! float!）。
-<length> : 线段的长度（integer! float!）。
+<end-y>  : 沿 Y 轴的终点位置 (integer! float!)。
+<length> : 线段的长度 (integer! float!)。
 ----
 
 *描述*
@@ -1083,9 +1083,9 @@ NOTE: 如果设词之前的 Draw 区块长度被改变了，原有的位置会�
 draw <size> <spec>
 draw <image> <spec>
 
-<size>  : 新图像的大小（pair!）。
-<image> : 用作画布的图像（image!）。
-<spec>  : Draw 命令区块（block!）。
+<size>  : 新图像的大小 (pair!)。
+<image> : 用作画布的图像 (image!)。
+<spec>  : Draw 命令区块 (block!)。
 ----
 
 *描述*
@@ -1112,16 +1112,16 @@ fill-pen diamond <grad-offset> <grad-focal> <grad-radius>
          <grad-angle> <grad-scale-x> <grad-scale-y> <grad-color> <offset>
          <grad-color> <offset> ...
 
-<grad-type>      : 渐变的类型（word!）。
-<grad-offset>    : 相对于渐变渲染处的偏移量（pair!）。
-<grad-start-rng> : 渐变范围的起点（integer!）。
-<grad-stop-rng>  : 渐变范围的终点（integer!）。
-<grad-focal>     : 渐变的焦点（pair!）。
-<grad-radius>    : 渐变的半径（integer!）。
-<grad-angle>     : （可选）渐变的旋转，以角度为单位（integer! float!）。
-<grad-scale-x>   : （可选）X 缩放因子（integer! float!）。
-<grad-scale-y>   : （可选）Y 缩放因子（integer! float!）。
-<grad-color>     : 用于渐变填充的颜色（tuple! word!）。
+<grad-type>      : 渐变的类型 (word!)。
+<grad-offset>    : 相对于渐变渲染处的偏移量 (pair!)。
+<grad-start-rng> : 渐变范围的起点 (integer!)。
+<grad-stop-rng>  : 渐变范围的终点 (integer!)。
+<grad-focal>     : 渐变的焦点 (pair!)。
+<grad-radius>    : 渐变的半径 (integer!)。
+<grad-angle>     : （可选）渐变的旋转，以角度为单位 (integer! float!)。
+<grad-scale-x>   : （可选）X 缩放因子 (integer! float!)。
+<grad-scale-y>   : （可选）Y 缩放因子 (integer! float!)。
+<grad-color>     : 用于渐变填充的颜色 (tuple! word!)。
 ----
 
 *描述*
