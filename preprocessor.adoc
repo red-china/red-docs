@@ -49,11 +49,13 @@ Red/System 有它自己的link:http://static.red-lang.org/red-system-specs-light
 [TIP, caption=贴士]
 ====
 * 可以使用以下表达式打印出隐藏的语境的内容：
-        
+
+[source, red]
         #do [probe self]
-        
+
 * 当在运行时被使用的时候，隐藏的语境也可以使用以下形式直接访问：
-        
+
+[source, red]
         probe preprocessor/exec
 ====
 
@@ -76,6 +78,7 @@ Red 预处理器支持定义宏函数（简称__宏__）来实现更复杂的转
 
 这种类型的宏是高级的，预处理器负责为用户获取参数和替换返回值。典型的形式是：
 
+[source, red]
     #macro name: func [arg1 arg2... /local word1 word2...][...code...]
 
 这样定义一个宏之后，源码中每个遇到 `name` 单词的地方，都会触发以下步骤：
