@@ -34,7 +34,7 @@ Red/View (或称 View) 组件是 Red 编程语言的图形系统，其设计目�
 |`size`    | `pair!`             | 是       | 所有   | 该元件的大小。
 |`text`    | `string!`           | 否       | 所有   | 显示在该元件上的标签文本。
 |`image`   | `image!`            | 否       | 某些   | 显示在该元件背景的图片。
-|`color`   | `tuple!`            | 否       | 某些   | 该元件的背景颜色，格式为 R.G.B 或 R.G.B.A。
+|`color`   | `tuple!`            | 否       | 某些   | 该元件的背景颜色，格式为 `R.G.B` 或 `R.G.B.A`。
 |`menu`    | `block!`            | 否       | 所有   | 菜单栏或上下文菜单。
 |`data`    | `any-type!`         | 否       | 所有   | 该元件的内容数据。
 |`enabled?`| `logic!`            | 是       | 所有   | 启用或禁用在该元件上的输入事件。
@@ -100,7 +100,7 @@ Red/View (或称 View) 组件是 Red 编程语言的图形系统，其设计目�
 |`size`       | `integer!`       | 否     | 字体大小，以磅为单位。
 |`style`      | `word!`, `block!`| 否     | 样式模式或样式模式区块。
 |`angle`      | `integer!`       | 是     | 文本书写角，以角度为单位（默认为 `0`）。
-|`color`      | `tuple!`         | 是     | 文本颜色，格式为 R.G.B 或 R.G.B.A。
+|`color`      | `tuple!`         | 是     | 文本颜色，格式为 `R.G.B` 或 `R.G.B.A`。
 |`anti-alias?`| `logic!`, `word!`| 否     | 反锯齿模式（激活/非激活或特殊模式）。
 |`shadow`     | __（保留）__     | 否     | __（保留以供将来使用）__
 |`state`      | `block!`         | 否     | 内部的元件状态信息__（仅被 View 引擎使用）__。
