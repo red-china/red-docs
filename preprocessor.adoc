@@ -198,7 +198,7 @@ print 8
 
 == 指令
 
-=== #if
+=== `#if`
 
 *语法*
 
@@ -259,7 +259,7 @@ Red []
 print "running in debug mode"
 ----
 
-=== #either 
+=== `#either`
 
 *语法*
 
@@ -303,7 +303,7 @@ Red []
 print "Unix"
 ----
 
-=== #switch 
+=== `#switch`
 
 *语法*
 
@@ -343,7 +343,7 @@ Red []
 print "Windows"
 ----
 
-=== #case 
+=== `#case`
 
 *语法*
 
@@ -383,7 +383,7 @@ Red []
 print "Medium"
 ----
 
-=== #include 
+=== `#include`
 
 *语法*
 
@@ -398,7 +398,7 @@ print "Medium"
 
 在编译时被求值时，读取并将参数文件内容引入到当前位置。该文件可以引入对于当前脚本绝对或相对的路径。当被 Red 解释器运行时，该指令只是被替换为一个 `do`，不会包含进文件。
 
-=== #do 
+=== `#do`
 
 *语法*
 
@@ -436,7 +436,7 @@ Red []
 print ["2 + 3 =" 5]
 ----
 
-=== #macro
+=== `#macro`
 
 *语法*
 
@@ -535,7 +535,7 @@ print sqrt -4
 (halted)
 ----
 
-=== #local 
+=== `#local`
 
 *语法*
 
@@ -573,7 +573,7 @@ print [1 3 124]
 print 2.0
 ----
 
-=== #reset 
+=== `#reset`
 
 *语法*
 
@@ -586,7 +586,7 @@ print 2.0
 
 重置隐藏的语境，将其从所有之前定义的单词中清空，并删除所有之前定义的宏。
 
-=== #process
+=== `#process`
 
 *语法*
 
@@ -623,7 +623,7 @@ print "Conditional directives:"
 foreach d [#if #either #switch #case][probe d]
 ----
 
-=== #trace 
+=== `#trace`
 
 *语法*
 
