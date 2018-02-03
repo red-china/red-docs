@@ -797,7 +797,7 @@ on-<event> <actor>
 func [face [object!] event [event! none!]][...body...]
 ----
 
-可以从link:view.adoc#_actors[这里]找到有效的事件名称的清单。
+可以从link:view.adoc#actors[这里]找到有效的事件名称的清单。
 
 当一个区块或一个取词没有跟着任何动作器名称前缀被传递时，会按照link:https://github.com/red/red/blob/master/modules/view/styles.red[这里]的定义创建该元件类型的默认动作器。
 
