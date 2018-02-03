@@ -12,11 +12,11 @@ Red 在 0.6.0 版本引入"`响应式编程`"，以帮助减少 Red 程序的大
 
 image::react-simple.png[react-simple,align="center"]
 
-_图 A & B 展示了一个或多个响应器（作为一个响应源的对象）之间的简单关系。_
+__图 A & B 展示了一个或多个响应器（作为一个响应源的对象）之间的简单关系。__
 
 image::react-graphs.png[react-graph,align="center"]
 
-_图 C, D & E 展示了链式响应，其中某些目标自身就是响应器，这些目标建立起任意形状的关系链。_
+__图 C, D & E 展示了链式响应，其中某些目标自身就是响应器，这些目标建立起任意形状的关系链。__
 
 当源中字段的值变化时，响应是异步工作的。响应关系会被维护到使用 `react/unlink` 或 `clear-reactions` 显式销毁响应为止。
 
