@@ -824,7 +824,7 @@ panel <options> [<content>]
 * 如果方向是 `across`，则分割器表示列数。
 * 如果方向是 `below`，则分割器表示行数。
 
-=== `group-box `
+=== `group-box`
 
 *语法*
 
@@ -872,6 +872,7 @@ tab-panel <options> [<name> <body>...]
 
 *语法*
 
+[source, red]
 ----
 style <new> <old> <options>
 
