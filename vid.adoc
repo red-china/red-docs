@@ -1,258 +1,306 @@
-= Visual Interface Dialect
+= 视觉界面方言
 :imagesdir: ../images
 :toc:
 :toclevels: 3
 :toc-title: 目录
 :numbered:
 
-  
 == 概述
 
-VID代表可视界面方言。 其目的是提供一种简单的方言（DSL），用于在Red link:view.html [View]引擎之上描述图形用户界面。
+VID 一词代表可视界面方言，其目的是提供一种用于在 Red link:view.adoc[View] 引擎之上描述图形用户界面的简单的方言（DSL）。
 
-VID允许您指定要显示的每个图形组件，从而选择不同的布局方法：
+VID 允许你指定要显示的每个图形组件，还给与你不同选择的布局方法：
 
-* 水平或垂直流动
+* 水平或垂直流布局
 * 网格定位
 * 绝对定位
 
-VID将自动为您创建一个容器face，以保持您提供的face描述。 默认情况下，容器face的类型为“window”。
+VID 将自动为你创建一个容器元件以持有你提供的元件描述。默认情况下，容器元件的类型为 `window`。
 
-VID代码由`layout`函数处理（由`view`函数内部调用）。 然后将VID代码编译成一张适合直接显示的faces。
+VID 代码由 `layout` 函数处理（`view` 函数内部调用就是它），然后被编译成一棵适合用来显示的内含元件的树。
 
-注意：从Red的控制台使用`help view`和`help layout`看看如何处理一个VID块。
+[NOTE, caption=注意]
+====
+在 Red 的控制台使用 `help view` 和 `help layout` 看看如何处理 VID 区块。
+====
 
 == 代码结构
 
-典型的VID代码块具有以下结构：
+典型的 VID 代码区块具有以下结构：
 
-	[
-	    <container settings>
-	    <layout description>
-	]
+[source, red]
+    [
+        <容器设定>
+        <布局描述>
+    ]
 
-* *容器设置*: 影响容器对象的设置（可以是面板或窗口）。
+* **容器设定**：影响容器对象（可以是面板或窗口）的设定。
 
-* *布局描述*: 布局定位命令，样式定义和面部描述。
+* **布局描述**：布局定位命令、样式定义和元件描述。
 
-注意：所有部分都是可选的，没有必须在VID块中提供必需的内容。
+[NOTE, caption=注意]
+====
+所有部分都是可选的，没有必须要在 VID 区块中提供的强制性的内容。
+====
 
-== 容器设置
+== 容器设定
 
-注意：“react”关键字也可以在容器设置级别使用，除了face选项级别，请参阅其描述 << anchor:_react，there >>
+[NOTE, caption=注意]
+====
+在元件选项级别之外，`react` 关键字也可以在容器设定级别使用，参照它<< anchor:_react, 那里>>的描述。
+====
 
-=== title
+=== `title`
 
 *语法*
+
+[source, red]
 ----
 title <text>
 
-<text> : title text (string!).
+<text> : 标题文本 (string!)。
 ----
+
 *描述*
 
-设置容器face的标题文本。
+设置该容器元件的标题文本。
 
-
-=== size 
+=== `size`
 
 *语法*
+
+[source, red]
 ----
 size <value>
 
-<value> : width and height in pixels (pair!).
+<value> : 宽高，以像素为单位 (pair!)。
 ----
+
 *描述*
 
-设置容器face的大小。 如果未明确提供大小，则会自动计算容器的大小以适应其内容。
+设置该容器元件的大小。如果没有显式地提供大小，则会自动计算该容器的大小以适应其内容。
 
-
-=== backdrop 
+=== `backdrop`
 
 *语法*
+
+[source, red]
 ----
 backdrop <color>
 
-<color> : name or value of a color (word! tuple! issue!).
+<color> : 颜色的名字或值 (word! tuple! issue!)。
 ----
+
 *描述*
 
-设置容器face的背景颜色。
+设置该容器元件的背景颜色。
 
-== Layout 
+=== 动作器定义
 
-默认情况下，VID根据简单的规则将faces放置在容器face中：
+容器的动作器也可以定义在该代码区域，要定义动作器请参考 <<Actors>> 小节。
 
-* 方向可以是水平还是垂直
-* 在当前方向使用当前间距对faces定位
+== 布局
+
+默认情况下，VID 根据简单的规则将元件放置在容器元件中：
+
+* 方向可以为水平或垂直
+* 一个元件按当前的方向以当前的间隔被放置在另一个元件之后
 
 默认：
 
-* 原点: `10x10`
-* 间距: `10x10`
-* 方向: `across`
-* 对齐: `top`
+* 原点（origin）：`10x10`
+* 间距（space）：`10x10`
+* 方向（direction）：`across`
+* 对齐（alignment）：`top`
 
-这是在`across`中如何布置face：
+这是在 `across` 模式中布置元件的方式：
 
 image::across.png[across,align="center"]
 
-这是在`below`模式中布局faces（使用默认的`left`对齐方式）：
+这是在 `below` 模式中布置元件的方式（使用默认的 `left` 对齐方式）：
 
 image::below.png[below,align="center"]
 
-
-=== across 
+=== `across`
 
 *语法*
+
+[source, red]
 ----
 across <alignment>
 
-<alignment> : (optional) possible values: top | middle | bottom.
+<alignment> : （可选）可以取的值：top | middle | bottom。
 ----
+
 *描述*
 
-将布局方向设置为水平，从左到右。 可以选择提供对齐修饰符来更改行中的face的默认（`top`）对齐方式。
+将布局方向设置为水平，从左到右。可选提供对齐修饰符来更改行中默认（`top`）的元件对齐方式。
 
-=== below 
+=== `below`
 
 *语法*
+
+[source, red]
 ----
 below <alignment>
 
-<alignment> : (optional) possible values: left | center | right.
+<alignment> : （可选）可以取的值：left | center | right。
 ----
+
 *描述*
 
-将布局方向设置为垂直，从上到下。 可以选择提供对齐修饰符来更改列中默认（`left`）face对齐方式。
+将布局方向设置为垂直，从上到下。可选提供对齐修饰符来更改列中默认（`left`）的元件对齐方式。
 
-=== return 
+=== `return`
 
 *语法*
+
+[source, red]
 ----
 return <alignment>
 
-<alignment> : (optional) possible values: left | center | right | top | middle | bottom.
+<alignment> : （可选）可以取的值：left | center | right | top | middle | bottom。
 ---- 
+
 *描述*
 
-根据当前布局方向，将位置移动到下一行或多列face。 可以选择提供对齐修改器来更改行或列中face的当前对齐方式。
+根据当前布局方向将位置移动到元件的下一行或下一列。可选提供对齐修饰符来更改行中或列中元件当前的对齐方式。
 
-=== space 
+=== `space`
 
 *语法*
+
+[source, red]
 ----
 space <offset>
 
-<offset> : new spacing value (pair!).
+<offset> : 新的间距值 (pair!)。
 ----
+
 *描述*
 
-设置将用于放置它后面face的新间距偏移。
+设置将用于放置在它之后的元件的新的间距偏移。
 
-=== origin 
+=== `origin`
 
 *语法*
+
+[source, red]
 ----
 origin <offset>
 
-<offset> : new origin value (pair!).
+<offset> : 新原点的值 (pair!)。
 ----
+
 *描述*
 
-设置相对于容器face的新原点位置。
+设置相对于容器元件的新的原点的位置。
 
-=== at
+=== `at`
 
 *语法*
+
+[source, red]
 ----
 at <offset>
 
-<offset> : position of next face (pair!).
+<offset> : 下一个元件的位置 (pair!)。
 ----
+
 *描述*
 
-将下一个face放在绝对位置。 此定位模式仅影响下一个face，不会更改布局流程位置。 所以，在下一个之后，下面的face将再次被放置在布局流中之前的连续性中。
+将下一个元件放在绝对位置。该定位模式仅影响下一个元件，并不会更改布局流位置。所以，在下一个元件之后的元件将再次在布局流中跟着之前的元件被放置。
 
-=== pad 
+=== `pad`
 
 *语法*
+
+[source, red]
 ----
 pad <offset>
 
-<offset> : relative offset (pair!).
+<offset> : 相对偏移量 (pair!)。
 ----
 *描述*
 
-通过相对偏移修改布局当前位置。 同一行（或列）上的以下所有face都受到影响。
+以一个相对偏移量修改布局的当前位置，所有在同一行（或列）中的后续元件都会受到影响。
 
-=== do 
+=== `do`
 
 *语法*
+
+[source, red]
 ----
 do <body>
 
-<body> : code to evaluate (block!).
+<body> : 要求值的代码 (block!)。
 ----
+
 *描述*
 
-评估常规Red代码块最后一分钟的初始化需求。 `self`关键字可用于引用容器face（窗口或面板）。
+对内含常规 Red 代码的区块进行求值，这是用于满足在最后做初始化的需要。`body` 区块绑定在容器元件（窗口或面板）上，所以可以直接访问容器的特征。可以使用 `self` 关键字引用到容器元件。
 
-== 额外样式
+== 附加样式
 
-视图引擎提供了许多免费的小部件，VID方言通过定义附加常用的样式和关联的关键字来扩展它们。 它们可以使用与其底层面部类型相同的选项。 他们也可以使用`style`命令自由重新设计。
+视图引擎提供了许多内建部件，VID 方言通过关联的关键字来附加地定义常用的样式以扩展它们。它们可以使用跟其底层元件类型一样的选项，也可以自由地通过 `style` 命令重新定义样式。
 	
-=== h1
+=== `h1`
 
-`H1`样式是一个文本类型，字体大小设置为32。
+`h1` 样式是字体大小设置为 32 的 `text` 类型。
 
-=== h2
+=== `h2`
 
-`H2`样式是一个文本类型，字体大小设置为26。
+`h2` 样式是字体大小设置为 26 的 `text` 类型。
 
-=== h3
+=== `h3`
 
-`H3`样式是一个文本类型，字体大小设置为22。
+`h3` 样式是字体大小设置为 22 的 `text` 类型。
 
-=== h4
+=== `h4`
 
-`H4`样式是一个文本类型，字体大小设置为17。
+`h4` 样式是字体大小设置为 17 的 `text` 类型。
 
-=== h5
+=== `h5`
 
-`H5`样式是一个文本类型，字体大小设置为13。
+`h5` 样式是字体大小设置为 13 的 `text` 类型。
 
-=== box
+=== `box`
 
-`box`样式是一个带有默认透明颜色的`base`类型。
+`box` 样式是带有默认的透明颜色的 `base` 类型。
 
-=== image
+=== `image`
 
-`image`风格是一个默认大小为100x100的`base`类型。它提供了一个`image!`选项，如果没有提供的话，就会提供一个空白的白色背景颜色和与face大小相同的图像。
+`image` 样式是默认大小为 `100x100` 的 `base` 类型。它期望被提供一个 `image!` 选项，如果没有的话，就会提供一个背景颜色为白色的、与元件大小相同的空图像。
 
-== Faces定义
+== 元件定义
 
 可以通过使用现有face类型或可用样式之一的名称，将布局中的face插入当前位置。
 
 *语法*
+
+[source, red]
 ----
 <name>: <type> <options>
 
-<name>    : optional name for the new component (set-word!).
-<type>    : a valid face type or style name (word!).
-<options> : optional list of options.
+<name>    : （可选）新组件的名称 (set-word!)。
+<type>    : 有效的元件类型或样式名称 (word!)。
+<options> : （可选）选项列表。
 ----
-如果提供了一个名称，该word将从face描述中引用VID创建的`face!`对象。
 
-为每个face类型或样式提供默认值，因此可以使用新face，而无需指定任何选项。 当需要选项时，以下部分将描述不同类型的接受选项：
+如果提供了 `name`，该单词将引用 VID 从元件描述中创建的 `face!` 对象。
 
-* Keywords
-* Datatypes
-* Actors
+每个元件类型或样式都有提供默认值，因此无需指定任何选项就可以使用一个新的元件。当需要选项时，以下小节将描述可接收的不同类型的选项：
 
-所有选项都可以以任意顺序指定，遵循face或样式名称。 新的face名称或布局关键字标记给定face的选项列表的结尾。
+* 关键字
+* 数据类型
+* 动作器
 
-注意：“window”不能用作face类型。
+所有选项都可以以任意顺序指定，跟在元件或样式名称之后。一个新的元件名称或布局关键字标记了给定元件的选项列表的结尾。
+
+[NOTE, caption=注意]
+====
+`window` 不能被用作元件类型。
+====
 
 === Keywords 
 
