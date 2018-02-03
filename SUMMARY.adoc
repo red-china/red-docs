@@ -1,18 +1,18 @@
-= Summary
+= 摘要
 
-. link:README.adoc[Red/Core Language]
-.. link:date.adoc[Date! datatype]
-.. link:map.adoc[Map! datatype]
+. link:README.adoc[Red/Core 语言]
+.. link:date.adoc[Date! 数据类型]
+.. link:map.adoc[Map! 数据类型]
 
-. link:gui.adoc[GUI System]
-.. link:view.adoc[View Engine]
-.. link:vid.adoc[VID Dialect]
-.. link:draw.adoc[Draw Dialect]
+. link:gui.adoc[GUI 系统]
+.. link:view.adoc[View 引擎]
+.. link:vid.adoc[VID 方言]
+.. link:draw.adoc[Draw 方言]
 
-### Other Docs
+### 其他文档
 
-. link:reactivity.adoc[Reactive Programming]
+. link:reactivity.adoc[响应式编程]
 . link:libred.adoc[LibRed API]
-. link:preprocessor.adoc[Preprocessor]
-. link:redbin.adoc[Redbin Format Specification]
-. link:style-guide.adoc[Coding Style Guide]
+. link:preprocessor.adoc[预处理器]
+. link:redbin.adoc[Redbin 格式规格文档]
+. link:style-guide.adoc[编码风格指南]

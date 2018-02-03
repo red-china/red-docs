@@ -11,6 +11,7 @@ _目前项目还处于开发阶段，所有只有少数信息能够作为文档�
 |===
 | 文档名 | 状  态 | 校  对
 | link:README.adoc[]       |    已完成   | link:https://github.com/pixcai[pixcai]
+| link:SUMMARY.adoc[]      |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
 | link:date.adoc[]         |    已完成   | link:https://github.com/pixcai[pixcai]
 | link:draw.adoc[]         |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
 | link:gui.adoc[]          |    已完成   | link:https://github.com/pixcai[pixcai]
