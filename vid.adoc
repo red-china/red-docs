@@ -302,483 +302,586 @@ do <body>
 `window` 不能被用作元件类型。
 ====
 
-=== Keywords 
+=== 关键字 
 
-==== left
+==== `left`
 
 *语法*
+
+[source, red]
 ----
 left
 ---- 
+
 *描述*
 
-将face的文字对准左侧。
+将该元件的文本向左侧对齐。
 
-
-==== center
+==== `center`
 
 *语法*
+
+[source, red]
 ----
 center
 ----
+
 *描述*
 
-居中对齐face的文字。
-
+将该元件的文本居中。
 
 ==== right
 
 *语法*
+
+[source, red]
 ----
 right
 ----
+
 *描述*
 
-将face的文字对准右侧。
+将该元件的文本向右侧对齐。
 
-
-==== top
+==== `top`
 
 *语法*
+
+[source, red]
 ----
 top
 ----
+
 *描述*
 
-将face的文字垂直对齐为`top`。
+将该元件的文本向 `top`（顶部）对齐。
 
-
-==== middle
+==== `middle`
 
 *语法*
+
+[source, red]
 ----
 middle
 ----
+
 *描述*
 
-将face的文字垂直对齐为`middle`。
+将该元件的文本向 `middle`（中央）对齐。
 
-
-==== bottom
+==== `bottom`
 
 *语法*
+
+[source, red]
 ----
 bottom
 ----
+
 *描述*
 
-将face的文字垂直对齐为`bottom`。
+将该元件的文本向 `bottom`（底部）对齐。
 
-
-==== bold
+==== `bold`
 
 *语法*
+
+[source, red]
 ----
 bold
 ----
+
 *描述*
 
-将face的文字样式设置为`bold`。
+将该元件的文本样式设置为 `bold`（粗体）。
 
-
-==== italic
+==== `italic`
 
 *语法*
+
+[source, red]
 ----
 italic
 ----
+
 *描述*
 
-将face的文字样式设置为`italic`。
+将该元件的文本样式设置为 `italic`（斜体）。
 
-
-==== underline
+==== `underline`
 
 *语法*
+
+[source, red]
 ----
 underline
 ----
+
 *描述*
 
-将face的文字样式设置为`underline`。
+将该元件的文本样式设置为 `underline`（下划线）。
 
-
-==== extra
+==== `extra`
 
 *语法*
-----
-extra <value>
 
-<value> : any value (any-type!).
+[source, red]
 ----
+extra <expr>
+
+<expr> : 任何值 (any-type!)。
+----
+
 *描述*
 
-将face的`extra` facet设置为新值。
+将该元件的 `extra` 特征设置为一个值（可以为 Red 表达式的结果）。
 
-
-==== data
+==== `data`
 
 *语法*
+
+[source, red]
 ----
 data <list>
 
-<list> : list of items (block!).
+<list> : 内含项的原义的列表，或 Red 表达式 (block!)。
 ----
+
 *描述*
 
-将face的`data` facet设置为值列表。 列表的格式取决于face类型要求。
+将该元件的 `data` 特征设置为内含值的列表，列表的格式取决于该元件类型的要求。
 
-
-==== draw
+==== `draw`
 
 *语法*
+
+[source, red]
 ----
 draw <commands>
 
-<commands> : list commands (block!).
+<commands> : 原义的命令列表，或 Red 表达式 (block!)。
 ---- 
+
 *描述*
 
-将face的`draw` facet设置为Draw方言命令列表。 有关有效命令，请参阅[Draw方言](draw.html)文档。
+将该元件的 `draw` 特征设置为内含 Draw 方言命令的列表。有效的命令请参阅 link:draw.adoc[Draw 方言文档]。
 
-
-==== font
+==== `font`
 
 *语法*
+
+[source, red]
 ----
 font <spec>
 
-<spec> : a valid font specification (block! object! word!).
+<spec> : 有效的 font 规格 (block! object! word!)。
 ----
+
 *描述*
 
-将face的`font` facet设置为新的`font!`对象。font!对象被描述为 link:view.html＃_font_object [这里]。
+将该元件的 `font` 特征设置为新的 `font!` 对象。关于 `font!` 对象的描述在link:view.adoc#_font_object[这里]。
 
-注意：可以使用`font`与其他字体相关的设置，VID将它们合并在一起，优先于指定的最后一个。
+[NOTE, caption=注意]
+====
+可以把 `font` 跟其他关于字体的设定一起使用，VID 会以最后指定的设定为优先，把它们合并在一起。
+====
 
-
-==== para
+==== `para`
 
 *语法*
+
+[source, red]
 ----
 para <spec>
 
-<spec> : a valid para specification (block! object! word!).
+<spec> : 有效的 para 规格 (block! object! word!)。
 ----
+
 *描述*
 
-将face的`para` facet设置为新的`para!`对象。para!对象被描述 link:view.html＃_para_object [对象]。
+将该元件的 `para` 特征设置为新的 `para!` 对象。关于 `para!` 对象的描述在link:view.adoc#_para_object[这里]。
 
-注意：可以使用`para`以及其他与`para`相关的设置，VID将它们合并在一起，优先于指定的最后一个。
+[NOTE, caption=注意]
+====
+可以把 `para` 跟其他关于段落的设定一起使用，VID 会以最后指定的设定为优先，把它们合并在一起。
+====
 
-==== wrap
+==== `wrap`
 
 *语法*
+
+[source, red]
 ----
 wrap
 ----
 
 *描述*
 
-在显示时包裹face的文字。
+当显示文本时对该元件的文本进行自动换行。
 
-
-==== no-wrap
+==== `no-wrap`
 
 *语法*
+
+[source, red]
 ----
 no-wrap
 ----
+
 *描述*
 
-避免在显示时包裹face的文字。
+避免当显示文本时对该元件的文本进行自动换行。
 
-
-==== font-size
+==== `font-size`
 
 *语法*
+
+[source, red]
 ----
 font-size <pt>
 
-<pt> : font size in points (integer! word!).
+<pt> : 字体大小，以磅为单位 (integer! word!)。
 ----
+
 *描述*
 
-设置face文字的当前字体大小。
+为该元件的文本设置当前字体大小。
 
-
-==== font-color
+==== `font-color`
 
 *语法*
+
+[source, red]
 ----
 font-color <value>
 
-<value> : color of the font (tuple! word! issue!).
+<value> : 字体的颜色 (tuple! word! issue!)。
 ----
+
 *描述*
 
-设置face文字的当前字体颜色。
+为该元件的文本设置当前字体颜色。
 
-
-==== font-name
+==== `font-name`
 
 *语法*
+
+[source, red]
 ----
 font-name <name>
 
-<name> : valid name of an available font (string! word!).
+<name> : 一个可用字体的有效名字 (string! word!)。
 ----
+
 *描述*
 
-设置face文字的当前字体名。
+为该元件的文本设置当前字体名称。
 
+==== `react`
 
-==== react
-
-此关键字既可用作face选项，也可用作全局关键字。可以使用任意数量的`react`实例。
+这个关键字既可用作元件选项，也可用作全局关键字。可以使用任意数量的 `react` 实例。
 
 *语法*
+
+[source, red]
 ----
 react [<body>]
 react later [<body>]
 
-<body> : regular Red code (block!).
+<body> : 常规的 Red 代码 (block!)。
 ----
+
 *描述*
 
-从body块创建一个新的reactor。 当`react`用作face选项时，body可以使用`face`字来引用当前face。 当全局使用`react`时，需要使用名称访问目标face。可选的`later`关键字跳过在`body`块被处理之后立即发生的第一个反应。
+从 `body` 块创建一个新的响应器。当 `react` 用作元件选项时，在主体区块里面可以使用 `face` 单词来引用当前元件。当在全局使用 `react` 时，需要使用名称来访问目标元件。可选的 `later` 关键字会跳过在 `body` 区块被处理之后立即发生的第一次响应。
 
-注意：
+[NOTE, caption=注意]
+====
+响应器是 View 中响应式编程支持的部分，它的文档还将要编写。简而言之，`body` 区块可以使用路径来描述元件属性之间的一个或多个关系。设置元件属性的设径被当作响应器（要更新的元件）的**目标**来处理，访问元件属性的路径被当作响应器的**源**（一次在源中的变化会触发一次对响应器代码的刷新）来处理。
+====
 
-reactor是View中的响应式编程支持的一部分，文档正在编写。 简而言之，body块可以使用路径来描述face属性之间的一个或多个关系。 设置路径设置face属性被处理为reactor的* target*（要更新的face），而访问face属性的路径被处理为reactor的*source*（源的更改触发了reactor的更新码）。
-
-==== loose
+==== `loose`
 
 *语法*
+
+[source, red]
 ----
 loose
 ----
+
 *描述*
 
-启用使用鼠标左键拖动face。
+让该元件可以使用鼠标左键拖动。
 
-
-==== all-over
+==== `all-over`
 
 *语法*
+
+[source, red]
 ----
 all-over
 ----
+
 *描述*
 
-设置face `all-over`标志，允许接收所有鼠标`over`事件。
+设置该元件的 `all-over` 标记，使其允许接收所有鼠标 `over` 事件。
 
-
-==== hidden
+==== `hidden`
 
 *语法*
+
+[source, red]
 ----
 hidden
 ----
+
 *描述*
 
-默认情况下使face看不见。
+使该元件默认不可见。
 
-
-==== disabled
+==== `disabled`
 
 *语法*
+
+[source, red]
 ----
 disabled
 ----
+
 *描述*
 
-默认情况下禁用face（face不会处理任何事件，直到启用）。
+使该元件默认被禁用（到该元件被启用为止，它不会处理任何事件）。
 
-
-==== select
+==== `select`
 
 *语法*
+
+[source, red]
 ----
 select <index>
 
-<index> : index of selected item (integer!).
+<index> : 所选项的索引 (integer!)。
 ----
+
 *描述*
 
-设置当前face的`selected` facet。 主要用于列表以指示预先选择的项目。
+设置当前元件的 `selected` 特征，主要用于列表，表示哪个项目要被预先选择。
 
-
-==== focus
+==== `focus`
 
 *语法*
+
+[source, red]
 ----
 focus
----- 
+----
+
 *描述*
 
-当窗口首次显示时，将焦点放在当前的face。 只有一个face可以有焦点。 如果在不同的face上使用了几个`focus`选项，只有最后一个可以获得焦点。
+当窗口首次显示时使当前的元件获得焦点。只有一个元件可以获得焦点，如果把几个 `focus` 选项使用在不同的元件上，只有最后一个会获得焦点。
 
-==== hint
+==== `hint`
 
 *语法*
+
+[source, red]
 ----
 hint <message>
 
-<message> : hint text (string!).
+<message> : 提示文本 (string!)。
 ---- 
+
 *描述*
 
-当字段的内容为空时，在`field` face中提供一个提示消息。 当提供任何新内容时，该文本消失（用户操作或设置`face/text` facet）。
+当 `field` 的内容为空时，在 `field` 元件中提供提示信息。当提供任何新内容时，该文本消失（用户操作或设置 `face/text` 特征）。
 
 
-==== rate
+==== `rate`
 
 *语法*
+
+[source, red]
 ----
 rate <value>
 rate <value> now
 
-<value>: duration or frequency (integer! time!).
+<value>: 时长或频率 (integer! time!)。
 ----
+
 *描述*
 
-从持续时间（time!）或频率（integer!）设置face的定时器。 在每个定时器的刻度上，将为该face产生一个`time`事件。 如果使用`now`选项，则会立即生成第一次事件。
+以一个时长（`time!`）或频率（`integer!`）给该元件设置定时器。每次定时器到期时，将为该元件生成 `time` 事件。如果使用 `now` 选项，则会立即生成第一次 `time` 事件。
 
 
-==== default
+==== `default`
 
 *语法*
+
+[source, red]
 ----
 default <value>
 
-<value>: a default value for `data` facet (any-type!).
+<value>: data 特征的默认值 (any-type!)。
 ----
+
 *描述*
 
-当`text` facet的转换返回`none`时，定义`data` facet的默认值。 该默认值存储在`options` facet中，作为key/value对。
+定义当 `text` 特征的转换返回 `none` 时 `data` 特征的默认值。该默认值作为键值对存储在 `options` 特征中。
 
-注意：目前仅使用`text`和`field` face类型。
+[NOTE, caption=注意]
+====
+目前仅被 `text` 和 `field` 元件类型使用。
+====
 
+==== `with`
 
-=== Datatypes 
+*语法*
 
-除了关键字，允许使用以下类型的文字值将设置传递给face：
+[source, red]
+----
+with <body>
+
+<body>: 绑定到当前元件的 Red 代码区块 (block!)。
+----
+
+*描述*
+
+对绑定到当前定义的元件的 Red 代码区块进行求值，使得可以直接设置元件字段，覆盖掉其他 VID 选项。
+
+=== 数据类型 
+
+除了关键字，还允许使用以下类型的原义值将设定传递给元件：
 
 [cols="1,3", options="header"]
 |===
-|Datatype|	Purpose
-|integer!|	Specifies the width of the face. For panels, indicates the number of row or columns for the layout, depending on the current direction.
-|pair!|		Specifies the width and height of the face.
-|tuple!|	Specifies the color of the face's background (where applicable).
-|issue!|	Specifies the color of the face's background using hex notation (#rgb, #rrggbb, #rrggbbaa).
-|string!|	Specifies the text to be displayed by the face.
-|percent!|	Sets the `data` facet (useful for `progress` and `slider` types).
-|logic!|	Sets the `data` facet (useful for `check` and `radio` types).
-|image!| 	Sets the image to be displayed as face's background (where applicable).
-|url!| 		Loads the resource pointed to by the URL, then process the resource according to its loaded type.
-|block!|	Sets the action for the default event of the face. For panels, specifies their content.
-|get-word!| Uses an existing function as actor.
-|char!| _(reserved for future use)_.
+|数据类型   | 目的
+|`integer!` | 指定该元件的宽度。对于面板，表示布局中行或列的数量，是行还是列取决于当前的布局方向。
+|`pair!`    | 指定该元件的宽度和高度。
+|`tuple!`   | 指定该元件的背景的颜色（如果适用于该元件的话）。
+|`issue!`   | 以十六进制记号（`#rgb`, `#rrggb`, `#rrggbbaa`）指定该元件的背景的颜色。
+|`string!`  | 指定该元件要显示的文本。
+|`percent!` | 设置其 `data` 特征（对 `progress` 和 `slider` 类型很有用）。
+|`logic!`   | 设置其 `data` 特征（对 `check` 和 `radio` 类型很有用）。
+|`image!`   | 设置要作为该元件的背景显示的图片（如果适用于该元件的话）。
+|`url!`     | 加载该 URL 指向的资源，接着根据它被加载后的类型处理该资源。
+|`block!`   | 设置该元件的默认事件的动作。对于面板来说，指定他的内容。
+|`get-word!`| 使用现存的函数作为动作器。
+|`char!`    | __(保留以供将来使用)__。
 |===
 
-=== Actors 
+=== 动作器
 
-actor可以通过指定一个文字块值或一个actor名称后跟一个块值来挂接到face。
+动作器可以通过指定一个原义区块值或一个动作器名称后跟一个区块值来挂接到元件。
 
 *语法*
+
+[source, red]
 ----
 <actor>
 on-<event> <actor>
 
-<actor> : actor's body block or actor reference (block! get-word!).
-<event> : valid event name (word!). 
+<actor> : 动作器的主体区块或动作器的引用 (block! get-word!)。
+<event> : 有效的事件名称 (word!)。
 ----
+
 *描述*
 
-可以通过仅仅提供actor的body块来指定actor，这个spec块是隐式的。 actor功能被构造，然后添加到face的`actor` facet。 几个actor可以这样指定。
+可以通过仅提供动作器的主体区块来指定动作器，其规格区块是隐含的。动作器函数会被构造出来，接着被添加到元件的 `actor` 特征中。可以以这样的方式指定好几个动作器。
 
-创建的actor功能完整规范是：
+创建的动作器函数的完整规格为：
+
+[source, red]
 ----
 func [face [object!] event [event! none!]][...body...]
 ----
-可以在 link:view.html＃_actors[这里] 找到有效的事件名称列表。
 
-当一个块或一个get-word没有任何actor名称前缀被传递时，face类型的默认actor是根据 https://github.com/red/red/blob/master/modules/view/styles.red[这里] 定义创建的。
+可以从link:view.adoc#_actors[这里]找到有效的事件名称的清单。
 
+当一个区块或一个取词没有跟着任何动作器名称前缀被传递时，会按照link:https://github.com/red/red/blob/master/modules/view/styles.red[这里]的定义创建该元件类型的默认动作器。
 
-== Panels 
+== 面板
 
-可以定义子面板以将face部分组在一起，并最终应用特定样式。 新面板的大小（如果未明确指定）将自动计算，以适应其内容。
+可以定义子面板以把多个元件编为一组，并在最后应用特定的样式。如果没有明确指定面板的大小，将会自动计算新面板的大小以适应其内容。
 
-VID中使用特定语法支持来自View的面板类face类型：
+在 VID 中使用特定的语法支持 View 的面板类元件类型：
 
-=== panel 
+=== `panel`
 
 *语法*
+
+[source, red]
 ----
 panel <options> [<content>]
 
-<options> : optional list of settings for the panel.
-<content> : panel's VID content description (block!).
+<options> : （可选）面板的设定列表。
+<content> : 面板的 VID 内容描述 (block!)。
 ----
+
 *描述*
 
-在当前容器内构造一个子面板，其中内容是另一个VID块。 除了其他的face选项之外，还可以提供整数除数器选项，设置网格模式布局：
+在当前容器内部构造子面板，其内容是另外的 VID 区块。除了其他的元件选项之外，还可以提供一个整数分割器选项以设置网格模式布局：
 
-* 如果方向是across，则分隔符表示列数。
-* 如果方向是below，则分隔符表示行数。
+* 如果方向是 `across`，则分割器表示列数。
+* 如果方向是 `below`，则分割器表示行数。
 
-
-=== group-box 
+=== `group-box `
 
 *语法*
+
+[source, red]
 ----
 group-box <divider> <options> [<body>]
 
-<divider> : optional number of row or columns (integer!).
-<options> : optional list of settings for the panel.
-<body>    : panel's VID content description (block!).
+<divider> : （可选）行或列的数量 (integer!)。
+<options> : （可选）面板的设定列表。
+<body>    : 面板的 VID 内容描述 (block!)。
 ----
+
 *描述*
 
-在当前容器中构造一个子组合框面板，其中内容是另一个VID块。 可以提供一个分频器参数，设置网格模式布局：
+在当前容器内部构造子编组框面板，其内容是另外的 VID 区块。可以提供一个分割器参数以设置网格模式布局：
 
-* 如果方向是across，则分隔符表示列数。
-* 如果方向是below，则分隔符表示行数。
+* 如果方向是 `across`，则分割器表示列数。
+* 如果方向是 `below`，则分割器表示行数。
 
-注意：提供一个`string!`值作为选项将设置组框标题文本。
+[NOTE, caption=注意]
+====
+若提供一个 `string!` 值作为选项，将会以其设置编组框的标题文本。
+====
 
-
-=== tab-panel 
+=== `tab-panel`
 
 *语法*
+
+[source, red]
 ----
 tab-panel <options> [<name> <body>...]
 
-<options> : optional list of settings for the panel.
-<name>    : a tab's title (string!).
-<body>    : a tab's content as VID description (block!).
+<options> : （可选）面板的设定列表。
+<name>    : 选项卡的标题 (string!)。
+<body>    : 选项卡的内容，作为 VID 描述 (block!)。
 ----
+
 *描述*
 
-在当前容器内构建一个制表符面板面板。 规范块必须包含每个选项卡的一对名称和内容描述。 每个标签的内容正文都是一个新的子面板，充当任何其他面板。
+在当前容器内部构造一个选项卡面板。对于每个选项卡，规格区块必须包含名称和内容描述这样一对参数。每个选项卡的内容主体都是一个新的子面板元件，跟任何其他面板的作用一样。
 
+== 样式 
 
-== Styling 
-
-=== style 
+=== `style`
 
 *语法*
+
 ----
 style <new> <old> <options>
 
-<new>     : name of new style (set-word!).
-<old>     : name of old style (word!).
-<options> : optional list of settings for the new style.
+<new>     : 新样式的名称 (set-word!)。
+<old>     : 旧样式的名称 (word!)。
+<options> : （可选）新样式的设定列表。
 ----
+
 *描述*
 
-在当前面板中设置新样式。 可以从现有的face类型或其他样式创建新的样式。 新风格仅在当前面板和子面板中有效。
+在当前面板中设置新样式。可以从现有的元件类型或其他样式创建新样式，该新样式仅在当前面板和其子面板中有效。
 
-样式可以从父面板级联到子面板，以便可以在子面板中重新定义或扩展相同的样式名称，而不会影响父面板中的定义。
+样式可以从父面板级联到子面板，所以可以在子面板中重新定义或扩展同一样式名称，而不会影响父面板中的定义。
