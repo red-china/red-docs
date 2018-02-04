@@ -1,33 +1,42 @@
-= Map!数据类型
+= Map! 数据类型
 :toc:
 :toc-title: 目录
 :numbered:
 
-== 概要(Abstract)
+== 概要
 
-`map`表示一个拥有键/值对的关联数组。它提供了一种快速访问(内部使用哈希表)、便捷和专用的语法。和`hash!`不同的是，`map`不是一个序列，所以它不存在偏移和位置的概念。理论上讲，`map!`是一种处于`hash!`和`object!`之间的数据类型。
+映射（map）代表一个内含键/值对的关联数组，它提供了快速的读取访问（内部使用散列表）和便捷的专用语法。不像 `hash!` 数据类型，映射不是一个序列，所以它不存在偏移量和位置的概念。从概念上来说，`map!` 是一种处于 `hash!` 和 `object!` 之间的数据类型。
 
-== 字面量语法(Literal syntax)
+== 字面语法
+
+[source, red]
 ----
 #(<key> <value>...)
 
-<key>   : hashed key, accepted types are: scalar!, all-word!, any-string!
-<value> : any-type! value
+<key>   : 散列键，接受的类型为：scalar!, all-word!, any-string!
+<value> : any-type! 值
 ----
-== 构造语法(Creation syntax)
+
+== 创建语法
+
+[source, red]
 ----
 make map! <spec>
 
-<spec> : block of key/value pairs or an integer value
+<spec> : 内含键/值对的区块或整数值
 ----
-如果_spec_是个整数，一个包含预分配大小的空`map!`将会被返回(通常是为了动态计算`map`)。
 
-注意：
+如果 `spec` 参数是整数，则会创建一个含有预分配数目槽位（通常用于动态地填充该映射）的空 `map!` 
 
-* `map` body或_spec_ block必须包含偶数个元素，否则会产生错误。
-* 值不是经过*reduce*产生的，所以某些值必须使用构造语法，比如`logic!`。
+[NOTE, caption=注意]
+====
+* `map` 的主体区块，或者说 `spec` 区块必须包含**偶数**个元素，否则将会生成一个错误。
+* 值不会被 `reduce`，所以某些特殊的值需要使用构造语法，比如 `logic!`。
+====
 
-例子：
+例：
+
+[source, red]
 ----
 #(a: 1 b: 2)
 == #(
@@ -42,44 +51,55 @@ make map! [a 1 'b 2 "c" 3]
     "c" 3
 )
 ----
-如果键是**any-word!**类型，为了使`map`的内容看起来更像键/值对，在`map`中键的类型会被转换为*set-word!*。要访问这些键，不需要再提供`set-word`，简单的`word`就够了。同样地，`keys-of`反射器会返回`word`而不是`set-word`，这大大简化了之后的处理过程(特别是匹配操作，匹配`word`比匹配`set-word`容易多了)。
 
-注意：
+如果键是 `any-word!` 类型，映射中的键的类型会被转换为 `set-word!`，这是为了使映射的内容看起来更像一组设置了值的键。不过，要访问单词键并不需要提供设词，出于实践性的考虑，你可以使用朴素的单词。类型的，`keys-of` 反射器（在下面的反射小节有描述）不会返回设词而会返回单词，因为这能简化之后的处理（尤其对于匹配操作，用单词比用设词简单）。
 
-* 和`hash!`以及`block!`一样, `map!`的查找操作默认是**大小写不敏感的**。
-* 如果指定了`none`作为值，那么相应的键不会被创建(参考”删除键“部分)。
-* 在创建`map`的时候所有的键都是深度拷贝的。
-* 在创建`map`的时候，如果值是`series!`类型，则值不会被拷贝，此选项留给用户(这样可以优化常见用例的资源)。
+[NOTE, caption=注意]
+====
+* 像 `hash!` 和 `block!` 那样，`map!` 默认是**大小写保留**且**查找时大小写不敏感**的。
+* 如果指定 `none` 作为值，那么相应的键不会被创建（参照 "`删除键`" 小节)。
+* 在创建映射时，所有的键都会被深度拷贝。
+* 在创建映射时，`series!` 值不会被拷贝，这个选择是留给用户的（这优化了常见用例的资源占用）。
+====
 
-另一种创建`map`的方式是使用`copy`动作来复制一个已有的`map`。
+另一种创建新的映射的方式是对现存的映射调用 `copy` 动作。
 
-== 获取值(Retrieving values)
+== 检索值
 
 使用路径：
+
+[source, red]
 ----
 <map>/<key>
 get '<map>/<key>
 
-<map> : word referring to a map! value
-<key> : word key
+<map> : 引用 map! 值的单词
+<key> : 单词键
 ----
 
-使用`select`动作：
+使用挑选动作：
+
+[source, red]
 ---- 
 select <map> <key>
 
-<map> : map value
-<key> : any valid key type
+<map> : 映射值
+<key> : 任何有效的键类型
 ----
-所有获取值的操作都是大小写不敏感的，如果想要区分大小写，需要用`/case`细化：
+
+所有这些读取访问都是大小写不敏感的，如果使用区分大小写的查找，需要在可用的地方用上 `/case` 修饰词：
+
+[source, red]
 ----
 get/case '<map>/<key>
 select/case <map> <key>
 ----
-如果访问一个`map`中不存在的键，结果将是`none`。
 
-例子：
+尝试访问映射中不存在的键会返回 `none` 值。
 
+例：
+
+[source, red]
 ----
 m: #(Ab: 2 aB: 5 ab: 10)
 m/ab
@@ -92,47 +112,60 @@ select/case m 'ab
 == 10
 ----
 
-== 改变键和值(Changing keys and values)
+== 修改键和值
 
 使用路径：
+
+[source, red]
 ----
 <map>/<key>: <value>
 set '<map>/<key> <value>
 
-<map>   : word referring to a map! value
-<key>   : word key to select a value in the map
-<value> : any value
+<map>   : 引用 map! 值的单词
+<key>   : 用于在映射中挑选值的单词键
+<value> : 任意值
 ----
 
-使用修改动作：
+使用更改动作：
+
+[source, red]
 ---- 
 put <map> <key> <value>
 
-<map> : map value
-<key> : any valid key value to a select a value in the map
+<map> : 映射值
+<key> : 任何用于在映射中挑选值的有效的键
 ----
-修改大量数据：
+
+做批量修改：
+
+[source, red]
 ----
 extend <map> <spec>
 
-<map>  : a map value
-<spec> : block of name/value pairs (one or more pairs)
+<map>  : 映射值
+<spec> : 内含名称/值对的区块（一对或多对）
 ----
-所有获取值的操作都是大小写不敏感的，如果想要区分大小写，需要用`/case`细化：
+
+所有这些读取访问都是大小写不敏感的，如果使用区分大小写的查找，需要在可用的地方用上 `/case` 修饰词：
+
+[source, red]
 ----
 set/case '<map>/<key> <value>
 put/case <map> <key> <value>
 extend/case <map> <spec>
 ----
 
-`extend`可以一次性接收多个键，所以它很适合用来修改大量数据。
+`extend` 原生可以一次性接收许多键，所以用于批量修改很方便。
 
-注意：
+[NOTE, caption=注意]
+====
+* 设置一个映射中之前不存在的键**仅会简单地创建它**.
+* 添加一个现存的键会改变该键的值，并不会添加一个新的键（默认以大小写不敏感的方式匹配）。
+====
 
-* 如果设置一个map中不存在的键，将会**自动创建它**.
-* 如果添加的键和`map`原有的键同名，则`map`中的键会被更新(默认情况下键是不区分大小写的)。
+例：
 
-例子：
+[source, red]
 ----
 m: #(Ab: 2 aB: 5 ab: 10)
 m/ab: 3
@@ -175,11 +208,13 @@ m
 )
 ----
 
-== 删除键(Deleting keys)
+== 删除键
 
-要删除`map`中的键/值，只要设置键为`none`即可，具体可以采用以下几种方式：
+要删除映射中的键/值对，你只要简单地以一种可用的方式设置键为 `none` 即可。
 
-例子：
+例：
+
+[source, red]
 ----
 m: #(a: 1 b 2 "c" 3 d: 99)
 m
@@ -198,37 +233,47 @@ m
 )
 ----
 
-注意：上面例子中传递`none!`类型的值时必须使用构造语法。
+[NOTE, caption=注意]
+====
+上面例子中的构造语法是必需的，这是为了要传递一个 `none!` 值而不是一个 `word!` 值（仅是一种其所需构造 `spec` 区块的方式）。
+====
 
-你也可以用`clear`动作一次性清空`map`：
+也可以使用 `clear` 动作来一次性删除所有键：
+
+[source, red]
 ----
 clear #(a 1 b 2 c 3)
 == #()
 ----
 
-== 反射(Reflection)
+== 反射
 
-* `find` 检查`map`中是否存在指定的键。如果存在返回`true`，否则返回`none`。
+* `find` 检查一个键是否有定义在映射中，如果找到则返回 `true`，否则返回 `none`。
 
+ [source, red]
  find #(a 123 b 456) 'b
  == true
 
-* `length?` 返回`map`中键/值对的个数。
+* `length?` 返回映射中键/值对的个数。
 
+ [source, red]
  length? #(a 123 b 456)
  == 2
 
-* `keys-of` 返回包含`map`中所有键的`block`(set-words被转换为words)。
+* `keys-of` 以区块形式返回映射中的键的列表（设词会被转换为单词）。
 
+ [source, red]
  keys-of #(a: 123 b: 456)
  == [a b]
 
-* `values-of` 返回包含`map`中所有值的`block`。
+* `values-of` 以区块形式返回映射中的值的列表。
 
+ [source, red]
  values-of #(a: 123 b: 456)
  == [123 456]
 
-* `body-of` 返回包含`map`中所有键/值对的`block`。
+* `body-of` 以区块形式返回映射中的所有键/值对。
 
+ [source, red]
  body-of #(a: 123 b: 456)
  == [a: 123 b: 456]
