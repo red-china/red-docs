@@ -251,29 +251,29 @@ clear #(a 1 b 2 c 3)
 * `find` 检查一个键是否有定义在映射中，如果找到则返回 `true`，否则返回 `none`。
 
 [source, red]
-    find #(a 123 b 456) 'b
-    == true
+find #(a 123 b 456) 'b
+== true
 
 * `length?` 返回映射中键/值对的个数。
 
 [source, red]
-    length? #(a 123 b 456)
-    == 2
+length? #(a 123 b 456)
+== 2
 
 * `keys-of` 以区块形式返回映射中的键的列表（设词会被转换为单词）。
 
 [source, red]
-    keys-of #(a: 123 b: 456)
-    == [a b]
+keys-of #(a: 123 b: 456)
+== [a b]
 
 * `values-of` 以区块形式返回映射中的值的列表。
 
 [source, red]
-    values-of #(a: 123 b: 456)
-    == [123 456]
+values-of #(a: 123 b: 456)
+== [123 456]
 
 * `body-of` 以区块形式返回映射中的所有键/值对。
 
 [source, red]
-    body-of #(a: 123 b: 456)
-    == [a: 123 b: 456]
+body-of #(a: 123 b: 456)
+== [a: 123 b: 456]
