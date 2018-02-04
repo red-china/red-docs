@@ -1,25 +1,28 @@
-= Date!数据类型
+= Date! 数据类型
 :toc:
 :toc-title: 目录
 :numbered:
 
-== 概要(Abstract)
+== 概要
 
-`date!`值表示公历日期。一个`date!`变量值，也可以包含可选的时间和时区信息。 日期的时间以24小时格式表示(包括可选的时区信息)。Red日期类型也广泛支持 https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] 输入格式。
+`date!` 值表示日历日期，它依赖于格里高利历。一个 `date!` 值也可以包含可选的时间和时区信息。日期的时间以 24 小时的格式表示(包括可选的时区信息)。Red 的日期也全面支持 link:https://en.wikipedia.org/wiki/ISO_8601[ISO 8601] 输入格式。
 
-注意：
+[NOTE, caption=注意]
+====
+* `date!` 使用link:https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar[早发格里高利历]以扩展其用法到 1582 年之前。在使用 `date!` 值表示历史上的前格里高利历日期时需要当心。
 
-* `date!`使用 https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar[proleptic Gregorian calendar]，可延伸到1582年以后。 在使用 `date!` 日期表示历史时应注意前公历的日期。
+* 支持的日期取值范围为从 `1/Jan/-16384` 到 `31/Dec/16383`，当数学运算溢出时会进行折返。在输入时出于实践性的原因，该取值范围减少为从 `1/Jan/-9999` 到 `31/Dec/9999`。
+====
 
-* 支持的日期范围从 `1/Jan/-16384` 到 `31/Dec/16383`，通过数学运算进行换算。在输入时，出于实际情况，该范围简化为从`1/Jan/-9999` 到 `31/Dec/9999`。
+== 创建
 
-== 创建(Creation)
+`date!` 值可以使用字面语法创建，或者在运行时使用 `make` 构造函数创建，或用 `to` 转换到日期类型。
 
-`date!`变量可以使用字面语法创建，或者在运行时使用`make`构造函数或`to`转换为日期类型。
+=== 字面语法
 
-=== 字面语法(Literal syntax)
+它支持多种不同的字面语法格式，包括所有的 Rebol 日期格式和大多数的 ISO 日期标准。
 
-支持多种不同的字面语法格式，包括Rebol的所有日期格式和大多数ISO日期标准格式。
+[source, red]
 ----
 <date>/<time>
 <date>/<time><zone>
@@ -27,23 +30,23 @@
 <date>T<time>Z
 <date>T<time><zone>
 
-<date> formats:
+<date> 格式:
     <yyyy><sep><mmm><sep><dd>
     <dd><sep><mmm><sep><yyyy>
     <dd><sep><mmm><sep><yy>
     
-Additional <date> formats when followed by T:
+当后接 T 时附加的 <date> 格式:
     <yyyy><mm><dd>
     <yyyy>-W<ww>    
     <yyyy>-W<ww>-<d>
     <yyyy>-<ddd>  
 
-<mmm> formats (month):
+<mmm> 格式（月份）:
     <m>
     <mon>
     <month>
 
-<time> formats:
+<time> 格式:
     <hour>:<min>:<sec>
     <hour>:<min>:<sec><zone>
     <hhmmss>
@@ -53,53 +56,57 @@ Additional <date> formats when followed by T:
     <hhmm>
     <hhmm><zone>
 
-<zone> formats (timezone):
+<zone> 格式（时区）:
     <sign><hour>
     <sign><hour>:<min15>
     <sign><hhmm>
     
-<sec> formats (seconds):
+<sec> 格式（秒）:
     <ss>
     <ss>.<dec>
 
-<sep>    : 分隔符号使用`-`或`/`
-<yyyy>   : 3或4位数字，代表年份(4位数字表示ISO日期)
-<yy>     : 2位数字表示的年份，相对于2000年
-<m>      : 1或2位数字，代表月份
-<mm>     : 2位数字，代表月份
-<mon>	 : 3个字母，代表月份
-<month>  : 月份的英语全名
-<d>      : 一个数字，表示一周中的某一天(1到7)
-<dd>     : 1或2位数字，表示当月的某一天
-<ddd>    : 3位数字，代表一年中的某一天
-<ww>     : 2位数字，表示一年中的某一周
-<time>   : `time!`变量
-<hour>   : 1或2位数字，表示小时
-<min>    : 1或2位数字，表示分钟
-<ss>     : 1或2位数字，表示秒
-<dec>    : 秒数
-<sign>   : `+`或`-`符号 (不能省略)
-<min15>  : 和`<min>`相同但能被15整除，刻数。
-<hhmm>   : 4位数字，表示小时和分钟(无分隔符)
-<hhmmss> : 6位数字，表示小时、分和秒(无分隔符)
+<sep>    : `-` 或 `/`
+<yyyy>   : 3 或 4 位数字，代表年份（4 位数字表示 ISO 日期）
+<yy>     : 2 个数字代表相对于 2000 年的年份
+<m>      : 1 或 2 位数字，代表月份
+<mm>     : 2 位数字，代表月份
+<mon>	 : 3 位字母，代表月份的开始
+<month>  : 月份的英文全名
+<d>      : 1 位数字，代表星期（1 到 7）
+<dd>     : 1 或 2 位数字，表示日
+<ddd>    : 3 位数字，代表年中的某一天
+<ww>     : 2 位数字，代表年中的某一周
+<time>   : time! 值
+<hour>   : 1 或 2 位数字，代表小时
+<min>    : 1 或 2 位数字，代表分钟
+<ss>     : 1 或 2 位数字，代表秒
+<dec>    : 秒的小数
+<sign>   : `+` 或 `-` 字符（不能省略）
+<min15>  : 和 <min> 相同但会被舍入为 15 的倍数。
+<hhmm>   : 4 位数字，表示小时和分钟（无分隔符）
+<hhmmss> : 6 位数字，表示小时、分种和秒（无分隔符）
 ----
 
-日期字面语法接受许多不同的输入格式。超出范围(超过指定的数字或超出字段的规范)将导致返回一个语法错误。当再次序列化(例如作屏显)时，仅使用以下规范格式:
+日期字面值可以接受许多不同的输入格式。超出范围的值（超过指定的数字位数或不符合字段的规范）将产生语法错误。当再次序列化（例如用于显示）时，仅使用以下标准格式:
 
+[source, red]
 ----
 <dd>-<mon>-<yyyy>
 <dd>-<mon>-<yyyy>/<hour>:<min>:<sec>
 <dd>-<mon>-<yyyy>/<hour>:<min>:<sec><sign><hour>:<min15>
 ----
-当时间和/或区域字段未设置时，它们会被省略。对于负日期值，使用`/`分隔符而不是`-`来提高可读性。
 
-注意：
+当 `time` 和/或 `zone` 字段没有被设置时，它们会被省略。对于负的日期值，使用 `/` 分隔符取代 `-` 分隔符以提高可读性。
 
-* 当使用单词指定月份时，应使用其英文名称表示该月份，单词不区分大小写。
-* 当一个年份仅用两位数字(`yy`)指定时：如果`yy < 50`，则被解释为”20yy“年，否则解释为“19yy”年。
+[NOTE, caption=注意]
+====
+* 当使用字母指定月份时，月份以其英文名称来表示，并不区分大小写。
+* 当仅用 2 位数字（`yy`）指定年份时：如果它 < 50，则被解释为 `20yy` 年，否则被解释为 `19yy` 年。
+====
 
-有效的日期输入例子如下：
+有效的日期输入例子：
 
+[source, red]
 ----
 1999-10-5
 1999/10/5
@@ -135,8 +142,10 @@ Additional <date> formats when followed by T:
 2017-153T10:50:00-4:00
 ----
 
-=== 运行时创建(Runtime creation)
+[#runtime-creation]
+=== 运行时创建
 
+[source, red]
 ----
 make date! [<day> <month> <year>]
 make date! [<year> <month> <day>]
@@ -145,24 +154,26 @@ make date! [<day> <month> <year> <time> <zone>]
 make date! [<day> <month> <year> <hour> <minute> <second>]
 make date! [<day> <month> <year> <hour> <minute> <second> <zone>]
 
-<year>   : integer! value
-<month>  : integer! value
-<day>    : integer! value
-<time>   : time! value
-<zone>   : integer!, time! or pair! value
-<hour>   : integer! value
-<minute> : integer! value
-<second> : integer! value
+<year>   : integer! 值
+<month>  : integer! 值
+<day>    : integer! 值
+<time>   : time! 值
+<zone>   : integer!, time! 或 pair! 值
+<hour>   : integer! 值
+<minute> : integer! 值
+<second> : integer! 值
 ----
 
-注意：
+[NOTE, caption=注意]
+====
+* 超出取值范围的参数值将导致错误。若要正规化的结果，请使用 `to` 替代 `make`。
 
-* 超出范围的参数值将导致错误。 为规范结果，请使用 `to` 替代 `make`。
+* `year` 和 `day` 字段位置可以互换，但只适用于低年份值，**仅**当年份值 >= 100 且大于第三个字段的值时可以将年份放在第一个位置。当这个规则不满足的时候，第三个字段被认为是年份。负的年份总是指定在第三个位置。
+====
 
-* `year` 和 `day` 字段位置可以互换， 但只适用于低年份值。 *仅*当年份值>=100且小于第三个字段的值时可以将年份放在第一个位置。当这个规则不满足的时候， 第三个字段被认为是年份。 指定负年数永远都是用第三个位置。
+*例*
 
-*例子*
-
+[source, red]
 ----
 make date! [1978 2 3]
 == 3-Feb-1978
@@ -183,39 +194,41 @@ make date! [1978 2 3 5 20 30 -4]
 make date! [100 12 31]
 == 31-Dec-0100
 
-; 32 isn't a valid day
+; 32 不是有效的日期
 make date! [100 12 32]
 *** Script Error: cannot MAKE/TO date! from: [100 12 32]
 *** Where: make
 
-; First field is < 100, so not considered as a year
+; 第一个字段 < 100，所以不被认为是年份
 make date! [99 12 31]
 *** Script Error: cannot MAKE/TO date! from: [99 12 31]
 *** Where: make
 ----
 
-== 路径访问器(Path accessors)
+== 路径访问器
 
-路径访问器提供了一种便捷的方式来获取和设置所有日期(`date!`)值字段。
+路径访问器提供了一种便捷的方式来获取和设置所有 `date!` 值字段。
 
-=== /date
+=== `/date`
 
 *语法*
 
+[source, red]
 ----
 <date>/date
 <date>/date: <date2>
 
-<date>  : a word or path expression referring to a date! value
-<date2> : a date! value
+<date>  : 引用 date! 值的单词或路径表达式
+<date2> : date! 值
 ----
 
 *描述*
 
-获取或设置日期的日期字段（不包括时间和区域）。 日期返回为 `date!` 值。
+获取或设置日期的日期字段（不包括时间和区域），返回作为 `date!` 值的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d:  now
 == 10-Jul-2017/22:46:22-06:00
@@ -226,54 +239,67 @@ d/date: 15/09/2017
 == 15-Sep-2017/22:46:22-06:00
 ----
 
-=== /year
+=== `/year`
 
 *语法*
 
+[source, red]
 ----
 <date>/year
 <date>/year: <year>
 
-<date> : a word or path expression referring to a date! value
-<year> : an integer! value
+<date> : 引用 date! 值的单词或路径表达式
+<year> : integer! 值
 ----
+
 *描述*
 
-获取或设置日期的年份字段。年数返回为整数，超出范围的参数值会返回一个标准化日期。
+获取或设置日期的年份字段，返回作为整数的年份。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d:  now
 == 10-Jul-2017/22:46:22-06:00
-d/year: 10000
-== 10000
+d/year: 16383
+== 16383
 d
-== 10-Jul-10000/22:46:22-06:00
+== 10-Jul-16383/22:46:22-06:00
+d/year: 16384
+== 16384
+d
+== 10/Jul/-16384/22:46:22-06:00     ; 注意超过 16384 年后产生溢出折返
+d/year: 32767
+== 32767
+d
+== 10/Jul/-1/22:46:22-06:00
 d/year: 32768
 == 32768
 d
-== 10/Jul/-32768/22:46:22-06:00     ; Note wrap on overflow
+== 10-Jul-0000/22:46:22-06:00
 ----
 
-=== /month
+=== `/month`
 
 *语法*
 
+[source, red]
 ----
 <date>/month
 <date>/month: <month>
 
-<date>  : a word or path expression referring to a date! value
-<month> : an integer! value
+<date>  : 引用 date! 值的单词或路径表达式
+<month> : integer! 值
 ----
 
 *描述*
 
-获取或设置日期的月份字段。月数返回为整数，超出范围的参数值会返回一个标准化日期。
+获取或设置日期的月份字段，返回作为整数的月份。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/22:48:31-06:00
@@ -284,29 +310,31 @@ d
 d/month: 13
 == 13
 d
-== 10-Jan-2018/22:48:31-06:00   ; Note wrap to the next year
+== 10-Jan-2018/22:48:31-06:00   ; 注意折返到了下一年
 d/month
-== 1                            ; Month is now normalized
+== 1                            ; 月份现在被正规化了
 ----
 
-=== /day
+=== `/day`
 
 *语法*
 
+[source, red]
 ----
 <date>/day
 <date>/day: <day>
 
-<date> : a word or path expression referring to a date! value
-<day>  : an integer! value
+<date> : 引用 date! 值的单词或路径表达式
+<day>  : integer! 值
 ----
 
 *描述*
 
-获取或设置日期的日期字段。天数返回为整数，超出范围的参数值会返回一个标准化日期。
+获取或设置日期的日字段，返回作为整数的日。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
  d: 1-jan-2017
 == 1-Jan-2017
@@ -314,32 +342,34 @@ d/day: 32
 == 32
 d
 == 1-Feb-2017
-d/day: 0         ; Note how zero works, for proper date math
+d/day: 0         ; 注意 0 起的作用，以使日期数学合理
 == 0
 d
 == 31-Jan-2017
 ----
 
-=== /time
+=== `/time`
 
 *语法*
 
+[source, red]
 ----
 <date>/time
 <date>/time: <time>
 
-<date> : a word or path expression referring to a date! value
-<time> : a time! or none! value
+<date> : 引用 date! 值的单词或路径表达式
+<time> : time! 或 none! 值
 ----
 
 *描述*
 
-获取或设置日期的时间字段。返回 `time!` 值，如果时间未设定或已重置(见下文)，返回 `none!` 值。 超出范围的参数值会返回一个标准化日期。
+获取或设置日期的时间字段，返回作为 `time!` 值的时间，或者如果时间没有被设置或已经被重置（见下文），就返回 `none!` 值。超出取值范围的参数值会产生一个正规化的日期。
 
-如果时间设置为 `none!` 值，时间和区域字段设置为零，字段值将不会被显示。
+如果时间被设置为 `none!` 值，则 `time` 和 `zone` 字段将被设置为零，并且不再会被显示出来。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:18:54-06:00
@@ -351,24 +381,26 @@ d/time: none
 == 10-Jul-2017
 ----
 
-=== /hour
+=== `/hour`
 
 *语法*
 
+[source, red]
 ----
 <date>/hour
 <date>/hour: <hour>
 
-<date> : a word or path expression referring to a date! value
-<hour> : an integer! value
+<date> : 引用 date! 值的单词或路径表达式
+<hour> : integer! 值
 ----
 
 *描述*
 
-获取或设置日期的小时数字段。小时数返回0到23之间的整数值，超出范围的参数值会返回一个标准化日期。
+获取或设置日期的小时字段，返回 0 到 23 之间的作为整数值的小时。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:19:40-06:00
@@ -382,26 +414,27 @@ d
 == 11-Jul-2017/0:19:40-06:00
 ----
 
-=== /minute
+=== `/minute`
 
 *语法*
 
+[source, red]
 ----
 <date>/minute
 <date>/minute: <minute>
 
-<date>   : a word or path expression referring to a date! value
-<minute> : an integer! value
+<date>   : 引用 date! 值的单词或路径表达式
+<minute> : integer! 值
 ----
 
 *描述*
 
-获取或设置日期的分钟字段。分钟返回0到59之间的整数值，超出范围的参数值会返回一个标准化日期。
+获取或设置日期的分钟字段，返回 0 到 59 之间的作为整数值的分钟。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
-
 == 10-Jul-2017/23:20:25-06:00
 d/minute: 0
 == 0
@@ -413,23 +446,26 @@ d
 == 11-Jul-2017/0:00:25-06:00
 ----
 
-=== /second
+=== `/second`
 
 *语法*
 
+[source, red]
 ----
 <date>/second
 <date>/second: <second>
 
-<date>   : a word or path expression referring to a date! value
-<second> : an integer! or float! value
+<date>   : 引用 date! 值的单词或路径表达式
+<second> : integer! 或 float! 值
 ----
+
 *描述*
 
-获取或设置日期的秒数字段。秒数返回为0到59之间的 `integer!` 或 `float!` 值，超出范围的参数值会返回一个标准化日期。
+获取或设置日期的秒数字段，返回为 0 到 59 之间的作为 `integer!` 或 `float!` 值的秒数。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:21:15-06:00
@@ -447,28 +483,30 @@ d
 == 10-Jul-2017/23:21:00-06:00
 ----
 
-=== /zone
+=== `/zone`
 
 *语法*
 
+[source, red]
 ----
 <date>/zone
 <date>/zone: <zone>
 
-<date> : a word or path expression referring to a date! value
-<zone> : a time! or integer! value
+<date> : 引用 date! 值的单词或路径表达式
+<zone> : time! 或 integer! 值
 ----
 
 *描述*
 
-获取或设置日期的时区字段。时区在-16:00和+15:00之间返回为 `time!` 值。使用 `/zone` 设置时区将只改变时区字段，时间字段会保持不变。超出范围的参数值会返回一个标准化日期。
+获取或设置日期的时区字段，返回在 -16:00 与 +15:00 之间的作为 `time!` 值的时区。使用 `/zone` 设置时区将仅改变该字段，时间会保持不变。超出取值范围的参数值会产生一个正规化的日期。
 
-当用 `integer!` 参数设置时区时，该参数表示小时，而分钟数被设置为0。
+当用 `integer!` 参数设置时区时，该参数表示分钟被设置为 0 的小时数。
 
-时区的分钟数为15, 不合格的值将四舍五入到最近15分钟的倍数。
+时区的分钟数的粒度为 15，不遵照粒度的值将被向下舍入到最靠近的 15 分钟的倍数。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: 1/3/2017/5:30:0
 d/zone: 8
@@ -478,26 +516,30 @@ d/zone: -4:00
 == 1-Mar-2017/5:30:00-04:00
 ----
 
-=== /timezone
+=== `/timezone`
 
 *语法*
 
+[source, red]
 ----
 <date>/timezone
 <date>/timezone: <zone>
 
-<date>     : a word or path expression referring to a date! value
-<timezone> : an integer!, time! or pair! value
+<date>     : 引用 date! 值的单词或路径表达式
+<timezone> : integer!, time! 或 pair! 值
 ----
+
 *描述*
 
-获取或设置日期的时区字段。时区在-16:00和+15:00之间返回为 `time!` 值。使用 `/timezone` 设置时区将会修改时间和时区，保持新时间相当于新区的旧时间。超出范围的参数值会返回一个标准化日期。
-当用 `integer!` 参数设置时区时，该参数表示小时，而分钟数被设置为0.
+获取或设置日期的时区字段，返回在 -16:00 与 +15:00 之间的作为 `time!` 值的时区。使用 `/zone` 设置时区将改变时间和区域两个字段，使新时间保持与在新区域内的旧时间相等。超出取值范围的参数值会产生一个正规化的日期。
 
-时区的分钟数为15，不合格的值将四舍五入到最近15分钟的倍数。
+当用 `integer!` 参数设置时区时，该参数表示分钟被设置为 0 的小时数。
 
-*例子*
+时区的分钟数的粒度为 15，不遵照粒度的值将被向下舍入到最靠近的 15 分钟的倍数。
 
+*例*
+
+[source, red]
 ----
 d: 1/3/2017/5:30:0
 d/timezone: 8
@@ -507,31 +549,36 @@ d/timezone: -4:00
 == 1-Mar-2017/1:30:00-04:00
 ----
 
-注意：
+[NOTE, caption=注意]
+====
+* 设置 `/timezone` 为 0 将会把时间设置为 UTC。
+====
 
-* 设定 `/timezone` 为 0 将会把时间设置为 UTC 格式。
-
-=== /yearday
+=== `/yearday`
 
 *语法*
 
+[source, red]
 ----
 <date>/yearday
 <date>/yearday: <day>
 
-<date>    : a word or path expression referring to a date! value
-<yearday> : an integer! value
+<date>    : 引用 date! 值的单词或路径表达式
+<yearday> : integer! 值
 ----
+
 *描述*
 
-获取一年中的天数，从1月1日开始，返回整数。当用于设置一年中的日期时，会重新计算日期以匹配当天。 超出范围的参数值会返回一个标准化日期。
+获取日期当天在当年中的天数，从 1 月 1 日开始计为 1，返回作为整数的天数。当用于设置当年中的当天天数时，该日期会被重新计算以匹配那一天。超出取值范围的参数值会产生一个正规化的日期。
 
-注意：
+[NOTE, caption=注意]
+====
+* 为了与 Rebol 兼容，`/yearday` 的另一个别名 `/julian` 也是可用的。
+====
 
-* 另一个 `/julian` 别名 for `/yearday` 也可以用，与Rebol兼容。
+*例*
 
-*例子*
-
+[source, red]
 ----
 d: 1-jan-2017
 == 1-Jan-2017
@@ -544,7 +591,7 @@ d/yearday
 d: 31-dec-2020
 == 31-Dec-2020
 d/yearday
-== 366                  ; Leap year
+== 366                  ; 闰年
 
 d: 31-dec-2017
 == 31-Dec-2017
@@ -554,23 +601,26 @@ d
 == 1-Jan-2018
 ----
 
-=== /weekday
+=== `/weekday`
 
 *语法*
 
+[source, red]
 ----
 <date>/weekday
 <date>/weekday: <day>
 
-<date>    : a word or path expression referring to a date! value
-<weekday> : an integer! value
+<date>    : 引用 date! 值的单词或路径表达式
+<weekday> : integer! 值
 ----
+
 *描述*
 
-获取周的天数，从星期一(1)到星期天(7)。当用于设置星期几时，重新计算日期以匹配当天的当天。 超出范围的参数值会返回一个标准化日期。
+获取星期数值，取值范围为从星期一的 1 到星期天的 7。当用于设置星期时，该日期会被重新计算以匹配相对于这周的那一天。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:25:35-06:00
@@ -590,28 +640,31 @@ d
 == 17-Jul-2017/23:25:35-06:00
 ----
 
-
-=== /week
+=== `/week`
 
 *语法*
 
+[source, red]
 ----
 <date>/week
 <date>/week: <day>
 
-<date> : a word or path expression referring to a date! value
-<week> : an integer! value
+<date> : 引用 date! 值的单词或路径表达式
+<week> : integer! 值
 ----
+
 *描述*
 
-获取周数(周从星期日开始，第一周从1月1日开始)， 从年的第1个星期直到到第53个。 用于设置周数时，重新计算日期以匹配该周(星期日)的第一天。 超出范围的参数值会返回一个标准化日期。
+获取使用非正式周定义的周数（周从星期日开始，第一周从 1 月 1 日开始)，取值范围为从年中第一个星期的 1 到 53。当用于设置周数时，该日期会被重新计算以匹配那周的第一天（星期日）。超出取值范围的参数值会产生一个正规化的日期。
 
-注意：
+[NOTE, caption=注意]
+====
+* 非正式周定义允许年中的第一个和最后一个星期是不完整的一周，天数取值范围为从 1 天到 7 天。对于精确周计算，请使用 `/isoweek` 访问器。
+====
 
-* 休闲周定义允许一年中的第一个和最后几个星期是部分周，范围从1天到7天，对于精确周计算，请使用 `/isoweek` 来获取。
+*例*
 
-*例子*
-
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:28:07-06:00
@@ -635,23 +688,26 @@ d
 == 7-Jan-2018/23:28:07-06:00
 ----
 
-=== /isoweek
+=== `/isoweek`
 
 *语法*
 
+[source, red]
 ----
 <date>/isoweek
 <date>/isoweek: <day>
 
-<date>    : a word or path expression referring to a date! value
-<isoweek> : an integer! value
+<date>    : 引用 date! 值的单词或路径表达式
+<isoweek> : integer! 值
 ----
+
 *描述*
 
-获取周数使用 https://en.wikipedia.org/wiki/ISO_week_date[ISO 8601] 周定义，从年的第 1 个星期，到 52 (或者有的年是 53)。当用于设置周数时，重新计算日期以匹配该星期的第一天(星期一)。 超出范围的参数值会返回一个标准化日期。
+获取使用 link:https://en.wikipedia.org/wiki/ISO_week_date[ISO 8601] 周定义的周数，取值范围为从年中第一个星期的 1，到 52（或者某些年是 53）。当用于设置周数时，该日期会被重新计算以匹配那周的第一天（星期一）。超出取值范围的参数值会产生一个正规化的日期。
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:29:13-06:00
@@ -671,55 +727,58 @@ d
 == 1-Jan-2018/23:29:13-06:00
 ----
 
-=== 序列访问器(Ordinal accessors)
+=== 序数访问器
 
-除了使用单词访问日期字段，也可以在路径表达式中使用整数索引：
+除了使用单词来访问日期的字段，也可以在路径表达式中使用整数索引：
 
+[source, red]
 ----
 <date>/<index>
 
-<date>  : a word or path expression referring to a date! value
-<index> : an integer! value referring to a date field.
+<date>  : 引用 date! 值的单词或路径表达式
+<index> : 指向日期字段的 integer! 值
 ----
 
-这样的序列访问器可以用于获取或设置字段。下表给出了对应的字段名称
+这样的序数访问器可以用于获取或设置字段。下表给出了对应的字段名称
 
 [cols="1,1",options="header",align="center"]
 |===
-|Index | Name
-| 1| date
-| 2| year
-| 3| month
-| 4| day
-| 5| zone
-| 6| time
-| 7| hour
-| 8| minute
-| 9| second
-|10| weekday
-|11| yearday
-|12| timezone
-|13| week
-|14| isoweek
+|索引 | 名称
+| 1   | `date`
+| 2   | `year`
+| 3   | `month`
+| 4   | `day`
+| 5   | `zone`
+| 6   | `time`
+| 7   | `hour`
+| 8   | `minute`
+| 9   | `second`
+|10   | `weekday`
+|11   | `yearday`
+|12   | `timezone`
+|13   | `week`
+|14   | `isoweek`
 |===
 
-=== 使用Pick访问日期字段(Accessing date fields using Pick)
+=== 使用 `Pick` 访问日期字段
 
-在某些情况下可以不使用路径访问日期字段。`pick` 可以对日期使用。
+可以不使用路径来访问日期字段，这在某些情况下更为方便，可以对日期使用 `pick`。
 
 *语法*
 
+[source, red]
 ----
 pick <date> <field>
 
-<date>  : a date! value
-<field> : an integer! value
+<date>  : date! 值
+<field> : integer! 值
 ----
 
-整数参数表示日期的顺序访问器，参见上面的"序列访问器"表。 
+整数参数代表用于日期的序数访问器，参照上面的 "`序数访问器`" 表格。 
 
-*例子*
+*例*
 
+[source, red]
 ----
 d: now
 == 10-Jul-2017/23:35:01-06:00
@@ -741,23 +800,26 @@ repeat i 14 [print [pad i 4 pad names/:i 10 pick d i]]
 14   isoweek    28
 ----
 
-== 转换(Conversions)
+== 转换
 
-=== 世纪时间(Epoch time)
+=== 新纪元时间
 
-日期可以用 `to` 操作互换成 https://en.wikipedia.org/wiki/Unix_time[Unix 世纪时间]。
+日期可以用 `to` 动作与link:https://en.wikipedia.org/wiki/Unix_time[Unix 新纪元时间]互相转换。
 
 *语法*
 
+[source, red]
 ----
 to-integer <date>
 to-date <epoch>
 
-<date>  : a date! value
-<epoch> : an integer value representing an epoch time
+<date>  : date! 值
+<epoch> : 代表新纪元时间的整数值
 ----
 
-世纪时间，以UTC表示，如果参数不是用UTC，它将在转换为时代之前在内部转换。
+新纪元时间，以 UTC 时区表示。如果日期参数不在 UTC 时区，它会在转换为新纪元时间之前被内部地转换到 UTC 时区。
+
+[source, red]
 ----
 d: 8-Jul-2017/17:49:27+08:00
 to-integer d
@@ -770,25 +832,31 @@ to-date to-integer d
 == 8-Jul-2017/9:49:27
 ----
 
-请注意，2038年之后的世纪时间没有定义。
+[NOTE, caption=注意]
+====
+2038 年之后的新纪元时间是未定义的。
+====
 
-=== 块转换为日期(Block to date)
+=== 把区块转换为日期
 
 *语法*
 
+[source, red]
 ----
 to date! <spec>
 
-<spec> : a block of values for date fields
+<spec> : 用于日期字段的内含值的区块
 ----
-根据与 `make` 相同的语法，`to` 将参数块转换为 `date!` 值(查看 2.2 运行时创建(Runtime creation))。超出范围的参数值会返回一个标准化日期。对于使用`make`对一个块进行严格转换，这将会产生错误而不是标准化日期。
 
-== 对比(Comparisons)
+参数区块会按照跟 `make`（参考 2.2 link:#runtime-creation[运行时创建]）一样的语法被转换为 `date!` 值。超出取值范围的参数值会产生正规化的日期。若要从区块进行会产生错误而不会被正规化的严格转换，请使用 `make`。
 
-所有可以应用于日期的对比有：`=，==，<>，>，<，>=，&lt;=，same?`。此外，`min`，`max` 和 `sort` 也支持。
+== 比较
 
-*例子*
+所有可以应用于日期的比较有：`=`、`==`、`<>`、`>`、`<`、`>=`、`&lt;=`、`same?`。此外，还支持 `min`、`max` 和 `sort`。
 
+*例*
+
+[source, red]
 ----
 3-Jul-2017/9:41:40+2:00 = 3-Jul-2017/5:41:40-2:00
 == true
@@ -806,18 +874,19 @@ sort [1/1/2017 5/10/1999 3-Jul-2017/5:41:40-2:00 1/1/1950 1/1/1980/2:2:2]
 == [1-Jan-1950 1-Jan-1980/2:02:02 5-Oct-1999 1-Jan-2017 3-Jul-2017/5:41:40-02:00]
 ----
 
-== 运算(Arithmetic)
+== 算术
 
-可对日期进行的数学运算包括：
+可对日期进行的数学操作包括：
 
-* 从任何日期字段添加或减去值：结果被标准化。
-* 添加或减去具有日期值的整数值：解释为天数。
-* 添加或减去具有日期值的时间值：将从日期的时间添加/减去它。
-* 两个日期相减：结果是这两个日期之间相隔的天数。
-* 使用 `difference` 函数对比两个日期：返回 `time!` 值，内容是两个日期之间差异。
+* 加减任何日期字段中的值：结果将被正规化。
+* 用日期值跟整数值相加减：该整数会被解释为天数。
+* 用日期值跟时间值相加减：将把日期的时间增加/减少该时间。
+* 两个日期相减：结果是这两个日期相隔的有符号天数。
+* 以两个日期为参数调用 `difference`：结果是作为 `time!` 值的这两个日期之间的有符号的差。
 
-*例子*
+*例*
 
+[source, red]
 ----
 20-Feb-1980 + 50
 == 10-Apr-1980
@@ -856,16 +925,17 @@ difference 08/07/2017/10:45:00 20-Feb-1980/05:30:0
 327677:15:00
 ----
 
-== 获取当前日期(Getting the current date)
+== 获取当前日期
 
- `now` 函数返回操作系统的当前日期和时间(包括时区)。所有的日期路径访问器都可用于 `now` 作为细化，另外还有一些补充：
+`now` 函数返回操作系统的当前日期和时间（包括时区）。所有的日期路径访问器都可作为修饰词用于 `now`，另外还有一些附加的：
 
-* `/utc`: 获取UTC格式日期。
+* `/utc`：获取 UTC 格式的日期。
 
-* `/precise`: 以更高的精度获得时间(Windows上的1/60秒，Unix上的微秒:micro-seconds)。
+* `/precise`：以更高的精度获得时间（在 Windows 上为 1/60 秒，在 Unix 上为微秒）。
 
-*例子*
+*例*
 
+[source, red]
 ----
 now
 == 8-Jul-2017/18:32:25+08:00
@@ -892,23 +962,26 @@ now/utc
 == 8-Jul-2017/10:32:25
 ----
 
-== 其他日期相关函数(Other date-related functions)
+== 其他日期相关函数
 
-=== 随机(Random)
+=== `random`
 
 *语法*
 
+[source, red]
 ----
 random <date>
 
-<date> : a date! value
+<date> : date! 值
 ----
+
 *描述*
 
-使用参数日期作为上限，返回一个随机日期。如果参数日期没有时间/时区部分，则生成的日期也没有。
+使用参数日期作为上限，返回一个随机日期。如果参数日期没有时间/时区分量，则产生的日期也不会有。
 
-*例子*
+*例*
 
+[source, red]
 ----
 random 09/07/2017
 == 18-May-1972
