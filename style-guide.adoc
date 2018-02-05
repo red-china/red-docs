@@ -229,7 +229,7 @@ tagMSG: alias struct! [
 默认情况下，所有变量和函数名称都应为小写，除非有很好的理由使用大写字母，例如：
 
 * 名字是缩写，例如 GMT（格林威治标准时间）
-* 名称是跟操作系统或（非 Red）第三方 API 相关的
+* 名称是跟操作系统或（非 Red 的）第三方 API 相关的
 
 == 宏（Red/System） anchor:macros-redsystem[]
 
