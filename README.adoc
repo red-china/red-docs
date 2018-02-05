@@ -21,8 +21,8 @@ __这是一个半成品，只有一部分可用的参考文档。__
 | link:map.adoc[]          |    已完成   | link:https://github.com/pixcai[pixcai] link:https://github.com/AT-Aoi[彩月葵]
 | link:preprocessor.adoc[] |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
 | link:reactivity.adoc[]   |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
-| link:redbin.adoc[]       |    进行中   | link:https://github.com/pixcai[pixcai]
-| link:style-guide.adoc[]  |    已完成，进行中   | link:https://github.com/pixcai[pixcai] link:https://github.com/AT-Aoi[彩月葵]
+| link:redbin.adoc[]       |    进行中   | link:https://github.com/pixcai[pixcai] link:https://github.com/AT-Aoi[彩月葵]
+| link:style-guide.adoc[]  |    已完成   | link:https://github.com/pixcai[pixcai] link:https://github.com/AT-Aoi[彩月葵]
 | link:vid.adoc[]          |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
 | link:view.adoc[]         |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
 |===
