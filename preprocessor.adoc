@@ -449,7 +449,7 @@ print ["2 + 3 =" 5]
 #macro <pattern> func <spec> <body>
 
 <name>    : 宏函数的名称 (set-word!)。
-<pattern> : 用于触发宏的匹配规则 (block!, word!, lit-word!)。
+<pattern> : 用于触发宏的匹配规则 (block! word! lit-word!)。
 <spec>    : 宏函数的规格区块。
 <body>    : 宏函数的主体区块。
 ----
@@ -468,7 +468,7 @@ print ["2 + 3 =" 5]
 
 * 一个区块：使用 Parse 方言指定要匹配的一个模式。
 * 一个单词：指定一个有效的 Parse 方言单词（比如一个数据类型名称，或写 `skip` 以匹配所有的值）。
-* 一个原词：指定要匹配的一个特定的原义单词。
+* 一个原词：指定要匹配的一个特定的字面单词。
 
 *例*
 

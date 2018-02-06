@@ -315,7 +315,7 @@ red_tuple redTuple4(long r, long g, long b, long a)
 red_binary redBinary(const char* buffer, long bytes)
 ----
 
-从内存 `buffer` 指针和这个缓冲的长度（以字节为单位）返回一个 `binary!` 值。输入缓冲将在内部被复制。
+从内存 `buffer` 指针和这个缓冲区的长度（以字节为单位）返回一个 `binary!` 值。输入缓冲区将在内部被复制。
 
 ==== `redImage()`
 
@@ -324,7 +324,7 @@ red_binary redBinary(const char* buffer, long bytes)
 red_image redImage(long width, long height, const void* buffer, long format)
 ----
 
-从内存 `buffer` 指针返回一个`image!` 值。图像的大小以 `width` 和 `height` 的形式定义，以像素为单位。输入缓冲将在内部被复制。接受的缓冲格式有：
+从内存 `buffer` 指针返回一个`image!` 值。图像的大小以 `width` 和 `height` 的形式定义，以像素为单位。输入缓冲区将在内部被复制。接受的缓冲区格式有：
 
 * `RED_IMAGE_FORMAT_RGB`：每一个像素 24 位元。
 * `RED_IMAGE_FORMAT_ARGB`: 每一个像素 32 位元，透明通道在最前。
@@ -447,7 +447,7 @@ double redCDouble(red_float number)
 const char* redCString(red_string string)
 ----
 
-从一个 Red `string!` 值返回一个 UTF-8 字符串缓冲指针。其他编码可以使用 `redSetEncoding()` 函数定义。
+从一个 Red `string!` 值返回一个 UTF-8 字符串缓冲区指针。其他编码可以使用 `redSetEncoding()` 函数定义。
 
 ==== `redTypeOf()`
 
@@ -830,7 +830,7 @@ Function redBlockVB(ParamArray args() As Variant) As Long
 [source, vb]
 ----
 redProbe redBlockVB()              ' 创建空区块
-redProbe redBlockVB(42, "hello")   ' 创建 [42 "hello" hi] 区块
+redProbe redBlockVB(42, "hello")   ' 创建 [42 "hello"] 区块
 ----
 
 ==== `redPathVB()`

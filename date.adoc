@@ -11,7 +11,7 @@
 ====
 * `date!` 使用link:https://en.wikipedia.org/wiki/Proleptic_Gregorian_calendar[早发格里高利历]以扩展其用法到 1582 年之前。在使用 `date!` 值表示历史上的前格里高利历日期时需要当心。
 
-* 支持的日期取值范围为从 `1/Jan/-16384` 到 `31/Dec/16383`，当数学运算溢出时会进行折返。在输入时出于实践性的原因，该取值范围减少为从 `1/Jan/-9999` 到 `31/Dec/9999`。
+* 支持的日期取值范围为从 `1/Jan/-16384` 到 `31/Dec/16383`，当数学运算溢出时会进行折返。在输入时出于实践性的考虑，该取值范围减少为从 `1/Jan/-9999` 到 `31/Dec/9999`。
 ====
 
 == 创建
@@ -100,7 +100,7 @@
 
 [NOTE, caption=注意]
 ====
-* 当使用字母指定月份时，月份以其英文名称来表示，并不区分大小写。
+* 当使用字母指定月份时，月份以其英文名称来表示，并为大小写不敏感的。
 * 当仅用 2 位数字（`yy`）指定年份时：如果它 < 50，则被解释为 `20yy` 年，否则被解释为 `19yy` 年。
 ====
 
@@ -158,7 +158,7 @@ make date! [<day> <month> <year> <hour> <minute> <second> <zone>]
 <month>  : integer! 值
 <day>    : integer! 值
 <time>   : time! 值
-<zone>   : integer!, time! 或 pair! 值
+<zone>   : integer! , time! 或 pair! 值
 <hour>   : integer! 值
 <minute> : integer! 值
 <second> : integer! 值
@@ -523,10 +523,10 @@ d/zone: -4:00
 [source, red]
 ----
 <date>/timezone
-<date>/timezone: <zone>
+<date>/timezone: <timezone>
 
 <date>     : 引用 date! 值的单词或路径表达式
-<timezone> : integer!, time! 或 pair! 值
+<timezone> : integer! , time! 或 pair! 值
 ----
 
 *描述*
@@ -762,7 +762,7 @@ d
 
 === 使用 `Pick` 访问日期字段
 
-可以不使用路径来访问日期字段，这在某些情况下更为方便，可以对日期使用 `pick`。
+可以不使用路径来访问日期字段，这在某些情况下更为便捷，可以对日期使用 `pick`。
 
 *语法*
 
@@ -874,7 +874,7 @@ sort [1/1/2017 5/10/1999 3-Jul-2017/5:41:40-2:00 1/1/1950 1/1/1980/2:2:2]
 == [1-Jan-1950 1-Jan-1980/2:02:02 5-Oct-1999 1-Jan-2017 3-Jul-2017/5:41:40-02:00]
 ----
 
-== 算术
+== 算术运算
 
 可对日期进行的数学操作包括：
 
