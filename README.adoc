@@ -25,4 +25,5 @@ __这是一个半成品，只有一部分可用的参考文档。__
 | link:style-guide.adoc[]  |    已完成   | link:https://github.com/pixcai[pixcai] link:https://github.com/AT-Aoi[彩月葵]
 | link:vid.adoc[]          |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
 | link:view.adoc[]         |    已完成   | link:https://github.com/AT-Aoi[彩月葵]
+| link:char.adoc[]         |    进行中   | link:https://github.com/AT-Aoi[彩月葵]
 |===
