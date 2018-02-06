@@ -1,6 +1,7 @@
 = 摘要
 
 . link:README.adoc[Red/Core 语言]
+.. link:char.adoc[Char! 数据类型]
 .. link:date.adoc[Date! 数据类型]
 .. link:map.adoc[Map! 数据类型]
 
@@ -14,5 +15,5 @@
 . link:reactivity.adoc[响应式编程]
 . link:libred.adoc[LibRed API]
 . link:preprocessor.adoc[预处理器]
-. link:redbin.adoc[Redbin 格式规格文档]
+. link:redbin.adoc[Redbin 格式规格]
 . link:style-guide.adoc[编码风格指南]
