@@ -1,139 +1,155 @@
-= Char! datatype
+= Char! 数据类型
 Version: Draft 3
 :toc:
+:toc-title: 目录
 :numbered:
 
-== Abstract
+== 摘要
 
-`Char!` values represent a Unicode code point. They are integer numbers in the range hexadecimal 00 to hexadecimal 10FFFF. (0 to 1,114,111 in decimal.) 
+`char!` 值代表 Unicode 代码点，是十六进制下取值范围在 00 到 10FFFF（十进制下 0 到 111,4111）的整数。
 
-== Characteristics
-'Char!' values are 'direct', 'atomic' and 'passive'.
+== 特点
 
-Note: This assumes that Type Characteristics have been defined earlier in the document.
+`char!` 值是 "`直接的`"、"`原子的`" 和 "`被动的`"。
 
-== Creation
+[NOTE, caption=注意]
+====
+这里假设类型特点已经在前面的文档中被定义过了。
+====
 
-`Char!` values can be created using literal syntax or at runtime by using a 'make' constructor, a `to` conversion or using one of the many functions that act on `string!` values to extract a `char!` value.
+== 创建
 
-=== Literal syntax
+`char!` 值可以通过字面语法，或在运行时使用 `make` 构造器或 `to` 转换，或使用能作用于 `string!` 值并提取出 `char!` 值的许多函数之一来创建。
 
-The basic literal formats for `char!` values is:
+=== 字面语法
+
+`char!` 值的基本字面格式为：
+
+[source, red]
 ----
 #"<character>"
-<character> : a single Unicode codepoint (usually entered via keystrokes)
+<character> : 单个 Unicode 代码点（它通常是通过按键输入的）
 ----
 
-The literal syntax also supports "escaped" characters for control characters and those characters which are not easily typed.
+这个字面语法也支持 "`转义的`" 字符，用于控制字符和那些无法简单地录入的字符。
 
-The escape character in Red is '^' - codepoint U+005E. As a result, the ^ character itself must be escaped. The string literal for codepoint is #"^^" not #"^". In fact, #"^" is invalid.
+Red 中的转义字符是 `^` —— 代码点 U+005E。这导致 `^` 字符本身必须要被转义。该代码点的字符串字面值是 `#"^^"` 而不是 `#"^"`。其实 `#"^"` 是无效的。
 
-There are three forms of escaped character literals in Red, one for numeric codepoints, another for named characters and the other for "control" characters.
+在 Red 中有三种转义字符的字面量，一个用于数字代码点，另一个用于命名字符，还有一个用于 "`控制`" 字符。
 
-The codepoint form is:
+代码点的形式为：
+
+[source, red]
 ----
 #"^(<codepoint>)"
-<codepoint> : a valid hexadecimal e.g. 00, ABCD, 10FFFFF
+<codepoint> : 有效的十六进制整数，如 00、ABCD、10FFFFF
 ----
 
-The "control" characters form is:
+"`控制`" 字符的形式为：
+
+[source, red]
 ----
 #"^<cc>"
-<cc> : A single character from the set - A-Z, [, \, ], _
+<cc> : 集合 A-Z, [, \, ], _ 中的单个字符
 ----
 
-.Escaped Control Characters
+.转义控制字符
 [cols="2*"]
 |===
 
-|Escaped Character
-|Codepoint
+|转义字符
+|代码点
 
-|#"^A" - #"^Z"
+|`#"^A" - #"^Z"`
 |U+0001 - U+001A.
 
-|#"^["
+|`#"^["`
 |U+001B
 
-|#"^\"
+|`#"^\"`
 |U+001C
 
-|#"^]"
+|`#"^]"`
 |U+001D
 
-|#"^_"
+|`#"^_"`
 |U+001F
 
 |===
 
-The "named" characters form is:
+"`命名`" 字符形式为：
+
+[source, red]
 ----
-#"^(<name>)" or #"^<symbol>" 
-<name> : a name from Named Escaped Characters table
-<symbol> : a symbol from from Named Escaped Characters table
+#"^(<name>)" 或 #"^<symbol>" 
+<name>   : 命名转义字符表中的名称
+<symbol> : 命名转义字符表中的符号
 ----
 
-.Named Escaped Characters
+.命名转义字符
 [cols="4*"]
 |===
 
-|name
-|symbol
-|character
-|codepoint
+|名称
+|符号
+|字符
+|代码点
 
-|#"^(null)    
-|#"^@"    
-|null                
+|`#"^(null)`
+|`#"^@"`
+|空字符
 |U+0000
 
-|#"^(back)"   
+|`#"^(back)"`
 |
-|backspace           
+|退格符
 |U+0008
 
-|#"^(tab)"    
-|#"^-" 
-|horizontal tab      
+|`#"^(tab)"`
+|`#"^-"`
+|水平制表符
 |U+0009
 
-|#"^(line)"    
-|#"^/"   
-|line feed           
+|`#"^(line)"`
+|`#"^/"`
+|换行符
 |U+000A 
 
-|#"^(page)"   
+|`#"^(page)"`
 |
-|form feed           
+|换页符
 |U+000C
 
-|#"^(esc)"    
+|`#"^(esc)"`
 |
-|escape              
+|退出符
 |U+001B
 
-|#"^(del)"    
-|#"^~"   
-|delete              
+|`#"^(del)"`
+|`#"^~"`
+|删除符
 |U+007F
 
 |
-|#"^""                      
-|" - double quote    
+|`#"^""`
+|" - 双引号字符
 |U+0022
 
 |
 |#"^^"
-|^ - caret           
+|^ - 脱字符
 |U+005E
 
 |===
 
-== Comparisons
+== 比较
 
 All comparators can be applied on 'char!' values: `=, ==, <>, >, <, >=, &lt;=, same?`. In addition, `min`, `max` and `sort` are supported. Comparison of `char!` values is case sensitive.
+所有比较器都可以应用于 `char!` 值上：`=`、`==`、`<>`、`>`、`<`、`>=`、`&lt;=`、`same?`。另外，也支持 `min`、`max` 和 `sort`。
 
-*Examples*
+*例*
+
+[source, red]
 ----
 #"a" = #"A"
 == false
@@ -145,10 +161,13 @@ sort [#"c" #"b" #"d" #"a"]
 == [#"a" #"b" #"c" #"d"]
 ----
 
-== Arithmetic
-The full range of mathematical functions can be used with `char!` values. A `Math Error` is raised if the result of the arithmetic falls outside of the range 00 - 10FFFF (hexadecimal).
+== 算术运算
 
-*Examples*
+全系列数学函数都可以用于 `char!` 值。如果算术运算的结果落在取值范围 00 - 10FFFF（十六进制）之外，就会报 `Math Error` 错误。
+
+*例*
+
+[source, red]
 ----
 #"a" + 1
 == #"b"
@@ -160,9 +179,8 @@ The full range of mathematical functions can be used with `char!` values. A `Mat
 *** Math Error: math or number overflow
 *** Where: -
 *** Stack:  
-
 ----
-== Other char-related functions
 
-Lowercase, Uppercase
+== 其他字符相关的函数
 
+`lowercase`、`uppercase`
